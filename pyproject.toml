@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "medical-imaging-pipelines"
+version = "0.1.0"
+description = "RSNA medical imaging pipelines (2018 CXR, 2024 lumbar, 2025 brain, 2026 knee)."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "Pillow>=10.0",
+    "pydicom>=2.4",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+rsna2024-export-crops = "rsna2024_lumbar.preprocessing.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["common*", "rsna2024_lumbar*"]
+exclude = ["rsna2024_lumbar.tests*"]
+
+[tool.pytest.ini_options]
+testpaths = ["rsna2024_lumbar/tests"]
+pythonpath = ["."]
+addopts = "-q"

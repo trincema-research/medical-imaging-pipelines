@@ -12,6 +12,22 @@
 
 From repo root (`pip install -e ".[dev]"` first).
 
+## ⬇ Download (Kaggle → data/raw/)
+
+Script lives in `data/download.py` (not `raw/` — that tree is gitignored). Writes into `data/raw/`.
+
+```bash
+pip install -e ".[kaggle]"
+python -m rsna2024_lumbar.data.download
+```
+
+Needs `~/.kaggle/kaggle.json` (or `KAGGLE_USERNAME` / `KAGGLE_KEY`) and accepted rules on the [competition page](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification). `--force` re-downloads. `--dest` overrides the folder.
+
+```bash
+python -m rsna2024_lumbar.data.validate
+python -m rsna2024_lumbar.data.validate --data-root rsna2024_lumbar/tests/fixtures
+```
+
 ## ⚙ Preprocess
 
 ```bash

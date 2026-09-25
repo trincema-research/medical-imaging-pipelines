@@ -18,9 +18,12 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
+kaggle = ["kaggle>=1.6"]
 
 [project.scripts]
 rsna2024-export-crops = "rsna2024_lumbar.preprocessing.cli:main"
+rsna2024-download-raw = "rsna2024_lumbar.data.download:main"
+rsna2024-validate-raw = "rsna2024_lumbar.data.validate:main"
 
 [tool.setuptools.packages.find]
 include = ["common*", "rsna2024_lumbar*"]

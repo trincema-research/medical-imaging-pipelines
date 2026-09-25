@@ -19,8 +19,10 @@ Shared training / preprocessing code for RSNA challenges. Each year is isolated;
 Tiny CI dump in tests. Full Kaggle dump stays **local** in `rsna2024_lumbar/data/raw/` (gitignored). Crops write to `data/processed/`.
 
 ```bash
-pip install -e ".[dev]"
+pip install -e ".[dev,kaggle]"
+# or: pip install -r requirements-dev.txt
 pytest                                          # ✔
+python -m rsna2024_lumbar.data.download         # ⬇
 python -m rsna2024_lumbar.preprocessing --help  # ⚙
 ```
 

@@ -1,6 +1,12 @@
 # ⬇ data/raw — local only
 
-Drop the Kaggle RSNA 2024 files here (not committed):
+Gitignored. Fill with:
+
+```bash
+python -m rsna2024_lumbar.data.download
+```
+
+or drop the Kaggle files here by hand:
 
 ```
 train.csv

@@ -43,6 +43,8 @@ SCS only. Other condition columns in `train.csv` are empty. Catalog requires all
 | `test_export.py` | 10 PNGs + `manifest.csv` + `export_meta.json`; 64×64; Moderate path for 1003 L4/L5; skip-existing exports 0 / skips 10; `png_relpath` contract |
 | `test_scale_contract.py` | raw layout = Kaggle names; 1 study → 5 jobs, 2 complete → 10 (linear) |
 | `test_params.py` | CLI defaults / `centered`+`extend50`+`--max-studies 1`; reject bad policy, condition, `max-studies 0`, missing data-root |
+| `test_download.py` | dest is `data/raw/`; skip if complete; no kaggle CLI → SystemExit (no network) |
+| `test_validate.py` | fixtures layout OK; missing root / incomplete dump fail; `--strict` flags 1002's missing DICOM |
 
 ## ▾ Pass / fail at a glance
 

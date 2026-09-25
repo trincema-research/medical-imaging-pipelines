@@ -9,6 +9,7 @@ import pandas as pd
 
 from rsna2024_lumbar.preprocessing.constants import (
     CONDITIONS,
+    CROP_POLICIES,
     LABEL_CSVS,
     LEVEL_DISPLAY,
     LUMBAR_LEVELS,
@@ -32,6 +33,12 @@ class CropJob:
 
 
 def require_raw_layout(data_root: Path) -> None:
+    data_root = Path(data_root)
+    if not data_root.is_dir():
+        raise FileNotFoundError(
+            f"data-root does not exist: {data_root}. "
+            "Use tests/fixtures/ in CI or copy the Kaggle dump to data/raw/."
+        )
     missing = [name for name in LABEL_CSVS if not (data_root / name).is_file()]
     if missing:
         raise FileNotFoundError(
@@ -40,6 +47,27 @@ def require_raw_layout(data_root: Path) -> None:
         )
     if not (data_root / "train_images").is_dir():
         raise FileNotFoundError(f"Missing train_images/ under {data_root}.")
+
+
+def validate_export_request(
+    data_root: Path,
+    *,
+    crop_policy: str,
+    conditions: list[str] | None = None,
+    max_studies: int | None = None,
+) -> list[str]:
+    if crop_policy not in CROP_POLICIES:
+        raise ValueError(f"Unknown crop policy {crop_policy!r}. Choose {CROP_POLICIES}.")
+    if max_studies is not None and max_studies < 1:
+        raise ValueError("--max-studies must be >= 1.")
+    wanted = list(conditions) if conditions else list(CONDITIONS)
+    if not wanted:
+        raise ValueError("conditions must be non-empty.")
+    bad = [c for c in wanted if c not in CONDITIONS]
+    if bad:
+        raise KeyError(f"Unknown condition(s): {bad}. Choose from {list(CONDITIONS)}.")
+    require_raw_layout(data_root)
+    return wanted
 
 
 def _dicom_path(images_root: Path, study_id: int, series_id: int, instance: int) -> Path:
@@ -107,7 +135,13 @@ def iter_crop_jobs(
     conditions: list[str] | None = None,
     max_studies: int | None = None,
 ) -> list[CropJob]:
-    require_raw_layout(data_root)
+    data_root = Path(data_root)
+    wanted = validate_export_request(
+        data_root,
+        crop_policy=crop_policy,
+        conditions=conditions,
+        max_studies=max_studies,
+    )
     labels = pd.read_csv(data_root / "train.csv")
     coords = pd.read_csv(data_root / "train_label_coordinates.csv")
     images_root = data_root / "train_images"
@@ -115,7 +149,6 @@ def iter_crop_jobs(
     if max_studies is not None:
         study_ids = study_ids[:max_studies]
     labels_ix = labels.set_index("study_id")
-    wanted = conditions or list(CONDITIONS)
 
     jobs: list[CropJob] = []
     for condition in wanted:

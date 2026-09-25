@@ -222,8 +222,6 @@ rsna2024_lumbar/data/raw/**
 !rsna2024_lumbar/data/raw/README.md
 rsna2024_lumbar/data/processed/**
 !rsna2024_lumbar/data/processed/README.md
-rsna2024_lumbar/tests/fixtures/**
-!rsna2024_lumbar/tests/fixtures/README.md
 
 # Keep other challenge data folders local-only when they appear
 rsna20*/data/raw/**

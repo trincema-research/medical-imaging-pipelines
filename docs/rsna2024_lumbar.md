@@ -1,4 +1,4 @@
-# RSNA 2024 lumbar — preprocess
+# ⚙ RSNA 2024 lumbar — preprocess
 
 Input (Kaggle / `data/raw/`):
 

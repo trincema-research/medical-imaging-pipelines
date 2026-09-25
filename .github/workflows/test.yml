@@ -13,4 +13,6 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
-      - run: pytest
+      - name: fixtures present
+        run: test -f rsna2024_lumbar/tests/fixtures/train.csv && test -d rsna2024_lumbar/tests/fixtures/train_images
+      - run: pytest --tb=short

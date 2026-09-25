@@ -3,26 +3,28 @@
 Shared training / preprocessing code for RSNA challenges. Each year is isolated; reusable pieces live in `common/`.
 
 ```
-[lib]  common/              preprocessing · models · metrics · utils
-[18]   rsna2018_cxr/        chest X-ray pneumonia
-[24]   rsna2024_lumbar/     lumbar stenosis  ← preprocessing first
-[25]   rsna2025_brain/      aneurysm detection
-[26]   rsna2026_knee/       meniscus / cartilage
-[doc]  docs/
-[bench] benchmarks/
+▣  common/              shared preprocessing · models · metrics · utils
+▸  rsna2018_cxr/        chest X-ray pneumonia
+▸  rsna2024_lumbar/     lumbar stenosis   ← preprocess first
+▸  rsna2025_brain/      aneurysm detection
+▸  rsna2026_knee/       meniscus / cartilage
+☰  docs/
+▤  benchmarks/
 ```
 
-## RSNA 2024 — start here
+`▣` shared · `▸` challenge · `☰` docs · `▤` benches · `⚙` preprocess · `✔` tests · `⬇` raw · `⬆` crops
 
-Tiny CI fixtures in-repo. Full Kaggle dump stays **local** in `rsna2024_lumbar/data/raw/` (gitignored). Crops write to `data/processed/`.
+## ▸ RSNA 2024 — start here
+
+Tiny CI dump in tests. Full Kaggle dump stays **local** in `rsna2024_lumbar/data/raw/` (gitignored). Crops write to `data/processed/`.
 
 ```bash
 pip install -e ".[dev]"
-pytest
-python -m rsna2024_lumbar.preprocessing --help
+pytest                                          # ✔
+python -m rsna2024_lumbar.preprocessing --help  # ⚙
 ```
 
-Full export (after you copy `train.csv` + `train_images/` into `data/raw/`):
+Full export (copy `train.csv` + `train_images/` into `data/raw/`):
 
 ```bash
 python -m rsna2024_lumbar.preprocessing \
@@ -33,10 +35,10 @@ python -m rsna2024_lumbar.preprocessing \
 
 ## Data rules
 
-| Path | Git | What |
-|---|---|---|
-| `*/tests/fixtures/` | yes | synthetic mini-dataset (CI) |
-| `*/data/raw/` | no | official challenge download |
-| `*/data/processed/` | no | cropped cache the trainer will load |
+| | Path | Git | What |
+|---|---|---|---|
+| ✔ | `*/tests/` | yes | synthetic mini-dump (CI) |
+| ⬇ | `*/data/raw/` | no | official challenge download |
+| ⬆ | `*/data/processed/` | no | cropped cache the trainer loads |
 
 Remote tests never need the big dump. Point `--data-root` at `data/raw` locally (or any existing checkout).

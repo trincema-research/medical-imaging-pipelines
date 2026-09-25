@@ -156,3 +156,9 @@ def write_mini_dataset(root: Path) -> Path:
             dest = images / str(study["study_id"]) / str(study["series_id"]) / f"{i}.dcm"
             write_gray_dicom(dest, pixels, instance_number=i)
     return root
+
+
+if __name__ == "__main__":
+    dest = Path(__file__).resolve().parent / "fixtures"
+    write_mini_dataset(dest)
+    print(f"Wrote mini dump to {dest}")

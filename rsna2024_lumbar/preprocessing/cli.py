@@ -27,7 +27,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     p.add_argument("--crop-policy", choices=CROP_POLICIES, default=CROP_POLICY_CENTERED)
     p.add_argument("--condition", choices=list(CONDITIONS), default=None)
-    p.add_argument("--max-studies", type=int, default=None, help="Smoke-test prefix of train.csv.")
+    p.add_argument(
+        "--max-studies",
+        type=int,
+        default=None,
+        metavar="N",
+        help="Smoke-test prefix of train.csv (must be >= 1).",
+    )
     p.add_argument("--skip-existing", action="store_true")
     p.add_argument("--progress", action="store_true")
     return p.parse_args(argv)
@@ -35,6 +41,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
+    if args.max_studies is not None and args.max_studies < 1:
+        raise SystemExit("--max-studies must be >= 1.")
     output = args.output_root or (DEFAULT_PROCESSED / args.crop_policy)
     conditions = [args.condition] if args.condition else None
     sample = (conditions or list(CONDITIONS))[0]

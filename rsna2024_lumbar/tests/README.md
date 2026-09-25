@@ -1,4 +1,4 @@
-# Tests — RSNA 2024 preprocess
+# ✔ Tests — RSNA 2024 preprocess
 
 ```bash
 # repo root
@@ -7,11 +7,11 @@ pytest rsna2024_lumbar/tests
 pytest rsna2024_lumbar/tests/test_catalog.py -k incomplete
 ```
 
-GitHub Actions runs the same command. No Kaggle download, no `data/raw/`.
+GitHub Actions runs the same command against **committed** files in `fixtures/` (no Kaggle download, no `data/raw/`).
 
-## Why a synthetic dump
+## ▾ Why a synthetic dump
 
-The real set is huge and not committable. Tests rebuild a **Kaggle-shaped** mini-root in a temp dir (`conftest.py` → `helpers.write_mini_dataset`). Same files the exporter reads:
+The real set is huge and not committable. Tests read a **Kaggle-shaped** mini-root committed under `fixtures/` (`conftest.py` → `mini_raw`). Same files the exporter reads:
 
 ```
 train.csv
@@ -20,9 +20,9 @@ train_series_descriptions.csv
 train_images/<study_id>/<series_id>/<instance_number>.dcm
 ```
 
-Slices are 128×128 MR-like synthetics with a bright 3×3 at **(64, 64)** so crop boxes are deterministic. A copy may appear under `fixtures/` for local browsing; those files are gitignored. See [fixtures/README.md](fixtures/README.md).
+Slices are 128×128 MR-like synthetics with a bright 3×3 at **(64, 64)** so crop boxes are deterministic. See [fixtures/README.md](fixtures/README.md).
 
-## Mini studies
+## ▾ Mini studies
 
 | study | series | what | expected |
 |---|---|---|---|
@@ -34,7 +34,7 @@ SCS only. Other condition columns in `train.csv` are empty. Catalog requires all
 
 `--max-studies 1` = first row of `train.csv` only → 1001 if complete.
 
-## What each file covers
+## ▾ What each file covers
 
 | file | checks |
 |---|---|
@@ -42,8 +42,9 @@ SCS only. Other condition columns in `train.csv` are empty. Catalog requires all
 | `test_catalog.py` | 1002 absent; 1001+1003 → 10 jobs; `max_studies=1` → only 1001 |
 | `test_export.py` | 10 PNGs + `manifest.csv` + `export_meta.json`; 64×64; Moderate path for 1003 L4/L5; skip-existing exports 0 / skips 10; `png_relpath` contract |
 | `test_scale_contract.py` | raw layout = Kaggle names; 1 study → 5 jobs, 2 complete → 10 (linear) |
+| `test_params.py` | CLI defaults / `centered`+`extend50`+`--max-studies 1`; reject bad policy, condition, `max-studies 0`, missing data-root |
 
-## Pass / fail at a glance
+## ▾ Pass / fail at a glance
 
 ```
 centered, SCS, no max_studies
@@ -56,6 +57,6 @@ centered, SCS, no max_studies
 
 A failure usually means: a broken study was kept, a complete one was dropped, crop side flipped, or the on-disk contract changed (trainer will not find PNGs).
 
-## Full dataset (not CI)
+## ⬇ Full dataset (not CI)
 
 Copy the official dump into `../data/raw/` (or pass `--data-root`). Same functions, more rows. `--skip-existing` is the resume switch. `--max-studies N` is the smoke switch before a long export.

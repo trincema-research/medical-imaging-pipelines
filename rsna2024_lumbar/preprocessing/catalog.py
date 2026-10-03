@@ -43,7 +43,7 @@ def require_raw_layout(data_root: Path) -> None:
     if missing:
         raise FileNotFoundError(
             f"Missing {missing} under {data_root}. "
-            "Copy the Kaggle CSVs here (see rsna2024_lumbar/data/raw/README.md)."
+            "Copy the Kaggle CSVs here (see rsna2024_lumbar/data/README.md)."
         )
     if not (data_root / "train_images").is_dir():
         raise FileNotFoundError(f"Missing train_images/ under {data_root}.")

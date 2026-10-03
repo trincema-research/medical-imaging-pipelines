@@ -44,6 +44,9 @@ SCS only. Other condition columns in `train.csv` are empty. Catalog requires all
 | `test_scale_contract.py` | raw layout = Kaggle names; 1 study → 5 jobs, 2 complete → 10 (linear) |
 | `test_params.py` | CLI defaults / `centered`+`extend50`+`--max-studies 1`; reject bad policy, condition, `max-studies 0`, missing data-root |
 | `test_download.py` | dest is `data/raw/`; skip if complete; no kaggle CLI → SystemExit (no network) |
+| `test_unzip.py` | extract tiny zip; `--keep-zip`; refuse partial/corrupt/empty; download reports CLI / partial failure |
+| `test_env.py` | `.env` parse / load; missing `KAGGLE_API_TOKEN` → SystemExit; auth describe never leaks token |
+| `test_log.py` | START/STEP/DATA/OK/NEXT/DONE; traces/download.log + pipeline.log |
 | `test_validate.py` | fixtures layout OK; missing root / incomplete dump fail; `--strict` flags 1002's missing DICOM |
 
 ## ▾ Pass / fail at a glance

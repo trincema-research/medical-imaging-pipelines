@@ -21,8 +21,11 @@ Tiny CI dump in tests. Full Kaggle dump stays **local** in `rsna2024_lumbar/data
 ```bash
 pip install -e ".[dev,kaggle]"
 # or: pip install -r requirements-dev.txt
+# copy .env.example → .env and set KAGGLE_API_TOKEN (gitignored)
 pytest                                          # ✔
-python -m rsna2024_lumbar.data.download         # ⬇
+python -m rsna2024_lumbar.data.download         # ⬇ zip + unzip
+python -m rsna2024_lumbar.data.unzip            # ⬇ if a .zip is still in raw/
+python -m rsna2024_lumbar.data.validate         # ✔
 python -m rsna2024_lumbar.preprocessing --help  # ⚙
 ```
 

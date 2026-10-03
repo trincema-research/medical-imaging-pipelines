@@ -147,8 +147,15 @@ activemq-data/
 # SageMath parsed files
 *.sage.py
 
-# Environments
+# Local CLI traces (keep the README, never commit *.log)
+logs/
+rsna20*/traces/**
+!rsna20*/traces/README.md
+
+# Environments / secrets (never commit real keys)
 .env
+.env.*
+!.env.example
 .envrc
 .venv
 env/

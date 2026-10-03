@@ -13,6 +13,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from common.utils.log import data, done, fail, next_step, ok, start, step, warn
+from rsna2024_lumbar import TRACES_DIR
 from rsna2024_lumbar.data.download import DEFAULT_RAW
 from rsna2024_lumbar.preprocessing.constants import (
     CONDITIONS,
@@ -57,26 +59,42 @@ def validate_raw(
 ) -> RawReport:
     root = Path(data_root).resolve()
     report = RawReport(data_root=root)
+    step("check data-root exists")
+    data(data_root=root, exists=root.is_dir())
     if not root.is_dir():
         report.errors.append(f"data-root does not exist: {root}")
         return report
 
+    step("check required CSVs + train_images/")
     for name in LABEL_CSVS:
-        if not (root / name).is_file():
+        present = (root / name).is_file()
+        data(file=name, present=present, size=(root / name).stat().st_size if present else 0)
+        if not present:
             report.errors.append(f"missing file: {name}")
     images = root / "train_images"
+    data(train_images=images.is_dir())
     if not images.is_dir():
         report.errors.append("missing directory: train_images/")
     if report.errors:
+        data(errors=len(report.errors))
         return report
 
+    step("read label CSVs")
     labels = pd.read_csv(root / "train.csv")
     coords = pd.read_csv(root / "train_label_coordinates.csv")
     series = pd.read_csv(root / "train_series_descriptions.csv")
     report.n_studies = int(labels["study_id"].nunique()) if "study_id" in labels.columns else 0
     report.n_coord_rows = len(coords)
     report.n_series_rows = len(series)
+    step("count DICOMs under train_images/")
     report.n_dicoms = sum(1 for _ in images.rglob("*.dcm"))
+    data(
+        studies=report.n_studies,
+        coord_rows=report.n_coord_rows,
+        series_rows=report.n_series_rows,
+        dicoms=report.n_dicoms,
+        label_cols=list(labels.columns)[:8],
+    )
 
     if "study_id" not in labels.columns:
         report.errors.append("train.csv: missing study_id")
@@ -116,6 +134,8 @@ def validate_raw(
     sample = coords
     if max_coord_checks is not None:
         sample = coords.head(max_coord_checks)
+    step("map coordinate rows to DICOM paths")
+    data(coord_checks=len(sample), strict=strict)
     for row in sample.itertuples(index=False):
         path = images / str(int(row.study_id)) / str(int(row.series_id)) / f"{int(row.instance_number)}.dcm"
         if path.is_file():
@@ -131,23 +151,25 @@ def validate_raw(
             report.errors.append(msg)
         else:
             report.warnings.append(msg)
+    data(coord_ok=report.n_coord_files_ok, coord_missing=report.n_coord_files_missing)
     return report
 
 
 def print_report(report: RawReport) -> None:
-    print(f"data-root: {report.data_root}")
-    print(f"studies:   {report.n_studies:,}")
-    print(f"coords:    {report.n_coord_rows:,}")
-    print(f"series:    {report.n_series_rows:,}")
-    print(f"dicoms:    {report.n_dicoms:,}")
-    print(f"coord->dcm: {report.n_coord_files_ok:,} ok / {report.n_coord_files_missing:,} missing")
+    step("report")
+    data(f"data-root: {report.data_root}")
+    data(f"studies:   {report.n_studies:,}")
+    data(f"coords:    {report.n_coord_rows:,}")
+    data(f"series:    {report.n_series_rows:,}")
+    data(f"dicoms:    {report.n_dicoms:,}")
+    data(f"coord->dcm: {report.n_coord_files_ok:,} ok / {report.n_coord_files_missing:,} missing")
     for w in report.warnings:
-        print(f"warning: {w}")
+        warn(f"warning: {w}")
     if report.ok:
-        print("OK")
+        ok("OK")
     else:
         for e in report.errors:
-            print(f"error: {e}")
+            fail(f"error: {e}")
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -168,7 +190,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def main(argv: list[str] | None = None) -> None:
+    start("rsna2024.data.validate", traces_dir=TRACES_DIR)
     args = parse_args(argv)
+    data(data_root=args.data_root, max_coord_checks=args.max_coord_checks, strict=args.strict)
+    next_step("validate_raw")
     report = validate_raw(
         args.data_root,
         max_coord_checks=args.max_coord_checks,
@@ -176,7 +201,14 @@ def main(argv: list[str] | None = None) -> None:
     )
     print_report(report)
     if not report.ok:
+        next_step("fix the dump (re-download / unzip) then re-run validate")
+        done("validate (failed)")
         raise SystemExit(1)
+    next_step(
+        "python -m rsna2024_lumbar.preprocessing --data-root "
+        f"{report.data_root} --crop-policy centered --max-studies 1 --progress"
+    )
+    done("validate")
 
 
 if __name__ == "__main__":

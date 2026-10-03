@@ -40,6 +40,7 @@ def test_incomplete_raw_is_not_skipped(tmp_path):
 def test_rejects_download_without_credentials(tmp_path, monkeypatch):
     from common.utils import kaggle as kaggle_mod
 
+    monkeypatch.setattr(kaggle_mod, "ensure_kaggle_token", lambda: None)
     monkeypatch.setattr(kaggle_mod, "_download_via_api", lambda *a, **k: False)
     monkeypatch.setattr(kaggle_mod.shutil, "which", lambda _name: None)
     with pytest.raises(SystemExit, match="kaggle CLI"):

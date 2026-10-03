@@ -5,27 +5,21 @@
 …  models/            later
 …  training/          later
 …  nas/               later
-⬇  data/raw/          local Kaggle dump (gitignored)
-⬆  data/processed/    crop PNG cache (gitignored)
+⬇  data/              download.py · unzip.py · validate.py · raw/ · processed/
+☰  traces/            download.log · unzip.log · validate.log · pipeline.log
 ✔  tests/             pytest + synthetic mini-dump
 ```
 
-From repo root (`pip install -e ".[dev]"` first).
+From repo root (`pip install -e ".[dev]"` first). Download + `.env`: [data/README.md](data/README.md).
 
 ## ⬇ Download (Kaggle → data/raw/)
 
-Script lives in `data/download.py` (not `raw/` — that tree is gitignored). Writes into `data/raw/`.
-
 ```bash
+copy .env.example .env    # set KAGGLE_API_TOKEN (gitignored)
 pip install -e ".[kaggle]"
-python -m rsna2024_lumbar.data.download
-```
-
-Needs `~/.kaggle/kaggle.json` (or `KAGGLE_USERNAME` / `KAGGLE_KEY`) and accepted rules on the [competition page](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification). `--force` re-downloads. `--dest` overrides the folder.
-
-```bash
+python -m rsna2024_lumbar.data.download    # zip + unzip; non-zero if it failed
+python -m rsna2024_lumbar.data.unzip       # only if a .zip is still in data/raw/
 python -m rsna2024_lumbar.data.validate
-python -m rsna2024_lumbar.data.validate --data-root rsna2024_lumbar/tests/fixtures
 ```
 
 ## ⚙ Preprocess

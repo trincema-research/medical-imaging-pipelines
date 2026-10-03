@@ -1,4 +1,4 @@
-"""NAS search spaces for RSNA 2024 lumbar (ViT, MaxViT, ConvNeXt, ConvNeXt3D, EfficientNet)."""
+"""NAS search spaces for RSNA 2024 lumbar (ViT, MaxViT, ConvNeXt, ConvNeXt3D, EfficientNet, EfficientNet3D)."""
 
 from rsna2024_lumbar.nas.families import FAMILIES, FAMILY_SPECS, FamilySpec, require_family
 from rsna2024_lumbar.nas.search_space import (

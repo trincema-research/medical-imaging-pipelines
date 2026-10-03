@@ -21,7 +21,8 @@ EXPECTED_TRIALS = {
     "maxvit": 1152,
     "convnext": 144,
     "convnext3d": 384,
-    "efficientnet": 24,
+    "efficientnet": 144,
+    "efficientnet3d": 384,
 }
 
 EXPECTED_VARIANTS = {
@@ -30,6 +31,7 @@ EXPECTED_VARIANTS = {
     "convnext": ["convnext_small"],
     "convnext3d": ["cnn3d_s", "cnn3d_b"],
     "efficientnet": ["efficientnet_v2_s"],
+    "efficientnet3d": ["cnn3d_s", "cnn3d_b"],
 }
 
 
@@ -53,6 +55,13 @@ def test_output_bases_are_isolated():
 def test_legacy_convnext_24_grid_still_expands():
     spec = FAMILY_SPECS["convnext"]
     space = load_search_space(CONFIGS / "convnext_nas_search_space.json")
+    trials = build_trial_configs(space, spec)
+    assert len(trials) == 24
+
+
+def test_legacy_efficientnet_24_grid_still_expands():
+    spec = FAMILY_SPECS["efficientnet"]
+    space = load_search_space(CONFIGS / "efficientnet_nas_search_space.json")
     trials = build_trial_configs(space, spec)
     assert len(trials) == 24
 

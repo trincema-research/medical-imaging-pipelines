@@ -1,4 +1,4 @@
-"""Isolated NAS families: ViT, MaxViT, ConvNeXt, ConvNeXt3D, EfficientNet."""
+"""Isolated NAS families: ViT, MaxViT, ConvNeXt, ConvNeXt3D, EfficientNet, EfficientNet3D."""
 
 from __future__ import annotations
 
@@ -12,12 +12,14 @@ FAMILY_MAXVIT = "maxvit"
 FAMILY_CONVNEXT = "convnext"
 FAMILY_CONVNEXT3D = "convnext3d"
 FAMILY_EFFICIENTNET = "efficientnet"
+FAMILY_EFFICIENTNET3D = "efficientnet3d"
 FAMILIES = (
     FAMILY_VIT,
     FAMILY_MAXVIT,
     FAMILY_CONVNEXT,
     FAMILY_CONVNEXT3D,
     FAMILY_EFFICIENTNET,
+    FAMILY_EFFICIENTNET3D,
 )
 
 
@@ -64,9 +66,17 @@ FAMILY_SPECS: dict[str, FamilySpec] = {
     FAMILY_EFFICIENTNET: FamilySpec(
         name=FAMILY_EFFICIENTNET,
         model_type="efficientnet",
-        config_file=CONFIGS / "efficientnet_nas_search_space.json",
+        config_file=CONFIGS / "efficientnet_nas_search_space_pruned.json",
         output_base="runs/lumbar_nas_efficientnet",
         variant_key="effnet2d_variants",
+    ),
+    FAMILY_EFFICIENTNET3D: FamilySpec(
+        name=FAMILY_EFFICIENTNET3D,
+        model_type="efficientnet3d",
+        config_file=CONFIGS / "efficientnet3d_nas_search_space_192.json",
+        output_base="runs/lumbar_nas_efficientnet3d",
+        variant_key="cnn3d_variants",
+        input_layout="3d_level_stack",
     ),
 }
 

@@ -50,7 +50,7 @@ SCS only. Other condition columns in `train.csv` are empty. Catalog requires all
 | `test_log.py` | START/STEP/DATA/OK/NEXT/DONE; traces/download.log + pipeline.log |
 | `test_smoke_samples.py` | two complete raw studies on disk; `centered` manifest is `@pytest.mark.local` |
 | `test_validate.py` | fixtures layout OK; missing root / incomplete dump fail; `--strict` flags 1002's missing DICOM |
-| `test_nas.py` | ViT 2304 / MaxViT 1152 / ConvNeXt 144 / ConvNeXt3D 384 / EfficientNet 24; legacy ConvNeXt 24-cell file; isolated `runs/` bases; `extend50` → 96×64; reject bad family / condition |
+| `test_nas.py` | ViT 2304 / MaxViT 1152 / ConvNeXt 144 / ConvNeXt3D 384 / EfficientNet 144 / EfficientNet3D 384; legacy 24-cell CNN files; isolated `runs/` bases; `extend50` → 96×64; reject bad family / condition |
 
 ## ▾ Pass / fail at a glance
 

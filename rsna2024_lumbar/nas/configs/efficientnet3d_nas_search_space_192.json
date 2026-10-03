@@ -1,0 +1,29 @@
+{
+  "cnn3d_variants": ["cnn3d_s", "cnn3d_b"],
+  "batch_sizes": [8],
+  "freeze_options": [false],
+  "head_depths": [2, 3, 4],
+  "head_hidden_dims": [null, 256],
+  "head_activations": ["gelu", "relu"],
+  "use_pretrained": [false],
+  "amp_options": [true],
+  "scheduler_types": ["CosineAnnealingLR"],
+  "epochs": 50,
+  "patience": 5,
+  "num_workers": 4,
+  "search_mode": "grid",
+  "grids": [
+    {
+      "learning_rates": [0.0008, 0.0016],
+      "weight_decays": [0, 0.01, 0.05],
+      "head_dropout_rates": [0.1, 0.2],
+      "optimizer_types": ["AdamW"]
+    },
+    {
+      "learning_rates": [0.0048, 0.016],
+      "weight_decays": [0, 0.01],
+      "head_dropout_rates": [0.1],
+      "optimizer_types": ["SGD"]
+    }
+  ]
+}

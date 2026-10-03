@@ -25,6 +25,10 @@ rsna2024-export-crops = "rsna2024_lumbar.preprocessing.cli:main"
 rsna2024-download-raw = "rsna2024_lumbar.data.download:main"
 rsna2024-unzip-raw = "rsna2024_lumbar.data.unzip:main"
 rsna2024-validate-raw = "rsna2024_lumbar.data.validate:main"
+rsna2024-nas = "rsna2024_lumbar.nas.cli:main"
+
+[tool.setuptools.package-data]
+"rsna2024_lumbar.nas" = ["configs/*.json"]
 
 [tool.setuptools.packages.find]
 include = ["common*", "rsna2024_lumbar*"]

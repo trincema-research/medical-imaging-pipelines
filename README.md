@@ -27,6 +27,7 @@ python -m rsna2024_lumbar.data.download         # ⬇ zip + unzip
 python -m rsna2024_lumbar.data.unzip            # ⬇ if a .zip is still in raw/
 python -m rsna2024_lumbar.data.validate         # ✔
 python -m rsna2024_lumbar.preprocessing --help  # ⚙
+python -m rsna2024_lumbar.nas --family vit --list  # ⚙ NAS dry-run
 ```
 
 Full export (copy `train.csv` + `train_images/` into `data/raw/`):

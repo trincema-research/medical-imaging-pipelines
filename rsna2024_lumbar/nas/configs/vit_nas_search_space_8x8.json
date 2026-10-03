@@ -1,0 +1,31 @@
+{
+  "vit_variants": ["vit_b_16", "vit_l_16", "vit_b_32", "vit_l_32"],
+  "batch_sizes": [128],
+  "freeze_options": [false],
+  "head_activations": ["gelu"],
+  "use_pretrained": [true],
+  "amp_options": [true],
+  "scheduler_types": ["CosineAnnealingLR"],
+  "epochs": 50,
+  "patience": 5,
+  "num_workers": 4,
+  "search_mode": "grid",
+  "grids": [
+    {
+      "optimizer_types": ["AdamW"],
+      "learning_rates": [0.00005, 0.0001, 0.0002, 0.0004, 0.0008, 0.0012, 0.0016, 0.0024],
+      "weight_decays": [0, 0.001, 0.005, 0.01, 0.02, 0.05, 0.08, 0.1],
+      "head_depths": [2, 3],
+      "head_hidden_dims": [null, 128, 256, 512],
+      "head_dropout_rates": [0.1]
+    },
+    {
+      "optimizer_types": ["SGD"],
+      "learning_rates": [0.0016, 0.0032, 0.0048, 0.008, 0.012, 0.016, 0.024, 0.032],
+      "weight_decays": [0, 0.001, 0.005, 0.01, 0.02, 0.05, 0.08, 0.1],
+      "head_depths": [2],
+      "head_hidden_dims": [256],
+      "head_dropout_rates": [0.1]
+    }
+  ]
+}

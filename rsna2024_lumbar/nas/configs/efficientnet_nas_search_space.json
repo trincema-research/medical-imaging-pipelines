@@ -1,0 +1,18 @@
+{
+  "effnet2d_variants": ["efficientnet_v2_s"],
+  "batch_sizes": [8],
+  "learning_rates": [0.0003, 0.0001, 0.00005],
+  "weight_decays": [0.05, 0.01],
+  "head_depths": [1, 2],
+  "head_hidden_dims": [null, 256],
+  "use_pretrained": [true],
+  "freeze_options": [false],
+  "amp_options": [true],
+  "head_dropout_rates": [0.0],
+  "head_activations": ["gelu"],
+  "optimizer_types": ["AdamW"],
+  "scheduler_types": ["CosineAnnealingLR"],
+  "epochs": 50,
+  "num_workers": 4,
+  "search_mode": "grid"
+}

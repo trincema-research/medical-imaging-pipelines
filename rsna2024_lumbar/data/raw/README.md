@@ -1,10 +1,15 @@
-# ⬇ raw/ — dump destination
+# ⬇ raw/ — labels + smoke studies in git
 
-Gitignored (this README stays). ~30GB. CI never reads here (`✔ tests/fixtures/` instead).
+Committed:
 
-How to fill it: [../README.md](../README.md). Download unzips automatically; if a `.zip` is left here run `python -m rsna2024_lumbar.data.unzip`. A `*.kaggle-partial` file means the transfer is not finished — do not unzip yet. Token is the repo-root `.env`, not this folder.
+- `train.csv`, `train_label_coordinates.csv`, `train_series_descriptions.csv`
+- two **complete** studies (only the DICOM instances the cropper needs): `3318343342`, `3065863143`
 
-Expected files:
+Not committed: the Kaggle `.zip`, `*.kaggle-partial`, the rest of `train_images/` (~30GB), `test_images/`.
+
+Download does **not** treat the two smoke studies as a full dump. It only skips when `train_images/` has a folder for every `study_id` in `train.csv`.
+
+How to fill the rest: [../README.md](../README.md). Token is the repo-root `.env`.
 
 ```
 train.csv

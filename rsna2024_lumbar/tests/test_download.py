@@ -24,8 +24,8 @@ def test_slug_is_the_2024_lumbar_competition():
 
 
 def test_skips_when_raw_already_complete(tmp_path, capsys):
-    (tmp_path / "train.csv").write_text("study_id\n", encoding="utf-8")
-    (tmp_path / "train_images").mkdir()
+    (tmp_path / "train.csv").write_text("study_id\n1\n", encoding="utf-8")
+    (tmp_path / "train_images" / "1").mkdir(parents=True)
     main(["--dest", str(tmp_path)])
     out = capsys.readouterr().out
     assert "Already present" in out
@@ -33,7 +33,8 @@ def test_skips_when_raw_already_complete(tmp_path, capsys):
 
 
 def test_incomplete_raw_is_not_skipped(tmp_path):
-    (tmp_path / "train.csv").write_text("study_id\n", encoding="utf-8")
+    (tmp_path / "train.csv").write_text("study_id\n1\n2\n", encoding="utf-8")
+    (tmp_path / "train_images" / "1").mkdir(parents=True)
     assert raw_looks_complete(tmp_path) is False
 
 

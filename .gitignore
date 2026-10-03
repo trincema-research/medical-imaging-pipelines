@@ -224,14 +224,13 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Local challenge dumps (never push)
-rsna2024_lumbar/data/raw/**
-!rsna2024_lumbar/data/raw/README.md
-rsna2024_lumbar/data/processed/**
-!rsna2024_lumbar/data/processed/README.md
+# Challenge archives (never commit the Kaggle zip or a partial transfer)
+*.zip
+*.kaggle-partial
 
-# Keep other challenge data folders local-only when they appear
+# Full raw DICOM dump stays local. Label CSVs + a few smoke studies are force-added.
 rsna20*/data/raw/**
 !rsna20*/data/raw/README.md
-rsna20*/data/processed/**
-!rsna20*/data/processed/README.md
+!rsna20*/data/raw/train.csv
+!rsna20*/data/raw/train_label_coordinates.csv
+!rsna20*/data/raw/train_series_descriptions.csv

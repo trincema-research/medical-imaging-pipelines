@@ -16,7 +16,7 @@ Shared training / preprocessing code for RSNA challenges. Each year is isolated;
 
 ## ▸ RSNA 2024 — start here
 
-Tiny CI dump in tests. Full Kaggle dump stays **local** in `rsna2024_lumbar/data/raw/` (gitignored). Crops write to `data/processed/`.
+Tiny CI dump in tests. Label CSVs are committed under `rsna2024_lumbar/data/raw/`; `train_images/` stays **local** (gitignored). Crops write to `data/processed/`.
 
 ```bash
 pip install -e ".[dev,kaggle]"
@@ -43,7 +43,9 @@ python -m rsna2024_lumbar.preprocessing \
 | | Path | Git | What |
 |---|---|---|---|
 | ✔ | `*/tests/` | yes | synthetic mini-dump (CI) |
-| ⬇ | `*/data/raw/` | no | official challenge download |
-| ⬆ | `*/data/processed/` | no | cropped cache the trainer loads |
+| ⬇ | `*/data/raw/*.csv` | yes | Kaggle label tables |
+| ⬇ | `*/data/raw/train_images/` (2 studies) | yes | smoke DICOMs only |
+| ⬇ | rest of `train_images/` + `.zip` | no | full official dump |
+| ⬆ | `*/data/processed/centered/` | yes | PNG crop cache (~240MB) |
 
 Remote tests never need the big dump. Point `--data-root` at `data/raw` locally (or any existing checkout).

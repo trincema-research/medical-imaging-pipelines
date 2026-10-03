@@ -1,5 +1,11 @@
 # ⬆ processed/ — crop cache
 
-Default export target: `centered/` or `extend50/`. Trainer will load this folder. Gitignored.
+`centered/` (64×64 PNGs + `manifest.csv`) is committed so smoke/training can run without re-exporting. ~240MB.
 
-Fill via preprocess (`--data-root` → `raw/`). How to get `raw/`: [../README.md](../README.md).
+Fill or refresh:
+
+```bash
+python -m rsna2024_lumbar.preprocessing --crop-policy centered --skip-existing --progress
+```
+
+`extend50/` stays local if you export it. Trainer loads this folder.

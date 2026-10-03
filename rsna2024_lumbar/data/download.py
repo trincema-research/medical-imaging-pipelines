@@ -1,7 +1,7 @@
 """
 ⬇ Download the Kaggle RSNA 2024 lumbar dump into data/raw/.
 
-Not stored under data/raw/ itself — that folder is gitignored.
+Script lives next to raw/ (not inside it). Label CSVs in raw/ are committed; train_images/ is not.
 
     pip install -e ".[kaggle]"
     python -m rsna2024_lumbar.data.download
@@ -41,8 +41,27 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return p.parse_args(argv)
 
 
+def _n_label_studies(dest: Path) -> int:
+    ids: set[str] = set()
+    with (dest / "train.csv").open(encoding="utf-8") as fh:
+        next(fh, None)
+        for line in fh:
+            if line.strip():
+                ids.add(line.split(",", 1)[0].strip())
+    return len(ids)
+
+
 def raw_looks_complete(dest: Path) -> bool:
-    return (dest / "train.csv").is_file() and (dest / "train_images").is_dir()
+    """True only when on-disk study folders cover every study in train.csv.
+
+    Two committed smoke studies plus the full label CSVs must not skip download.
+    """
+    images = dest / "train_images"
+    if not (dest / "train.csv").is_file() or not images.is_dir():
+        return False
+    n_dirs = sum(1 for p in images.iterdir() if p.is_dir())
+    n_csv = _n_label_studies(dest)
+    return n_csv > 0 and n_dirs >= n_csv
 
 
 def require_extracted_layout(dest: Path) -> None:

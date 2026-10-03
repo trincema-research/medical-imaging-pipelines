@@ -35,8 +35,8 @@ def test_trace_kinds_on_stdout(capsys):
 def test_download_skip_emits_trace(tmp_path, capsys):
     from rsna2024_lumbar.data.download import main
 
-    (tmp_path / "train.csv").write_text("study_id\n", encoding="utf-8")
-    (tmp_path / "train_images").mkdir()
+    (tmp_path / "train.csv").write_text("study_id\n1\n", encoding="utf-8")
+    (tmp_path / "train_images" / "1").mkdir(parents=True)
     main(["--dest", str(tmp_path)])
     out = capsys.readouterr().out
     assert "START" in out

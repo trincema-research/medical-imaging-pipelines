@@ -4,10 +4,11 @@
 # repo root
 pip install -e ".[dev]"
 pytest rsna2024_lumbar/tests
+pytest -m local                          # processed cache / full dump only
 pytest rsna2024_lumbar/tests/test_catalog.py -k incomplete
 ```
 
-GitHub Actions runs the same command against **committed** files in `fixtures/` (no Kaggle download, no `data/raw/`).
+GitHub Actions runs `pytest -m "not local"` against **committed** fixtures + smoke DICOMs. Tests marked `local` need `data/processed/centered/` or a full raw dump and stay on this machine.
 
 ## ▾ Why a synthetic dump
 
@@ -47,7 +48,7 @@ SCS only. Other condition columns in `train.csv` are empty. Catalog requires all
 | `test_unzip.py` | extract tiny zip; `--keep-zip`; refuse partial/corrupt/empty; download reports CLI / partial failure |
 | `test_env.py` | `.env` parse / load; missing `KAGGLE_API_TOKEN` → SystemExit; auth describe never leaks token |
 | `test_log.py` | START/STEP/DATA/OK/NEXT/DONE; traces/download.log + pipeline.log |
-| `test_smoke_samples.py` | two complete raw studies + centered `manifest.csv` are on disk |
+| `test_smoke_samples.py` | two complete raw studies on disk; `centered` manifest is `@pytest.mark.local` |
 | `test_validate.py` | fixtures layout OK; missing root / incomplete dump fail; `--strict` flags 1002's missing DICOM |
 
 ## ▾ Pass / fail at a glance

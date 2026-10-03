@@ -15,4 +15,4 @@ jobs:
       - run: pip install -e ".[dev]"
       - name: fixtures present
         run: test -f rsna2024_lumbar/tests/fixtures/train.csv && test -d rsna2024_lumbar/tests/fixtures/train_images
-      - run: pytest --tb=short
+      - run: pytest --tb=short -m "not local"

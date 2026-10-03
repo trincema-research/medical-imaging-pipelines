@@ -34,3 +34,6 @@ exclude = ["rsna2024_lumbar.tests*"]
 testpaths = ["rsna2024_lumbar/tests"]
 pythonpath = ["."]
 addopts = "-q"
+markers = [
+    "local: needs a local dump (processed cache / Kaggle); skipped in GitHub Actions",
+]

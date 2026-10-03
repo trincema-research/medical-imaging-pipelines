@@ -1,7 +1,12 @@
+import pytest
+
 from pathlib import Path
 
 SMOKE_STUDIES = (3318343342, 3065863143)
 RAW = Path(__file__).resolve().parents[1] / "data" / "raw"
+CENTERED_MANIFEST = (
+    Path(__file__).resolve().parents[1] / "data" / "processed" / "centered" / "manifest.csv"
+)
 
 
 def test_committed_smoke_studies_have_dicoms():
@@ -10,6 +15,7 @@ def test_committed_smoke_studies_have_dicoms():
         assert len(dcms) >= 15, f"study {study_id} missing smoke DICOMs"
 
 
+@pytest.mark.local
 def test_centered_crop_cache_has_manifest():
-    manifest = Path(__file__).resolve().parents[1] / "data" / "processed" / "centered" / "manifest.csv"
-    assert manifest.is_file()
+    """Full PNG cache is local-only (~240MB, not in git / CI)."""
+    assert CENTERED_MANIFEST.is_file()

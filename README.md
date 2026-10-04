@@ -28,9 +28,12 @@ python -m rsna2024_lumbar.data.unzip            # ⬇ if a .zip is still in raw/
 python -m rsna2024_lumbar.data.validate         # ✔
 python -m rsna2024_lumbar.preprocessing --help  # ⚙
 python -m rsna2024_lumbar.nas --family vit --list  # ⚙ NAS dry-run
-python -m rsna2024_lumbar.nas.launch --family efficientnet --num-gpus 8  # ⚙ 1/2/4/8 GPU shards
-python -m rsna2024_lumbar.nas.pack --profile efficientnet_families       # ⚙ cloud zip
+python -m rsna2024_lumbar.nas.launch --family efficientnet --num-gpus 8 --spawn --wait  # GPU shards
+python -m rsna2024_lumbar.nas.pack --profile efficientnet_deploy --legacy-root /path/to/lumbar  # deploy zip
+python -m rsna2024_lumbar.nas.deploy --family efficientnet --num-gpus 8 --all-conditions  # cloud one-shot
 ```
+
+**Cloud NAS:** pack includes code, label CSVs, optional `data/processed/centered/` PNGs, and a copied `vit_nas_lumbar.py` bundle. Unzip on the GPU box and run `nas.deploy` (see [rsna2024_lumbar/nas/README.md](rsna2024_lumbar/nas/README.md)).
 
 Full export (copy `train.csv` + `train_images/` into `data/raw/`):
 
@@ -49,6 +52,6 @@ python -m rsna2024_lumbar.preprocessing \
 | ⬇ | `*/data/raw/*.csv` | yes | Kaggle label tables |
 | ⬇ | `*/data/raw/train_images/` (2 studies) | yes | smoke DICOMs only |
 | ⬇ | rest of `train_images/` + `.zip` | no | full official dump |
-| ⬆ | `*/data/processed/centered/` | yes | PNG crop cache (~240MB) |
+| ⬆ | `*/data/processed/` | no | full PNG cache (local or inside deploy zip) |
 
 Remote tests never need the big dump. Point `--data-root` at `data/raw` locally (or any existing checkout).

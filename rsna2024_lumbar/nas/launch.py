@@ -46,6 +46,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         metavar="N",
         help="Override visible CUDA count (tests / dry-run). Default: probe torch.",
     )
+    p.add_argument("--data-root", type=str, default=None)
+    p.add_argument("--crops-root", type=str, default=None)
+    p.add_argument("--epochs", type=int, default=50)
+    p.add_argument("--early-stop-patience", type=int, default=None)
+    p.add_argument("--amp", action="store_true")
+    p.add_argument("--no-amp", action="store_true")
+    p.add_argument("--progress", action="store_true")
+    p.add_argument("--no-progress", action="store_true")
+    p.add_argument("--resume", action="store_true", default=True)
+    p.add_argument("--no-resume", action="store_true")
     p.add_argument("--spawn", action="store_true", help="Start one subprocess per GPU shard.")
     p.add_argument("--wait", action="store_true", help="With --spawn, block until shards exit.")
     return p.parse_args(argv)
@@ -89,7 +99,33 @@ def format_plan(plan: LaunchPlan) -> str:
     return "\n".join(lines)
 
 
-def spawn_shard(plan: LaunchPlan, shard: GpuShard) -> subprocess.Popen:
+def _worker_training_flags(args: argparse.Namespace) -> list[str]:
+    flags: list[str] = [
+        "--epochs",
+        str(args.epochs),
+    ]
+    if args.data_root:
+        flags.extend(["--data-root", args.data_root])
+    if args.crops_root:
+        flags.extend(["--crops-root", args.crops_root])
+    if args.no_amp:
+        flags.append("--no-amp")
+    elif args.amp:
+        flags.append("--amp")
+    if args.no_resume:
+        flags.append("--no-resume")
+    elif args.resume:
+        flags.append("--resume")
+    if args.no_progress:
+        flags.append("--no-progress")
+    elif args.progress:
+        flags.append("--progress")
+    if args.early_stop_patience is not None:
+        flags.extend(["--early-stop-patience", str(args.early_stop_patience)])
+    return flags
+
+
+def spawn_shard(plan: LaunchPlan, shard: GpuShard, args: argparse.Namespace) -> subprocess.Popen:
     env = os.environ.copy()
     env["CUDA_VISIBLE_DEVICES"] = str(shard.gpu_id)
     env.setdefault("MPLBACKEND", "Agg")
@@ -107,9 +143,19 @@ def spawn_shard(plan: LaunchPlan, shard: GpuShard) -> subprocess.Popen:
         str(shard.start_trial),
         "--end-trial",
         str(shard.end_trial),
+        "--output-base",
+        plan.spec.output_base,
+        *_worker_training_flags(args),
     ]
     print(f"GPU {shard.gpu_id}: trials {shard.start_trial}-{shard.end_trial}")
     return subprocess.Popen(cmd, env=env)
+
+
+def _wait_processes(processes: list[subprocess.Popen]) -> None:
+    codes = [proc.wait() for proc in processes]
+    failed = sum(code != 0 for code in codes)
+    if failed:
+        raise SystemExit(f"{failed} GPU shard(s) exited with non-zero status.")
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -130,17 +176,24 @@ def main(argv: list[str] | None = None) -> None:
         print()
     if not args.spawn:
         return
+
+    sequential = args.all_conditions and args.wait
+    if sequential:
+        for plan in plans:
+            print(f"=== {plan.condition} ({plan.n_trials} trials, {plan.num_gpus} GPU(s)) ===")
+            processes = [spawn_shard(plan, shard, args) for shard in plan.shards]
+            _wait_processes(processes)
+        print("All GPU shards finished.")
+        return
+
     processes: list[subprocess.Popen] = []
     for plan in plans:
         for shard in plan.shards:
-            processes.append(spawn_shard(plan, shard))
+            processes.append(spawn_shard(plan, shard, args))
     if not args.wait:
         print(f"Started {len(processes)} background shard(s).")
         return
-    codes = [proc.wait() for proc in processes]
-    failed = sum(code != 0 for code in codes)
-    if failed:
-        raise SystemExit(f"{failed} GPU shard(s) exited with non-zero status.")
+    _wait_processes(processes)
     print("All GPU shards finished.")
 
 

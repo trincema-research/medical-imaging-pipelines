@@ -117,7 +117,15 @@ def test_launch_cli_rejects_bad_gpu_count():
 
 def test_pack_zip_without_crops(tmp_path):
     dest = tmp_path / "nas.zip"
-    pack_main(["--profile", "efficientnet_families", "--output", str(dest)])
+    pack_main(
+        [
+            "--profile",
+            "efficientnet_families",
+            "--output",
+            str(dest),
+            "--skip-bundle",
+        ]
+    )
     assert dest.is_file()
     with zipfile.ZipFile(dest) as zf:
         names = zf.namelist()
@@ -129,7 +137,7 @@ def test_pack_zip_without_crops(tmp_path):
 
 
 def test_pack_collect_skips_processed_by_default():
-    files = collect_pack_files(include_crops=False, crop_policy="centered")
+    files = collect_pack_files(include_crops=False, crop_policy="centered", bundle_files=[])
     assert any(path.name == "gpus.py" for path in files)
     assert not any("processed" in path.parts and path.suffix == ".png" for path in files)
 

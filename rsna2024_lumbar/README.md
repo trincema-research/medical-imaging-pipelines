@@ -4,7 +4,7 @@
 ⚙  preprocessing/     crop DICOMs → PNG cache
 …  models/            later
 …  training/          later
-⚙  nas/               ViT · MaxViT · ConvNeXt · ConvNeXt3D · EfficientNet · EfficientNet3D grids (dry-run)
+⚙  nas/               NAS grids · GPU launch · cloud pack/deploy (EfficientNet/ConvNeXt/…)
 ⬇  data/              download.py · unzip.py · validate.py · raw/ · processed/
 ☰  traces/            download.log · unzip.log · validate.log · pipeline.log
 ✔  tests/             pytest + synthetic mini-dump
@@ -41,9 +41,22 @@ python -m rsna2024_lumbar.preprocessing \
 
 `--data-root` is any Kaggle-shaped folder (`train.csv` + `train_images/`). Default output is `data/processed/<policy>/`. Policies: `centered` (64×64), `extend50` (96×64). Incomplete studies (missing a level/DICOM) are skipped.
 
-## ⚙ NAS (dry-run)
+## ⚙ NAS
 
-Six isolated families. Expands the grids only — no GPU / no training yet. Counts are **per condition**.
+Six isolated families. Grid expansion, 1/2/4/8 GPU shards, and cloud deploy. **per condition** = one task; **all 5** = `--all-conditions` (sequential when `--spawn --wait`).
+
+**Pack + run on cloud (EfficientNet 2D, all five conditions):**
+
+```bash
+# On a machine with crops under data/processed/centered/ and the legacy lumbar training repo:
+python -m rsna2024_lumbar.nas.pack --profile efficientnet_deploy --legacy-root /path/to/rsna-2024-lumbar-spine-degenerative-classification
+
+# On the GPU instance (unzip, then from repo root):
+python -m rsna2024_lumbar.nas.deploy --family efficientnet --num-gpus 8 --all-conditions \
+  --crop-policy centered --epochs 50 --early-stop-patience 5
+```
+
+Dry-run grid:
 
 ```bash
 python -m rsna2024_lumbar.nas --family vit --list
@@ -54,16 +67,16 @@ python -m rsna2024_lumbar.nas --family efficientnet --list
 python -m rsna2024_lumbar.nas --family efficientnet3d --list
 ```
 
-| family | trials | output |
-|---|---:|---|
-| `vit` | 2304 | `runs/lumbar_nas` |
-| `maxvit` | 1152 | `runs/lumbar_nas_maxvit` |
-| `convnext` | 144 | `runs/lumbar_nas_convnext` |
-| `convnext3d` | 384 | `runs/lumbar_nas_convnext3d` |
-| `efficientnet` | 144 | `runs/lumbar_nas_efficientnet` |
-| `efficientnet3d` | 384 | `runs/lumbar_nas_efficientnet3d` |
+| family | per condition | all 5 | output |
+|---|---:|---:|---|
+| `vit` | 2304 | 11520 | `runs/lumbar_nas` |
+| `maxvit` | 1152 | 5760 | `runs/lumbar_nas_maxvit` |
+| `convnext` | 144 | 720 | `runs/lumbar_nas_convnext` |
+| `convnext3d` | 384 | 1920 | `runs/lumbar_nas_convnext3d` |
+| `efficientnet` | 144 | 720 | `runs/lumbar_nas_efficientnet` |
+| `efficientnet3d` | 384 | 1920 | `runs/lumbar_nas_efficientnet3d` |
 
-`--crop-policy centered|extend50` sets PNG size. Shard across **1 / 2 / 4 / 8** GPUs (`--num-gpus 0` = auto). Pack a cloud zip with `python -m rsna2024_lumbar.nas.pack`. Depth: [nas/README.md](nas/README.md).
+`--crop-policy centered|extend50` sets PNG size. Shard across **1 / 2 / 4 / 8** GPUs (`--num-gpus 0` = auto). Training uses bundled `vit_nas_lumbar.py` (staged by `nas.pack`). Depth: [nas/README.md](nas/README.md).
 
 ## ✔ Tests
 
@@ -72,7 +85,7 @@ pytest rsna2024_lumbar/tests
 pytest rsna2024_lumbar/tests/test_export.py -q
 ```
 
-CI reads **committed** `tests/fixtures/` (same CSV/DICOM layout, no patient data). We assert crop geometry, incomplete studies drop, PNG/manifest write, `--skip-existing` resume, job count vs `--max-studies`, NAS trial counts (2304 / 1152 / 144 / 384 / 144 / 384), isolated NAS output bases, and reject bad `--crop-policy` / `--condition` / `--max-studies` / `--family`.
+CI reads **committed** `tests/fixtures/` (same CSV/DICOM layout, no patient data). We assert crop geometry, incomplete studies drop, PNG/manifest write, `--skip-existing` resume, job count vs `--max-studies`, NAS trial counts per condition (2304 / 1152 / 144 / 384 / 144 / 384; ×5 if `--all-conditions`), isolated NAS output bases, and reject bad `--crop-policy` / `--condition` / `--max-studies` / `--family`.
 
 | | input | result |
 |---|---|---|

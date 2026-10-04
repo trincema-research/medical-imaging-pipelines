@@ -19,6 +19,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
 kaggle = ["kaggle>=1.6"]
+nas = ["torch>=2.1", "torchvision>=0.16"]
 
 [project.scripts]
 rsna2024-export-crops = "rsna2024_lumbar.preprocessing.cli:main"
@@ -28,6 +29,7 @@ rsna2024-validate-raw = "rsna2024_lumbar.data.validate:main"
 rsna2024-nas = "rsna2024_lumbar.nas.cli:main"
 rsna2024-nas-launch = "rsna2024_lumbar.nas.launch:main"
 rsna2024-nas-pack = "rsna2024_lumbar.nas.pack:main"
+rsna2024-nas-deploy = "rsna2024_lumbar.nas.deploy:main"
 
 [tool.setuptools.package-data]
 "rsna2024_lumbar.nas" = ["configs/*.json"]

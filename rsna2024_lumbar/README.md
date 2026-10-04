@@ -60,6 +60,9 @@ python -m rsna2024_lumbar.nas.deploy --family efficientnet --num-gpus 8 --all-co
 
 ```bash
 python -m rsna2024_lumbar.nas.best --family convnext --layout 2d --shared --attach-grid-index
+
+# Batch CSV for ViT / MaxViT / ConvNeXt (2D + 3D) from ``runs/NAS results/``
+python -m rsna2024_lumbar.nas.summarize
 ```
 
 Dry-run grid:

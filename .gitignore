@@ -244,3 +244,5 @@ rsna20*/data/raw/**
 !rsna20*/data/raw/train.csv
 !rsna20*/data/raw/train_label_coordinates.csv
 !rsna20*/data/raw/train_series_descriptions.csv
+
+# NAS compact exports are committed under rsna2024_lumbar/data/nas_compact/ (see README there).

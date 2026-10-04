@@ -1,0 +1,5 @@
+{
+  "source_trial_dir": "trial_1007_left_subarticular_stenosis_maxvit_maxvit_small_tf_224_img64x64_bs128_lr0.0024_wd0.05_head3_hd256_cropcentered_srcpng_finetune_pre_amp",
+  "source_result": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\MaxViT\\2d\\left_subarticular_stenosis\\left_subarticular_stenosis\\trial_1007_left_subarticular_stenosis_maxvit_maxvit_small_tf_224_img64x64_bs128_lr0.0024_wd0.05_head3_hd256_cropcentered_srcpng_finetune_pre_amp\\result.json",
+  "note": "Per-epoch metrics are in training_history.csv; hyperparameters in trial_config.json."
+}

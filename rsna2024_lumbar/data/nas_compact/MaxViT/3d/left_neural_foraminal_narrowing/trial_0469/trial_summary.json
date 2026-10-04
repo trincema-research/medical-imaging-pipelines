@@ -1,0 +1,5 @@
+{
+  "source_trial_dir": "trial_469_left_neural_foraminal_narrowing_maxvit3d_maxvit3d_tiny_img64x64_bs128_lr0.0008_wd0.005_head3_layout3d_level_stack_cropcentered_srcpng_finetune_pre_amp",
+  "source_result": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\MaxViT\\3d\\left_neural_foraminal_narrowing\\left_neural_foraminal_narrowing\\trial_469_left_neural_foraminal_narrowing_maxvit3d_maxvit3d_tiny_img64x64_bs128_lr0.0008_wd0.005_head3_layout3d_level_stack_cropcentered_srcpng_finetune_pre_amp\\result.json",
+  "note": "Per-epoch metrics are in training_history.csv; hyperparameters in trial_config.json."
+}

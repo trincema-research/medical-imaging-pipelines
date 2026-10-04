@@ -1,0 +1,5 @@
+{
+  "source_trial_dir": "trial_1290_spinal_canal_stenosis_vit3d_vit3d_b_img64x64_bs256_lr0.0002_wd0.001_head2_hd128_layout3d_level_stack_cropcentered_srcpng_finetune_scratch_amp",
+  "source_result": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\ViT\\3d\\spinal_canal_stenosis_3d_vit\\spinal_canal_stenosis\\trial_1290_spinal_canal_stenosis_vit3d_vit3d_b_img64x64_bs256_lr0.0002_wd0.001_head2_hd128_layout3d_level_stack_cropcentered_srcpng_finetune_scratch_amp\\result.json",
+  "note": "Per-epoch metrics are in training_history.csv; hyperparameters in trial_config.json."
+}

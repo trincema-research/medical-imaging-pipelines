@@ -12,6 +12,9 @@ from rsna2024_lumbar.preprocessing.constants import CONDITIONS
 
 CSV_FIELDNAMES: tuple[str, ...] = (
     "selection",
+    "model_group",
+    "archive_layout",
+    "archive_label",
     "family",
     "results_root",
     "rank_metric",
@@ -79,6 +82,9 @@ def trial_record_to_row(
     rank_val = _safe_metric(record, rank_metric)
     return {
         "selection": selection,
+        "model_group": "",
+        "archive_layout": "",
+        "archive_label": "",
         "family": family,
         "results_root": str(results_root),
         "rank_metric": rank_metric,

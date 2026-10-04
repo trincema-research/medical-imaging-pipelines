@@ -76,6 +76,23 @@ python -m rsna2024_lumbar.nas.best --family convnext --layout 2d --json-out runs
 
 # CSV (auto: runs/nas_best_<family>_<layout>.csv with full config + metrics)
 python -m rsna2024_lumbar.nas.best --family vit --layout 2d --csv-out runs/nas_best_vit_2d.csv
+
+# All three model families × 2D + 3D (ViT, MaxViT, ConvNeXt) in one go
+python -m rsna2024_lumbar.nas.summarize
+python -m rsna2024_lumbar.nas.summarize --models vit maxvit convnext --metric val_acc
+python -m rsna2024_lumbar.nas.summarize --layouts 2d --csv-dir runs/nas_best_2d_only
 ```
+
+## Compact export for git (histories + config JSON)
+
+Copy ``training_history.csv`` and slim ``trial_config.json`` (from ``result.json``) into ``data/nas_compact/`` mirroring ``NAS results/{ViT,MaxViT,Convnext}/{2d,3d}/``.
+
+```bash
+python -m rsna2024_lumbar.nas.export_compact --mode best
+python -m rsna2024_lumbar.nas.export_compact --estimate-only
+python -m rsna2024_lumbar.nas.export_compact --mode all --yes-all
+```
+
+See [data/nas_compact/README.md](../data/nas_compact/README.md).
 
 Set ``LUMBAR_NAS_RESULTS_ROOT`` to the ``NAS results`` folder to omit ``--archive-root``. Metrics: ``val_acc`` (default), ``max_val_acc``, ``final_val_acc``, ``val_f1_macro_levels``, ``test_f1_macro_levels``, ``val_loss``. Module layout: ``results.py`` (load), ``rank.py`` (sort/shared pick), ``best.py`` (CLI).

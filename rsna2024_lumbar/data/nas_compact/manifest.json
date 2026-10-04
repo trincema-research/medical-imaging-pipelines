@@ -1,0 +1,69 @@
+{
+  "mode": "all",
+  "metric": "val_acc",
+  "archive_root": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results",
+  "output_root": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact",
+  "trial_tree": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact",
+  "targets": [
+    {
+      "label": "ViT 2D",
+      "family": "vit",
+      "layout": "2d",
+      "source_root": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\ViT\\2d",
+      "dest_root": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\ViT\\2d",
+      "exported_trials": 8960,
+      "skipped_trials": 0,
+      "bytes_written": 237325376
+    },
+    {
+      "label": "ViT 3D",
+      "family": "vit3d",
+      "layout": "3d",
+      "source_root": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\ViT\\3d",
+      "dest_root": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\ViT\\3d",
+      "exported_trials": 11520,
+      "skipped_trials": 0,
+      "bytes_written": 368749601
+    },
+    {
+      "label": "MaxViT 2D",
+      "family": "maxvit",
+      "layout": "2d",
+      "source_root": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\MaxViT\\2d",
+      "dest_root": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\MaxViT\\2d",
+      "exported_trials": 5760,
+      "skipped_trials": 0,
+      "bytes_written": 107674903
+    },
+    {
+      "label": "MaxViT 3D",
+      "family": "maxvit3d",
+      "layout": "3d",
+      "source_root": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\MaxViT\\3d",
+      "dest_root": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\MaxViT\\3d",
+      "exported_trials": 5760,
+      "skipped_trials": 0,
+      "bytes_written": 135894901
+    },
+    {
+      "label": "ConvNeXt 2D",
+      "family": "convnext",
+      "layout": "2d",
+      "source_root": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\Convnext\\2D",
+      "dest_root": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\Convnext\\2d",
+      "exported_trials": 720,
+      "skipped_trials": 0,
+      "bytes_written": 13820282
+    },
+    {
+      "label": "ConvNeXt 3D",
+      "family": "convnext3d",
+      "layout": "3d",
+      "source_root": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\Convnext\\3D",
+      "dest_root": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\Convnext\\3d",
+      "exported_trials": 1664,
+      "skipped_trials": 0,
+      "bytes_written": 33022494
+    }
+  ]
+}

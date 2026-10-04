@@ -29,6 +29,12 @@ class SearchSpace:
     maxvit_variants: list[str] = field(
         default_factory=lambda: ["maxvit_tiny_tf_224", "maxvit_small_tf_224"]
     )
+    vit3d_variants: list[str] = field(
+        default_factory=lambda: ["vit3d_t", "vit3d_s", "vit3d_b", "vit3d_l"]
+    )
+    maxvit3d_variants: list[str] = field(
+        default_factory=lambda: ["maxvit3d_tiny", "maxvit3d_small"]
+    )
     cnn2d_variants: list[str] = field(default_factory=lambda: ["convnext_small"])
     cnn3d_variants: list[str] = field(default_factory=lambda: ["cnn3d_s", "cnn3d_b"])
     effnet2d_variants: list[str] = field(default_factory=lambda: ["efficientnet_v2_s"])

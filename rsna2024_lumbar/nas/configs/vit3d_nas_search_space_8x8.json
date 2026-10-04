@@ -1,0 +1,31 @@
+{
+  "vit3d_variants": ["vit3d_t", "vit3d_s", "vit3d_b", "vit3d_l"],
+  "batch_sizes": [8],
+  "freeze_options": [false],
+  "head_activations": ["gelu"],
+  "use_pretrained": [false],
+  "amp_options": [true],
+  "scheduler_types": ["CosineAnnealingLR"],
+  "epochs": 50,
+  "patience": 5,
+  "num_workers": 4,
+  "search_mode": "grid",
+  "grids": [
+    {
+      "optimizer_types": ["AdamW"],
+      "learning_rates": [0.00001, 0.00003, 0.00005, 0.0001, 0.0002, 0.0003, 0.0005, 0.0008],
+      "weight_decays": [0, 0.001, 0.005, 0.01, 0.02, 0.05, 0.08, 0.1],
+      "head_depths": [2, 3],
+      "head_hidden_dims": [null, 128, 256, 512],
+      "head_dropout_rates": [0.1]
+    },
+    {
+      "optimizer_types": ["SGD"],
+      "learning_rates": [0.0003, 0.0008, 0.0016, 0.0032, 0.0048, 0.008, 0.012, 0.016],
+      "weight_decays": [0, 0.001, 0.005, 0.01, 0.02, 0.05, 0.08, 0.1],
+      "head_depths": [2],
+      "head_hidden_dims": [256],
+      "head_dropout_rates": [0.1]
+    }
+  ]
+}

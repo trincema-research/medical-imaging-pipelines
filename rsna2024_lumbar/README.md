@@ -56,6 +56,12 @@ python -m rsna2024_lumbar.nas.deploy --family efficientnet --num-gpus 8 --all-co
   --crop-policy centered --epochs 50 --early-stop-patience 5
 ```
 
+**Best trial from archived NAS results** (legacy ``runs/NAS results/`` on disk):
+
+```bash
+python -m rsna2024_lumbar.nas.best --family convnext --layout 2d --shared --attach-grid-index
+```
+
 Dry-run grid:
 
 ```bash

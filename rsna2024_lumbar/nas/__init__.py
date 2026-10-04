@@ -2,6 +2,13 @@
 
 from rsna2024_lumbar.nas.families import FAMILIES, FAMILY_SPECS, FamilySpec, require_family
 from rsna2024_lumbar.nas.gpus import ALLOWED_NAS_GPU_COUNTS, GpuShard, resolve_num_gpus, shard_trial_range
+from rsna2024_lumbar.nas.rank import (
+    DEFAULT_RANK_METRIC,
+    RANK_METRICS,
+    best_per_condition,
+    best_shared_hyperparams,
+)
+from rsna2024_lumbar.nas.results import TrialRecord, iter_trial_records, load_trial_record
 from rsna2024_lumbar.nas.search_space import (
     SearchSpace,
     TrialConfig,
@@ -17,8 +24,15 @@ __all__ = [
     "FamilySpec",
     "GpuShard",
     "SearchSpace",
+    "DEFAULT_RANK_METRIC",
+    "RANK_METRICS",
     "TrialConfig",
+    "TrialRecord",
+    "best_per_condition",
+    "best_shared_hyperparams",
     "build_trial_configs",
+    "iter_trial_records",
+    "load_trial_record",
     "expand_family",
     "load_search_space",
     "require_family",

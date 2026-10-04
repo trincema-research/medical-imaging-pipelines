@@ -52,3 +52,30 @@ python -m rsna2024_lumbar.nas.launch --family efficientnet --num-gpus 8 \
 ```
 
 144 trials / 8 GPUs → 18 per GPU. Outputs: ``runs/lumbar_nas_efficientnet/<condition>/trial_*/result.json``.
+
+## Best config from finished NAS runs
+
+Scan legacy archives under ``runs/NAS results/{ViT,MaxViT,Convnext,...}`` or any tree of ``result.json`` files.
+
+```bash
+# ConvNeXt 2D — best trial per condition (default: val_acc at best epoch)
+python -m rsna2024_lumbar.nas.best --family convnext --layout 2d
+
+# Same run ranked by macro F1 or peak val accuracy
+python -m rsna2024_lumbar.nas.best --family convnext --layout 2d --metric val_f1_macro_levels
+python -m rsna2024_lumbar.nas.best --family convnext --layout 2d --metric max_val_acc
+
+# ViT 2D + map trials to grid index + one shared HP set across all five conditions
+python -m rsna2024_lumbar.nas.best --family vit --layout 2d --attach-grid-index --shared
+
+# Explicit root (portable)
+python -m rsna2024_lumbar.nas.best --family maxvit --results-root "/path/to/NAS results/MaxViT/2d"
+
+# Export JSON summary
+python -m rsna2024_lumbar.nas.best --family convnext --layout 2d --json-out runs/best_convnext_2d.json
+
+# CSV (auto: runs/nas_best_<family>_<layout>.csv with full config + metrics)
+python -m rsna2024_lumbar.nas.best --family vit --layout 2d --csv-out runs/nas_best_vit_2d.csv
+```
+
+Set ``LUMBAR_NAS_RESULTS_ROOT`` to the ``NAS results`` folder to omit ``--archive-root``. Metrics: ``val_acc`` (default), ``max_val_acc``, ``final_val_acc``, ``val_f1_macro_levels``, ``test_f1_macro_levels``, ``val_loss``. Module layout: ``results.py`` (load), ``rank.py`` (sort/shared pick), ``best.py`` (CLI).

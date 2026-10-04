@@ -232,6 +232,12 @@ __marimo__/
 *.zip
 *.kaggle-partial
 
+# Full PNG crop cache + NAS deploy bundle (generated locally / via nas.pack)
+rsna20*/data/processed/**
+!rsna20*/data/processed/README.md
+rsna2024_lumbar/nas/training_bundle/**
+!rsna2024_lumbar/nas/training_bundle/.gitkeep
+
 # Full raw DICOM dump stays local. Label CSVs + a few smoke studies are force-added.
 rsna20*/data/raw/**
 !rsna20*/data/raw/README.md

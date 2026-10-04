@@ -4,7 +4,7 @@
 ⚙  preprocessing/     crop DICOMs → PNG cache
 …  models/            later
 …  training/          later
-⚙  nas/               ViT · MaxViT · ConvNeXt · ConvNeXt3D · EfficientNet · EfficientNet3D grids (dry-run)
+⚙  nas/               NAS grids · GPU launch · cloud pack/deploy (EfficientNet/ConvNeXt/…)
 ⬇  data/              download.py · unzip.py · validate.py · raw/ · processed/
 ☰  traces/            download.log · unzip.log · validate.log · pipeline.log
 ✔  tests/             pytest + synthetic mini-dump
@@ -41,9 +41,22 @@ python -m rsna2024_lumbar.preprocessing \
 
 `--data-root` is any Kaggle-shaped folder (`train.csv` + `train_images/`). Default output is `data/processed/<policy>/`. Policies: `centered` (64×64), `extend50` (96×64). Incomplete studies (missing a level/DICOM) are skipped.
 
-## ⚙ NAS (dry-run)
+## ⚙ NAS
 
-Six isolated families. Grid expansion + 1/2/4/8 GPU shard plan. **per condition** = one task; **all 5** = `--all-conditions`.
+Six isolated families. Grid expansion, 1/2/4/8 GPU shards, and cloud deploy. **per condition** = one task; **all 5** = `--all-conditions` (sequential when `--spawn --wait`).
+
+**Pack + run on cloud (EfficientNet 2D, all five conditions):**
+
+```bash
+# On a machine with crops under data/processed/centered/ and the legacy lumbar training repo:
+python -m rsna2024_lumbar.nas.pack --profile efficientnet_deploy --legacy-root /path/to/rsna-2024-lumbar-spine-degenerative-classification
+
+# On the GPU instance (unzip, then from repo root):
+python -m rsna2024_lumbar.nas.deploy --family efficientnet --num-gpus 8 --all-conditions \
+  --crop-policy centered --epochs 50 --early-stop-patience 5
+```
+
+Dry-run grid:
 
 ```bash
 python -m rsna2024_lumbar.nas --family vit --list
@@ -63,7 +76,7 @@ python -m rsna2024_lumbar.nas --family efficientnet3d --list
 | `efficientnet` | 144 | 720 | `runs/lumbar_nas_efficientnet` |
 | `efficientnet3d` | 384 | 1920 | `runs/lumbar_nas_efficientnet3d` |
 
-`--crop-policy centered|extend50` sets PNG size. Shard across **1 / 2 / 4 / 8** GPUs (`--num-gpus 0` = auto). Pack a cloud zip with `python -m rsna2024_lumbar.nas.pack`. Depth: [nas/README.md](nas/README.md).
+`--crop-policy centered|extend50` sets PNG size. Shard across **1 / 2 / 4 / 8** GPUs (`--num-gpus 0` = auto). Training uses bundled `vit_nas_lumbar.py` (staged by `nas.pack`). Depth: [nas/README.md](nas/README.md).
 
 ## ✔ Tests
 

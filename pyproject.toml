@@ -26,6 +26,8 @@ rsna2024-download-raw = "rsna2024_lumbar.data.download:main"
 rsna2024-unzip-raw = "rsna2024_lumbar.data.unzip:main"
 rsna2024-validate-raw = "rsna2024_lumbar.data.validate:main"
 rsna2024-nas = "rsna2024_lumbar.nas.cli:main"
+rsna2024-nas-launch = "rsna2024_lumbar.nas.launch:main"
+rsna2024-nas-pack = "rsna2024_lumbar.nas.pack:main"
 
 [tool.setuptools.package-data]
 "rsna2024_lumbar.nas" = ["configs/*.json"]

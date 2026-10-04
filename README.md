@@ -28,6 +28,8 @@ python -m rsna2024_lumbar.data.unzip            # ⬇ if a .zip is still in raw/
 python -m rsna2024_lumbar.data.validate         # ✔
 python -m rsna2024_lumbar.preprocessing --help  # ⚙
 python -m rsna2024_lumbar.nas --family vit --list  # ⚙ NAS dry-run
+python -m rsna2024_lumbar.nas.launch --family efficientnet --num-gpus 8  # ⚙ 1/2/4/8 GPU shards
+python -m rsna2024_lumbar.nas.pack --profile efficientnet_families       # ⚙ cloud zip
 ```
 
 Full export (copy `train.csv` + `train_images/` into `data/raw/`):

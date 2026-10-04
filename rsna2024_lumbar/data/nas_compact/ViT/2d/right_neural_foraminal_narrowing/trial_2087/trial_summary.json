@@ -1,0 +1,5 @@
+{
+  "source_trial_dir": "trial_2087_right_neural_foraminal_narrowing_vit_vit_b_16_img64x64_bs256_lr0.012_wd0.08_head2_hd256_cropcentered_srcpng_finetune_pre_amp",
+  "source_result": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\ViT\\2d\\right_neural_foraminal_narrowing_2d_vit\\right_neural_foraminal_narrowing\\trial_2087_right_neural_foraminal_narrowing_vit_vit_b_16_img64x64_bs256_lr0.012_wd0.08_head2_hd256_cropcentered_srcpng_finetune_pre_amp\\result.json",
+  "note": "Per-epoch metrics are in training_history.csv; hyperparameters in trial_config.json."
+}

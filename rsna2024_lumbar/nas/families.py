@@ -8,14 +8,18 @@ from pathlib import Path
 CONFIGS = Path(__file__).resolve().parent / "configs"
 
 FAMILY_VIT = "vit"
+FAMILY_VIT3D = "vit3d"
 FAMILY_MAXVIT = "maxvit"
+FAMILY_MAXVIT3D = "maxvit3d"
 FAMILY_CONVNEXT = "convnext"
 FAMILY_CONVNEXT3D = "convnext3d"
 FAMILY_EFFICIENTNET = "efficientnet"
 FAMILY_EFFICIENTNET3D = "efficientnet3d"
 FAMILIES = (
     FAMILY_VIT,
+    FAMILY_VIT3D,
     FAMILY_MAXVIT,
+    FAMILY_MAXVIT3D,
     FAMILY_CONVNEXT,
     FAMILY_CONVNEXT3D,
     FAMILY_EFFICIENTNET,
@@ -47,6 +51,22 @@ FAMILY_SPECS: dict[str, FamilySpec] = {
         config_file=CONFIGS / "maxvit_nas_search_space_8x8.json",
         output_base="runs/lumbar_nas_maxvit",
         variant_key="maxvit_variants",
+    ),
+    FAMILY_VIT3D: FamilySpec(
+        name=FAMILY_VIT3D,
+        model_type="vit3d",
+        config_file=CONFIGS / "vit3d_nas_search_space_8x8.json",
+        output_base="runs/lumbar_nas3d",
+        variant_key="vit3d_variants",
+        input_layout="3d_level_stack",
+    ),
+    FAMILY_MAXVIT3D: FamilySpec(
+        name=FAMILY_MAXVIT3D,
+        model_type="maxvit3d",
+        config_file=CONFIGS / "maxvit3d_nas_search_space_8x8.json",
+        output_base="runs/lumbar_nas_maxvit3d",
+        variant_key="maxvit3d_variants",
+        input_layout="3d_level_stack",
     ),
     FAMILY_CONVNEXT: FamilySpec(
         name=FAMILY_CONVNEXT,

@@ -5,7 +5,8 @@ download.py      ⬇  Kaggle zip → raw/ (unzips; exits non-zero on failure)
 unzip.py         ⬇  extract a .zip already in raw/
 validate.py      ✔  check a dump before preprocess
 raw/             ⬇  label CSVs + 2 smoke studies (git); full train_images/ local
-processed/       ⬆  centered/ PNG cache (git, ~240MB)
+processed/       ⬆  centered/ PNG cache (local)
+nas_compact/     📊  NAS training histories + best-config CSVs (git)
 ```
 
 Scripts stay **here** (not in `raw/`) so git can track them and `python -m rsna2024_lumbar.data.<name>` works. Label CSVs live in `raw/`; DICOMs and crops stay local.

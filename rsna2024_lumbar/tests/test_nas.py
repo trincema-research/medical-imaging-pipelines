@@ -18,7 +18,9 @@ from rsna2024_lumbar.preprocessing.constants import (
 
 EXPECTED_TRIALS = {
     "vit": 2304,
+    "vit3d": 2304,
     "maxvit": 1152,
+    "maxvit3d": 1152,
     "convnext": 144,
     "convnext3d": 384,
     "efficientnet": 144,
@@ -27,7 +29,9 @@ EXPECTED_TRIALS = {
 
 EXPECTED_VARIANTS = {
     "vit": ["vit_b_16", "vit_l_16", "vit_b_32", "vit_l_32"],
+    "vit3d": ["vit3d_t", "vit3d_s", "vit3d_b", "vit3d_l"],
     "maxvit": ["maxvit_tiny_tf_224", "maxvit_small_tf_224"],
+    "maxvit3d": ["maxvit3d_tiny", "maxvit3d_small"],
     "convnext": ["convnext_small"],
     "convnext3d": ["cnn3d_s", "cnn3d_b"],
     "efficientnet": ["efficientnet_v2_s"],

@@ -8,7 +8,8 @@ This folder holds a **compact mirror** for ViT, MaxViT, and ConvNeXt (2D + 3D):
 nas_compact/
   ViT/2d/<condition>/trial_XXXX/training_history.csv
   ViT/2d/<condition>/trial_XXXX/trial_config.json
-  best_configs/nas_best_*.csv    # ranked best trials (default: val_acc)
+  best_configs/nas_best_*.csv    # ranked best trials + full metrics/hyperparams (default: val_acc)
+  best_configs/nas_best_*.json   # same rows, nested hyperparameters + metrics
   manifest.json
   ViT/ ...                       # --mode all only (local; large)
 ```

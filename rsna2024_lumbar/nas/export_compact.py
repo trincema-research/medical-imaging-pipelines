@@ -15,8 +15,10 @@ from rsna2024_lumbar.nas.compact import (
 from rsna2024_lumbar.nas.extract import extract_best_for_target
 from rsna2024_lumbar.nas.rank import DEFAULT_RANK_METRIC, RANK_METRICS
 from rsna2024_lumbar.nas.report import (
+    default_json_path,
     rows_best_per_condition,
     write_best_csv,
+    write_best_json,
 )
 from rsna2024_lumbar.nas.results import default_archive_root
 from rsna2024_lumbar.nas.summarize import filter_targets
@@ -136,6 +138,16 @@ def main(argv: list[str] | None = None) -> None:
             best_rows.extend(rows)
             csv_path = output_base / "best_configs" / f"nas_best_{target.family}_{target.layout}.csv"
             write_best_csv(csv_path, rows)
+            json_path = output_base / "best_configs" / default_json_path(
+                target.family, target.layout
+            ).name
+            write_best_json(
+                json_path,
+                rows,
+                rank_metric=args.metric,
+                archive_root=archive,
+                label=target.label,
+            )
 
     manifest = {
         "mode": args.mode,
@@ -152,7 +164,15 @@ def main(argv: list[str] | None = None) -> None:
     if best_rows:
         combined = output_base / "best_configs" / "nas_best_vit_maxvit_convnext_all.csv"
         write_best_csv(combined, best_rows)
-        print(f"Wrote best-config CSVs under {output_base / 'best_configs'}")
+        combined_json = combined.with_suffix(".json")
+        write_best_json(
+            combined_json,
+            best_rows,
+            rank_metric=args.metric,
+            archive_root=archive,
+            label="ViT / MaxViT / ConvNeXt (all layouts)",
+        )
+        print(f"Wrote best-config CSVs and JSON under {output_base / 'best_configs'}")
 
     print(f"Wrote {manifest_path}")
 

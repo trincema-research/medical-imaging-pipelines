@@ -39,10 +39,16 @@ CONFIG_KEYS_FROM_RESULT = (
     "best_epoch",
     "epochs_ran",
     "duration_sec",
+    "final_train_acc",
+    "max_train_acc",
     "final_val_acc",
     "max_val_acc",
+    "final_test_acc",
+    "max_test_acc",
     "val_f1_macro_levels",
     "test_f1_macro_levels",
+    "crop_policy",
+    "image_source",
     "trainable_params",
     "total_params",
 )
@@ -98,6 +104,12 @@ def trial_config_from_result(result_path: Path) -> dict:
             config["val_acc_at_best_epoch"] = metrics["val_acc"]
         if "val_loss" in metrics:
             config["val_loss_at_best_epoch"] = metrics["val_loss"]
+        if "train_acc" in metrics:
+            config["train_acc_at_best_epoch"] = metrics["train_acc"]
+        if "test_acc" in metrics:
+            config["test_acc_at_best_epoch"] = metrics["test_acc"]
+        if "train_f1_macro_levels" in metrics:
+            config["train_f1_macro_levels_at_best"] = metrics["train_f1_macro_levels"]
     return config
 
 

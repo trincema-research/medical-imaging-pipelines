@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import pytest
@@ -16,60 +15,7 @@ from rsna2024_lumbar.nas.rank import (
     metric_value,
 )
 from rsna2024_lumbar.nas.results import load_trial_record
-
-
-def _write_result(
-    dest: Path,
-    *,
-    trial_id: int,
-    condition: str,
-    val_f1: float,
-    variant: str = "vit_b_16",
-    batch_size: int = 8,
-    lr: float = 1e-4,
-) -> None:
-    dest.mkdir(parents=True, exist_ok=True)
-    payload = {
-        "trial_id": trial_id,
-        "condition": condition,
-        "variant": variant,
-        "image_width": 64,
-        "image_height": 64,
-        "batch_size": batch_size,
-        "learning_rate": lr,
-        "weight_decay": 0.01,
-        "freeze_backbone": False,
-        "use_pretrained": True,
-        "amp": True,
-        "head_depth": 1,
-        "head_hidden_dim": None,
-        "head_dropout": 0.0,
-        "head_activation": "gelu",
-        "optimizer_type": "AdamW",
-        "scheduler_type": "CosineAnnealingLR",
-        "final_train_acc": 0.5,
-        "final_val_acc": 0.5,
-        "final_test_acc": 0.5,
-        "max_train_acc": 0.5,
-        "max_val_acc": 0.5,
-        "max_test_acc": 0.5,
-        "best_epoch": 1,
-        "duration_sec": 1.0,
-        "output_dir": str(dest),
-        "trainable_params": 1,
-        "total_params": 1,
-        "epochs_ran": 1,
-        "val_f1_macro_levels": val_f1,
-        "test_f1_macro_levels": val_f1,
-        "checkpoint_path": "",
-        "model_type": "vit",
-        "input_layout": "2d",
-    }
-    (dest / "result.json").write_text(json.dumps(payload), encoding="utf-8")
-    (dest / "best_epoch_metrics.json").write_text(
-        json.dumps({"metrics": {"val_loss": 1.0 - val_f1, "val_acc": 0.5 + val_f1 * 0.1}}),
-        encoding="utf-8",
-    )
+from rsna2024_lumbar.tests.nas_fixtures import write_nas_result as _write_result
 
 
 def test_best_per_condition_picks_highest_val_acc(tmp_path: Path):

@@ -59,6 +59,13 @@ class TrialRecord:
     val_f1_macro_levels: float
     test_f1_macro_levels: float
     val_loss: float | None
+    final_train_acc: float
+    max_train_acc: float
+    final_test_acc: float
+    max_test_acc: float
+    train_acc_at_best_epoch: float | None
+    test_acc_at_best_epoch: float | None
+    train_f1_macro_levels_at_best: float | None
     result_path: Path
     output_dir: str
     grid_index: int | None = None
@@ -152,12 +159,18 @@ def load_trial_record(result_path: Path) -> TrialRecord:
     payload = json.loads(result_path.read_text(encoding="utf-8"))
     val_loss: float | None = None
     val_acc: float | None = None
+    train_acc_at_best: float | None = None
+    test_acc_at_best: float | None = None
+    train_f1_at_best: float | None = None
     best_path = result_path.parent / "best_epoch_metrics.json"
     if best_path.is_file():
         best_payload = json.loads(best_path.read_text(encoding="utf-8"))
         metrics = best_payload.get("metrics") or {}
         val_loss = _optional_float(metrics.get("val_loss"))
         val_acc = _optional_float(metrics.get("val_acc"))
+        train_acc_at_best = _optional_float(metrics.get("train_acc"))
+        test_acc_at_best = _optional_float(metrics.get("test_acc"))
+        train_f1_at_best = _optional_float(metrics.get("train_f1_macro_levels"))
 
     hidden = payload.get("head_hidden_dim")
     return TrialRecord(
@@ -189,6 +202,13 @@ def load_trial_record(result_path: Path) -> TrialRecord:
         val_f1_macro_levels=float(payload.get("val_f1_macro_levels", 0.0)),
         test_f1_macro_levels=float(payload.get("test_f1_macro_levels", 0.0)),
         val_loss=val_loss,
+        final_train_acc=float(payload.get("final_train_acc", 0.0)),
+        max_train_acc=float(payload.get("max_train_acc", 0.0)),
+        final_test_acc=float(payload.get("final_test_acc", 0.0)),
+        max_test_acc=float(payload.get("max_test_acc", 0.0)),
+        train_acc_at_best_epoch=train_acc_at_best,
+        test_acc_at_best_epoch=test_acc_at_best,
+        train_f1_macro_levels_at_best=train_f1_at_best,
         result_path=result_path,
         output_dir=str(payload.get("output_dir", "")),
     )

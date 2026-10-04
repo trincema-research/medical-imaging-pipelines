@@ -49,3 +49,24 @@ def test_worker_builds_vit_nas_command():
     assert "--image-source png" in joined
     assert "--start-trial 1" in joined
     assert "efficientnet_nas_search_space_pruned.json" in joined
+
+
+@pytest.mark.skipif(not bundle_ready(), reason="training bundle missing")
+def test_vit_nas_cli_accepts_efficientnet3d():
+    import os
+    import subprocess
+    import sys
+
+    vit_nas = BUNDLE_DIR / "vit_nas_lumbar.py"
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    proc = subprocess.run(
+        [sys.executable, str(vit_nas), "--model-type", "efficientnet3d", "--help"],
+        capture_output=True,
+        text=True,
+        check=False,
+        env=env,
+    )
+    combined = proc.stdout + proc.stderr
+    assert "invalid choice: 'efficientnet3d'" not in combined
+    assert proc.returncode == 0, combined

@@ -1,8 +1,9 @@
-"""Export NAS best-trial summaries to CSV."""
+"""Export NAS best-trial summaries to CSV and JSON."""
 
 from __future__ import annotations
 
 import csv
+import json
 from pathlib import Path
 from typing import Any
 
@@ -10,18 +11,7 @@ from rsna2024_lumbar.nas.rank import SharedConfigPick, metric_value
 from rsna2024_lumbar.nas.results import TrialRecord
 from rsna2024_lumbar.preprocessing.constants import CONDITIONS
 
-CSV_FIELDNAMES: tuple[str, ...] = (
-    "selection",
-    "model_group",
-    "archive_layout",
-    "archive_label",
-    "family",
-    "results_root",
-    "rank_metric",
-    "rank_metric_value",
-    "condition",
-    "trial_id",
-    "grid_index",
+HYPERPARAMETER_CSV_FIELDS: tuple[str, ...] = (
     "model_type",
     "input_layout",
     "variant",
@@ -39,17 +29,46 @@ CSV_FIELDNAMES: tuple[str, ...] = (
     "head_activation",
     "optimizer_type",
     "scheduler_type",
+    "crop_policy",
+    "image_source",
+)
+
+METRIC_CSV_FIELDS: tuple[str, ...] = (
     "best_epoch",
     "epochs_ran",
     "duration_sec",
+    "train_acc_at_best_epoch",
     "val_acc",
-    "max_val_acc",
+    "test_acc_at_best_epoch",
+    "final_train_acc",
+    "max_train_acc",
     "final_val_acc",
+    "max_val_acc",
+    "final_test_acc",
+    "max_test_acc",
+    "train_f1_macro_levels_at_best",
     "val_f1_macro_levels",
     "test_f1_macro_levels",
     "val_loss",
+)
+
+CSV_FIELDNAMES: tuple[str, ...] = (
+    "selection",
+    "model_group",
+    "archive_layout",
+    "archive_label",
+    "family",
+    "results_root",
+    "rank_metric",
+    "rank_metric_value",
+    "condition",
+    "trial_id",
+    "grid_index",
+    *HYPERPARAMETER_CSV_FIELDS,
+    *METRIC_CSV_FIELDS,
     "trainable_params",
     "total_params",
+    "checkpoint_path",
     "result_path",
     "trial_dir",
     "shared_mean_rank_metric",
@@ -63,11 +82,24 @@ def default_csv_path(family: str, layout: str | None = None) -> Path:
     return Path("runs") / f"{'_'.join(parts)}.csv"
 
 
+def default_json_path(family: str, layout: str | None = None) -> Path:
+    parts = ["nas_best", family]
+    if layout:
+        parts.append(layout)
+    return Path("runs") / f"{'_'.join(parts)}.json"
+
+
 def _safe_metric(record: TrialRecord, metric: str) -> float | None:
     try:
         return float(metric_value(record, metric))
     except ValueError:
         return None
+
+
+def _fmt(value: Any) -> Any:
+    if value is None:
+        return ""
+    return value
 
 
 def trial_record_to_row(
@@ -80,7 +112,7 @@ def trial_record_to_row(
     shared_mean_rank_metric: float | None = None,
 ) -> dict[str, Any]:
     rank_val = _safe_metric(record, rank_metric)
-    return {
+    row: dict[str, Any] = {
         "selection": selection,
         "model_group": "",
         "archive_layout": "",
@@ -109,27 +141,36 @@ def trial_record_to_row(
         "head_activation": record.head_activation,
         "optimizer_type": record.optimizer_type,
         "scheduler_type": record.scheduler_type,
+        "crop_policy": "",
+        "image_source": "",
         "best_epoch": record.best_epoch,
         "epochs_ran": record.epochs_ran,
         "duration_sec": record.duration_sec,
-        "val_acc": record.val_acc if record.val_acc is not None else "",
-        "max_val_acc": record.max_val_acc,
+        "train_acc_at_best_epoch": _fmt(record.train_acc_at_best_epoch),
+        "val_acc": _fmt(record.val_acc),
+        "test_acc_at_best_epoch": _fmt(record.test_acc_at_best_epoch),
+        "final_train_acc": record.final_train_acc,
+        "max_train_acc": record.max_train_acc,
         "final_val_acc": record.final_val_acc,
+        "max_val_acc": record.max_val_acc,
+        "final_test_acc": record.final_test_acc,
+        "max_test_acc": record.max_test_acc,
+        "train_f1_macro_levels_at_best": _fmt(record.train_f1_macro_levels_at_best),
         "val_f1_macro_levels": record.val_f1_macro_levels,
         "test_f1_macro_levels": record.test_f1_macro_levels,
-        "val_loss": record.val_loss if record.val_loss is not None else "",
+        "val_loss": _fmt(record.val_loss),
         "trainable_params": "",
         "total_params": "",
+        "checkpoint_path": "",
         "result_path": str(record.result_path),
         "trial_dir": record.result_path.parent.name,
         "shared_mean_rank_metric": shared_mean_rank_metric if shared_mean_rank_metric is not None else "",
     }
+    _enrich_from_result_json(row)
+    return row
 
 
-def _enrich_params_from_result_json(row: dict[str, Any]) -> None:
-    """Optional trainable/total params if present in result.json (not on TrialRecord)."""
-    import json
-
+def _enrich_from_result_json(row: dict[str, Any]) -> None:
     path = Path(str(row["result_path"]))
     if not path.is_file():
         return
@@ -138,6 +179,37 @@ def _enrich_params_from_result_json(row: dict[str, Any]) -> None:
         row["trainable_params"] = payload["trainable_params"]
     if "total_params" in payload:
         row["total_params"] = payload["total_params"]
+    if "checkpoint_path" in payload:
+        row["checkpoint_path"] = payload["checkpoint_path"]
+    if payload.get("crop_policy"):
+        row["crop_policy"] = payload["crop_policy"]
+    if payload.get("image_source"):
+        row["image_source"] = payload["image_source"]
+
+
+def row_to_json_entry(row: dict[str, Any]) -> dict[str, Any]:
+    hyperparameters = {key: row.get(key, "") for key in HYPERPARAMETER_CSV_FIELDS}
+    metrics = {key: row.get(key, "") for key in METRIC_CSV_FIELDS}
+    return {
+        "selection": row.get("selection"),
+        "model_group": row.get("model_group"),
+        "archive_layout": row.get("archive_layout"),
+        "archive_label": row.get("archive_label"),
+        "family": row.get("family"),
+        "condition": row.get("condition"),
+        "trial_id": row.get("trial_id"),
+        "grid_index": row.get("grid_index"),
+        "rank_metric": row.get("rank_metric"),
+        "rank_metric_value": row.get("rank_metric_value"),
+        "hyperparameters": hyperparameters,
+        "metrics": metrics,
+        "trainable_params": row.get("trainable_params"),
+        "total_params": row.get("total_params"),
+        "checkpoint_path": row.get("checkpoint_path"),
+        "result_path": row.get("result_path"),
+        "trial_dir": row.get("trial_dir"),
+        "shared_mean_rank_metric": row.get("shared_mean_rank_metric"),
+    }
 
 
 def rows_best_per_condition(
@@ -152,15 +224,15 @@ def rows_best_per_condition(
         record = best.get(condition)
         if record is None:
             continue
-        row = trial_record_to_row(
-            record,
-            family=family,
-            results_root=results_root,
-            rank_metric=rank_metric,
-            selection="best_per_condition",
+        rows.append(
+            trial_record_to_row(
+                record,
+                family=family,
+                results_root=results_root,
+                rank_metric=rank_metric,
+                selection="best_per_condition",
+            )
         )
-        _enrich_params_from_result_json(row)
-        rows.append(row)
     return rows
 
 
@@ -176,16 +248,16 @@ def rows_shared_config(
         record = shared.per_condition.get(condition)
         if record is None:
             continue
-        row = trial_record_to_row(
-            record,
-            family=family,
-            results_root=results_root,
-            rank_metric=rank_metric,
-            selection="shared_hyperparams",
-            shared_mean_rank_metric=shared.mean_score,
+        rows.append(
+            trial_record_to_row(
+                record,
+                family=family,
+                results_root=results_root,
+                rank_metric=rank_metric,
+                selection="shared_hyperparams",
+                shared_mean_rank_metric=shared.mean_score,
+            )
         )
-        _enrich_params_from_result_json(row)
-        rows.append(row)
     return rows
 
 
@@ -197,3 +269,24 @@ def write_best_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
+
+
+def write_best_json(
+    path: Path,
+    rows: list[dict[str, Any]],
+    *,
+    rank_metric: str,
+    archive_root: str | Path | None = None,
+    label: str | None = None,
+) -> None:
+    path = path.resolve()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    document = {
+        "schema_version": 1,
+        "rank_metric": rank_metric,
+        "archive_root": str(archive_root) if archive_root is not None else "",
+        "label": label or "",
+        "row_count": len(rows),
+        "entries": [row_to_json_entry(row) for row in rows],
+    }
+    path.write_text(json.dumps(document, indent=2), encoding="utf-8")

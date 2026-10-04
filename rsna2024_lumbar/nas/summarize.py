@@ -10,9 +10,11 @@ from rsna2024_lumbar.nas.extract import extract_best_for_target
 from rsna2024_lumbar.nas.rank import DEFAULT_RANK_METRIC, METRIC_HELP, RANK_METRICS
 from rsna2024_lumbar.nas.report import (
     default_csv_path,
+    default_json_path,
     rows_best_per_condition,
     rows_shared_config,
     write_best_csv,
+    write_best_json,
 )
 from rsna2024_lumbar.nas.results import default_archive_root
 from rsna2024_lumbar.preprocessing.constants import CROP_POLICIES, CROP_POLICY_CENTERED
@@ -150,6 +152,14 @@ def main(argv: list[str] | None = None) -> None:
 
         out_path = args.csv_dir / default_csv_path(target.family, target.layout).name
         write_best_csv(out_path, rows)
+        json_path = args.csv_dir / default_json_path(target.family, target.layout).name
+        write_best_json(
+            json_path,
+            rows,
+            rank_metric=args.metric,
+            archive_root=archive,
+            label=label,
+        )
         combined_rows.extend(rows)
         wrote += 1
         n_trials = len(result.records)
@@ -161,7 +171,16 @@ def main(argv: list[str] | None = None) -> None:
     if not args.no_combined_csv and combined_rows:
         combined_path = args.combined_csv or (args.csv_dir / "nas_best_vit_maxvit_convnext_all.csv")
         write_best_csv(combined_path, combined_rows)
+        combined_json = combined_path.with_suffix(".json")
+        write_best_json(
+            combined_json,
+            combined_rows,
+            rank_metric=args.metric,
+            archive_root=archive,
+            label="ViT / MaxViT / ConvNeXt (all layouts)",
+        )
         print(f"Wrote combined CSV: {combined_path.resolve()} ({len(combined_rows)} rows)")
+        print(f"Wrote combined JSON: {combined_json.resolve()}")
 
     if errors and not wrote:
         raise SystemExit(f"No archives processed. {len(errors)} skipped.")

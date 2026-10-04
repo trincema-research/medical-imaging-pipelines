@@ -5,9 +5,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from rsna2024_lumbar.nas.catalog import ARCHIVE_RESULT_TARGETS, targets_for_groups
 from rsna2024_lumbar.nas.summarize import filter_targets, main as summarize_main
-from rsna2024_lumbar.tests.test_nas_best import _write_result
+from rsna2024_lumbar.tests.nas_fixtures import write_nas_result as _write_result
 
 
 def test_targets_for_groups():
@@ -16,6 +18,11 @@ def test_targets_for_groups():
     vit_only = targets_for_groups(["vit"])
     assert len(vit_only) == 2
     assert {t.layout for t in vit_only} == {"2d", "3d"}
+
+
+def test_targets_for_groups_unknown_raises():
+    with pytest.raises(ValueError, match="Unknown model group"):
+        targets_for_groups(["not_a_model"])
 
 
 def test_filter_targets_layouts():

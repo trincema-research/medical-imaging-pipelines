@@ -43,7 +43,7 @@ python -m rsna2024_lumbar.preprocessing \
 
 ## ⚙ NAS (dry-run)
 
-Six isolated families. Expands the grids only — no GPU / no training yet. Counts are **per condition**.
+Six isolated families. Grid expansion + 1/2/4/8 GPU shard plan. **per condition** = one task; **all 5** = `--all-conditions`.
 
 ```bash
 python -m rsna2024_lumbar.nas --family vit --list
@@ -54,14 +54,14 @@ python -m rsna2024_lumbar.nas --family efficientnet --list
 python -m rsna2024_lumbar.nas --family efficientnet3d --list
 ```
 
-| family | trials | output |
-|---|---:|---|
-| `vit` | 2304 | `runs/lumbar_nas` |
-| `maxvit` | 1152 | `runs/lumbar_nas_maxvit` |
-| `convnext` | 144 | `runs/lumbar_nas_convnext` |
-| `convnext3d` | 384 | `runs/lumbar_nas_convnext3d` |
-| `efficientnet` | 144 | `runs/lumbar_nas_efficientnet` |
-| `efficientnet3d` | 384 | `runs/lumbar_nas_efficientnet3d` |
+| family | per condition | all 5 | output |
+|---|---:|---:|---|
+| `vit` | 2304 | 11520 | `runs/lumbar_nas` |
+| `maxvit` | 1152 | 5760 | `runs/lumbar_nas_maxvit` |
+| `convnext` | 144 | 720 | `runs/lumbar_nas_convnext` |
+| `convnext3d` | 384 | 1920 | `runs/lumbar_nas_convnext3d` |
+| `efficientnet` | 144 | 720 | `runs/lumbar_nas_efficientnet` |
+| `efficientnet3d` | 384 | 1920 | `runs/lumbar_nas_efficientnet3d` |
 
 `--crop-policy centered|extend50` sets PNG size. Shard across **1 / 2 / 4 / 8** GPUs (`--num-gpus 0` = auto). Pack a cloud zip with `python -m rsna2024_lumbar.nas.pack`. Depth: [nas/README.md](nas/README.md).
 
@@ -72,7 +72,7 @@ pytest rsna2024_lumbar/tests
 pytest rsna2024_lumbar/tests/test_export.py -q
 ```
 
-CI reads **committed** `tests/fixtures/` (same CSV/DICOM layout, no patient data). We assert crop geometry, incomplete studies drop, PNG/manifest write, `--skip-existing` resume, job count vs `--max-studies`, NAS trial counts (2304 / 1152 / 144 / 384 / 144 / 384), isolated NAS output bases, and reject bad `--crop-policy` / `--condition` / `--max-studies` / `--family`.
+CI reads **committed** `tests/fixtures/` (same CSV/DICOM layout, no patient data). We assert crop geometry, incomplete studies drop, PNG/manifest write, `--skip-existing` resume, job count vs `--max-studies`, NAS trial counts per condition (2304 / 1152 / 144 / 384 / 144 / 384; ×5 if `--all-conditions`), isolated NAS output bases, and reject bad `--crop-policy` / `--condition` / `--max-studies` / `--family`.
 
 | | input | result |
 |---|---|---|

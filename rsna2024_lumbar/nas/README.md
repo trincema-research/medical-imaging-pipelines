@@ -1,15 +1,17 @@
 # ⚙ NAS — RSNA 2024 lumbar
 
-Six isolated families. This package expands the grids (CPU, no torch). Training / 8-GPU launch stays later. Counts are **per condition**.
+Six isolated families. This package expands the grids (CPU, no torch). Training / 8-GPU launch stays later.
 
-| family | config | trials | output base |
-|---|---|---:|---|
-| `vit` | `configs/vit_nas_search_space_8x8.json` | 2304 | `runs/lumbar_nas` |
-| `maxvit` | `configs/maxvit_nas_search_space_8x8.json` | 1152 | `runs/lumbar_nas_maxvit` |
-| `convnext` | `configs/convnext_nas_search_space_pruned.json` | 144 | `runs/lumbar_nas_convnext` |
-| `convnext3d` | `configs/convnext3d_nas_search_space_192.json` | 384 | `runs/lumbar_nas_convnext3d` |
-| `efficientnet` | `configs/efficientnet_nas_search_space_pruned.json` | 144 | `runs/lumbar_nas_efficientnet` |
-| `efficientnet3d` | `configs/efficientnet3d_nas_search_space_192.json` | 384 | `runs/lumbar_nas_efficientnet3d` |
+**per condition** = one stenosis/narrowing task. **all 5** = `--all-conditions` (×5).
+
+| family | config | per condition | all 5 | output base |
+|---|---|---:|---:|---|
+| `vit` | `configs/vit_nas_search_space_8x8.json` | 2304 | 11520 | `runs/lumbar_nas` |
+| `maxvit` | `configs/maxvit_nas_search_space_8x8.json` | 1152 | 5760 | `runs/lumbar_nas_maxvit` |
+| `convnext` | `configs/convnext_nas_search_space_pruned.json` | 144 | 720 | `runs/lumbar_nas_convnext` |
+| `convnext3d` | `configs/convnext3d_nas_search_space_192.json` | 384 | 1920 | `runs/lumbar_nas_convnext3d` |
+| `efficientnet` | `configs/efficientnet_nas_search_space_pruned.json` | 144 | 720 | `runs/lumbar_nas_efficientnet` |
+| `efficientnet3d` | `configs/efficientnet3d_nas_search_space_192.json` | 384 | 1920 | `runs/lumbar_nas_efficientnet3d` |
 
 ViT / MaxViT use the 8×8 AdamW + SGD grids. ConvNeXt / EfficientNet 2D share the pruned 144-cell HP axes. ConvNeXt3D / EfficientNet3D share the 192-HP × `cnn3d_s`/`cnn3d_b` grid. The old 24-cell JSON files stay as legacy stubs. Image size comes from `--crop-policy` (`centered` 64×64, `extend50` 96×64). `runs/` is gitignored.
 

@@ -51,6 +51,7 @@ SCS only. Other condition columns in `train.csv` are empty. Catalog requires all
 | `test_smoke_samples.py` | two complete raw studies on disk; `centered` manifest is `@pytest.mark.local` |
 | `test_validate.py` | fixtures layout OK; missing root / incomplete dump fail; `--strict` flags 1002's missing DICOM |
 | `test_nas.py` | ViT 2304 / MaxViT 1152 / ConvNeXt 144 / ConvNeXt3D 384 / EfficientNet 144 / EfficientNet3D 384; legacy 24-cell CNN files; isolated `runs/` bases; `extend50` → 96×64; reject bad family / condition |
+| `test_nas_gpus.py` | `--num-gpus` only 1/2/4/8; auto-snap; 144/384/2304 shards cover every trial once; launch dry-run; pack zip has no PNG cache |
 
 ## ▾ Pass / fail at a glance
 

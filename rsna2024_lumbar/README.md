@@ -63,7 +63,7 @@ python -m rsna2024_lumbar.nas --family efficientnet3d --list
 | `efficientnet` | 144 | `runs/lumbar_nas_efficientnet` |
 | `efficientnet3d` | 384 | `runs/lumbar_nas_efficientnet3d` |
 
-`--crop-policy centered|extend50` sets PNG size. Depth: [nas/README.md](nas/README.md).
+`--crop-policy centered|extend50` sets PNG size. Shard across **1 / 2 / 4 / 8** GPUs (`--num-gpus 0` = auto). Pack a cloud zip with `python -m rsna2024_lumbar.nas.pack`. Depth: [nas/README.md](nas/README.md).
 
 ## ✔ Tests
 

@@ -21,3 +21,25 @@ python -m rsna2024_lumbar.nas --family convnext3d --list
 python -m rsna2024_lumbar.nas --family efficientnet --list
 python -m rsna2024_lumbar.nas --family efficientnet3d --list --crop-policy extend50
 ```
+
+## Parallel GPUs (1 / 2 / 4 / 8)
+
+`--num-gpus 0` picks the largest of those that fits visible CUDA devices.
+
+```bash
+python -m rsna2024_lumbar.nas.launch --family convnext --num-gpus 4 --all-conditions
+python -m rsna2024_lumbar.nas.launch --family efficientnet --num-gpus 8 --spawn --wait
+python -m rsna2024_lumbar.nas.launch --family efficientnet3d --num-gpus 0 --all-conditions --spawn --wait
+```
+
+144 trials / 8 GPUs → 18 each. 384 / 8 → 48 each. `--spawn` starts one process per shard (`CUDA_VISIBLE_DEVICES`). The worker records the shard; the training loop is not in this package yet.
+
+## Cloud zip
+
+```bash
+python -m rsna2024_lumbar.nas.pack --profile efficientnet_families
+python -m rsna2024_lumbar.nas.pack --profile convnext_families
+python -m rsna2024_lumbar.nas.pack --profile all --include-crops
+```
+
+Default zip is code + label CSVs (no PNG cache). `--include-crops` adds `data/processed/<policy>/`.

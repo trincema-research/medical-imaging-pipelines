@@ -6,7 +6,10 @@ import argparse
 from pathlib import Path
 
 from rsna2024_lumbar.perf_pipeline.config import list_best_config_files
-from rsna2024_lumbar.perf_pipeline.nas_snapshot import write_nas_snapshot_csv
+from rsna2024_lumbar.perf_pipeline.nas_snapshot import (
+    snapshot_all_best_configs,
+    write_nas_snapshot_csv,
+)
 from rsna2024_lumbar.perf_pipeline.paths import (
     DEFAULT_BEST_CONFIG_DIR,
     DEFAULT_REPEATS,
@@ -62,6 +65,18 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     snap.add_argument("--output-csv", type=Path, default=None)
 
+    snap_all = sub.add_parser(
+        "nas-snapshot-all",
+        help="OA snapshots for every per-model nas_best_*.json + combined CSV.",
+    )
+    snap_all.add_argument("--config-dir", type=Path, default=DEFAULT_BEST_CONFIG_DIR)
+    snap_all.add_argument(
+        "--compact-root",
+        type=Path,
+        default=Path("rsna2024_lumbar/data/nas_compact"),
+    )
+    snap_all.add_argument("--output-base", type=Path, default=RESULTS_DIR)
+
     list_cfg = sub.add_parser("list-configs", help="List per-model nas_best_*.json files.")
     list_cfg.add_argument("--config-dir", type=Path, default=DEFAULT_BEST_CONFIG_DIR)
 
@@ -71,6 +86,17 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def cmd_list_configs(args: argparse.Namespace) -> int:
     for path in list_best_config_files(args.config_dir):
         print(path)
+    return 0
+
+
+def cmd_nas_snapshot_all(args: argparse.Namespace) -> int:
+    rows = snapshot_all_best_configs(
+        config_dir=args.config_dir,
+        compact_root=args.compact_root,
+        output_base=args.output_base,
+    )
+    combined = args.output_base / "nas_snapshots_all_models.csv"
+    print(f"Wrote {len(rows)} rows -> {combined}")
     return 0
 
 
@@ -137,6 +163,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(cmd_list_configs(args))
     if args.command == "nas-snapshot":
         raise SystemExit(cmd_nas_snapshot(args))
+    if args.command == "nas-snapshot-all":
+        raise SystemExit(cmd_nas_snapshot_all(args))
     if args.command == "run":
         raise SystemExit(cmd_run(args))
     if args.command == "run-all":

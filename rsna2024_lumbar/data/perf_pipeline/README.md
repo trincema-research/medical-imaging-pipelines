@@ -1,7 +1,27 @@
 # Performance pipeline results
 
-Stage **after** `data/` and `nas/`: retrain **NAS best** hyperparameters and record
-**train / val / test** metrics (accuracy, F1, and severity: OA, O-MAE, QWK, SER).
+## What is this stage?
+
+| | |
+|--|--|
+| **Package** | `rsna2024_lumbar/perf_pipeline/` |
+| **Name** | **Performance pipeline** (`perf_pipeline`) |
+| **Comes after** | `data/` (inputs) → `nas/` (search + `nas_compact/best_configs`) |
+| **Main purpose** | **Confirm** NAS winners: retrain with a fixed protocol, default **5 repeats** per condition (split seeds), and write **train / val / test** metrics—including **OA, O-MAE, QWK, SER**—to CSV under `data/perf_pipeline/results/`. |
+
+NAS tells you what worked in search; perf_pipeline produces **auditable, comparable** numbers for reporting and PRs.
+
+## Committed results in git
+
+- `nas_snapshots_all_models.csv` — OA at NAS best val epoch (all model layouts, no GPU).
+- Per-model `nas_snapshot_<config>.csv` — same, one file per `nas_best_*.json`.
+- After local `run` / `run-all`: `pipeline_results.csv` (full severity + accuracy on retrain).
+
+Regenerate NAS snapshots:
+
+```bash
+python -m rsna2024_lumbar.perf_pipeline nas-snapshot-all
+```
 
 ## Run locally
 

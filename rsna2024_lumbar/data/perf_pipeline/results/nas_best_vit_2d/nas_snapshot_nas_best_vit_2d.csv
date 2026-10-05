@@ -1,0 +1,6 @@
+condition,family,archive_layout,trial_id,history_path,best_epoch,source,train_oa_overall,val_oa_overall,test_oa_overall,model_config,model_label
+spinal_canal_stenosis,vit,2d,72,rsna2024_lumbar\data\nas_compact\ViT\2d\spinal_canal_stenosis\trial_0072\training_history.csv,25,nas_training_history,0.9528614457831324,0.9310344827586208,0.9103202846975088,nas_best_vit_2d,ViT 2D
+left_neural_foraminal_narrowing,vit,2d,2091,rsna2024_lumbar\data\nas_compact\ViT\2d\left_neural_foraminal_narrowing\trial_2091\training_history.csv,45,nas_training_history,0.8656521739130435,0.8648648648648649,0.8486486486486486,nas_best_vit_2d,ViT 2D
+right_neural_foraminal_narrowing,vit,2d,132,rsna2024_lumbar\data\nas_compact\ViT\2d\right_neural_foraminal_narrowing\trial_0132\training_history.csv,38,nas_training_history,0.9081632653061223,0.8585858585858586,0.8317567567567568,nas_best_vit_2d,ViT 2D
+left_subarticular_stenosis,vit,2d,74,rsna2024_lumbar\data\nas_compact\ViT\2d\left_subarticular_stenosis\trial_0074\training_history.csv,20,nas_training_history,0.8610276679841897,0.825925925925926,0.8228136882129278,nas_best_vit_2d,ViT 2D
+right_subarticular_stenosis,vit,2d,1627,rsna2024_lumbar\data\nas_compact\ViT\2d\right_subarticular_stenosis\trial_1627\training_history.csv,11,nas_training_history,0.8388318863456985,0.8333333333333334,0.8322097378277153,nas_best_vit_2d,ViT 2D

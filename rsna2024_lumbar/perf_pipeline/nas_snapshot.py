@@ -81,6 +81,37 @@ def write_nas_snapshot_csv(
         summarize_entry_from_nas_history(entry, compact_root=compact_root)
         for entry in config.get("entries", [])
     ]
+    for row in rows:
+        row["model_config"] = best_config_path.stem
+        row["model_label"] = config.get("label") or best_config_path.stem
     output_csv.parent.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(rows).to_csv(output_csv, index=False)
     return rows
+
+
+def snapshot_all_best_configs(
+    *,
+    config_dir: Path,
+    compact_root: Path,
+    output_base: Path,
+) -> list[dict[str, Any]]:
+    from rsna2024_lumbar.perf_pipeline.config import list_best_config_files
+
+    all_rows: list[dict[str, Any]] = []
+    for cfg_path in list_best_config_files(config_dir):
+        out_csv = (
+            output_base
+            / cfg_path.stem
+            / f"nas_snapshot_{cfg_path.stem}.csv"
+        )
+        all_rows.extend(
+            write_nas_snapshot_csv(
+                cfg_path,
+                compact_root=compact_root,
+                output_csv=out_csv,
+            )
+        )
+    combined = output_base / "nas_snapshots_all_models.csv"
+    combined.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(all_rows).to_csv(combined, index=False)
+    return all_rows

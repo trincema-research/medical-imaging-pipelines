@@ -9,8 +9,12 @@ from rsna2024_lumbar.nas.catalog import ARCHIVE_RESULT_TARGETS, MODEL_GROUPS, ta
 from rsna2024_lumbar.nas.extract import extract_best_for_target
 from rsna2024_lumbar.nas.rank import DEFAULT_RANK_METRIC, METRIC_HELP, RANK_METRICS
 from rsna2024_lumbar.nas.report import (
+    COMBINED_BEST_CONFIG_STEM,
+    LEGACY_COMBINED_BEST_CONFIG_STEM,
+    combined_best_config_csv_path,
     default_csv_path,
     default_json_path,
+    merge_combined_best_rows,
     rows_best_per_condition,
     rows_shared_config,
     write_best_csv,
@@ -169,18 +173,35 @@ def main(argv: list[str] | None = None) -> None:
         )
 
     if not args.no_combined_csv and combined_rows:
-        combined_path = args.combined_csv or (args.csv_dir / "nas_best_vit_maxvit_convnext_all.csv")
-        write_best_csv(combined_path, combined_rows)
-        combined_json = combined_path.with_suffix(".json")
+        combined_path = args.combined_csv or combined_best_config_csv_path(args.csv_dir)
+        existing_rows: list[dict] = []
+        if combined_path.is_file():
+            import csv as _csv
+
+            with combined_path.open(encoding="utf-8", newline="") as fh:
+                existing_rows = list(_csv.DictReader(fh))
+        merged = merge_combined_best_rows(existing_rows, combined_rows)
+        write_best_csv(combined_path, merged)
         write_best_json(
-            combined_json,
-            combined_rows,
+            combined_path.with_suffix(".json"),
+            merged,
             rank_metric=args.metric,
             archive_root=archive,
-            label="ViT / MaxViT / ConvNeXt (all layouts)",
+            label="All NAS model groups (best per condition)",
         )
-        print(f"Wrote combined CSV: {combined_path.resolve()} ({len(combined_rows)} rows)")
-        print(f"Wrote combined JSON: {combined_json.resolve()}")
+        legacy = args.csv_dir / f"{LEGACY_COMBINED_BEST_CONFIG_STEM}.csv"
+        write_best_csv(legacy, merged)
+        write_best_json(
+            legacy.with_suffix(".json"),
+            merged,
+            rank_metric=args.metric,
+            archive_root=archive,
+            label="All NAS model groups (best per condition)",
+        )
+        print(
+            f"Wrote combined CSV: {combined_path.resolve()} ({len(merged)} rows, "
+            f"{COMBINED_BEST_CONFIG_STEM})"
+        )
 
     if errors and not wrote:
         raise SystemExit(f"No archives processed. {len(errors)} skipped.")

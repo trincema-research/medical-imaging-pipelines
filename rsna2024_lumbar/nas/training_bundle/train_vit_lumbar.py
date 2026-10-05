@@ -26,7 +26,6 @@ import contextlib
 import csv
 import json
 import math
-import os
 import random
 import time
 from pathlib import Path
@@ -193,21 +192,6 @@ def merge_multi_head_metrics(
     """Add prefixed keys from compute_multi_head_metrics into epoch_history."""
     for key, value in metrics.items():
         epoch_history[f"{prefix}_{key}"] = value
-
-
-def _append_ordinal_metrics_if_enabled(
-    epoch_history: Dict[str, Any],
-    prefix: str,
-    logits: np.ndarray,
-    targets: np.ndarray,
-) -> None:
-    if os.environ.get("RSNA2024_ORDINAL_METRICS") != "1":
-        return
-    try:
-        from rsna2024_lumbar.ordinal.multi_head import append_ordinal_to_epoch_history
-    except ImportError:
-        return
-    append_ordinal_to_epoch_history(epoch_history, prefix, logits, targets)
 
 
 def save_per_level_confusion_matrices(
@@ -1089,15 +1073,12 @@ def main(argv: List[str] | None = None) -> None:
             "lr": scheduler.get_last_lr()[0],
             "epoch_time_sec": epoch_time_sec,
         }
-        for prefix, metric_dict, split_logits, split_targets in (
-            ("train", train_metrics, train_logits, train_targets),
-            ("val", val_metrics, val_logits, val_targets),
-            ("test", test_metrics, test_logits, test_targets),
+        for prefix, metric_dict in (
+            ("train", train_metrics),
+            ("val", val_metrics),
+            ("test", test_metrics),
         ):
             merge_multi_head_metrics(epoch_history, prefix, metric_dict)
-            _append_ordinal_metrics_if_enabled(
-                epoch_history, prefix, split_logits, split_targets
-            )
         history.append(epoch_history)
 
         write_mode = "a" if csv_initialized else "w"

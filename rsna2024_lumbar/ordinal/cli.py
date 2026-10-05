@@ -10,6 +10,7 @@ from rsna2024_lumbar.ordinal.export import (
     best_epoch_ordinal_row,
     epoch_history_to_ordinal_csv,
 )
+from rsna2024_lumbar.ordinal.nas_history import write_nas_history_ordinal_summary
 from rsna2024_lumbar.ordinal.paths import DEFAULT_BEST_CONFIG_DIR, ORDINAL_RESULTS_DIR
 from rsna2024_lumbar.ordinal.refit import (
     extract_best_epoch_summary,
@@ -53,6 +54,23 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--config-dir",
         type=Path,
         default=DEFAULT_BEST_CONFIG_DIR,
+    )
+
+    nas_hist = sub.add_parser(
+        "nas-history",
+        help="OA at NAS best val epoch from compact training_history.csv (no refit).",
+    )
+    nas_hist.add_argument("--best-config", type=Path, required=True)
+    nas_hist.add_argument(
+        "--compact-root",
+        type=Path,
+        default=Path("rsna2024_lumbar/data/nas_compact"),
+    )
+    nas_hist.add_argument(
+        "--output-csv",
+        type=Path,
+        default=None,
+        help="Default: data/ordinal_benchmark/nas_history_<config_stem>.csv",
     )
 
     return p.parse_args(argv)
@@ -136,6 +154,19 @@ def cmd_refit(args: argparse.Namespace) -> int:
     return rc
 
 
+def cmd_nas_history(args: argparse.Namespace) -> int:
+    out = args.output_csv
+    if out is None:
+        out = ORDINAL_RESULTS_DIR / f"nas_history_{args.best_config.stem}.csv"
+    write_nas_history_ordinal_summary(
+        args.best_config,
+        compact_root=args.compact_root,
+        output_csv=out,
+    )
+    print(f"Wrote {out}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> None:
     args = _parse_args(argv)
     if args.command == "list-configs":
@@ -144,6 +175,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(cmd_export(args))
     if args.command == "refit":
         raise SystemExit(cmd_refit(args))
+    if args.command == "nas-history":
+        raise SystemExit(cmd_nas_history(args))
     raise SystemExit(f"Unknown command: {args.command}")
 
 

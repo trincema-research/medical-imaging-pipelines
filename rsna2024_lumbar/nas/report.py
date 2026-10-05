@@ -52,6 +52,32 @@ METRIC_CSV_FIELDS: tuple[str, ...] = (
     "val_loss",
 )
 
+COMBINED_BEST_CONFIG_STEM = "nas_best_all"
+LEGACY_COMBINED_BEST_CONFIG_STEM = "nas_best_vit_maxvit_convnext_all"
+
+
+def combined_best_config_csv_path(csv_dir: Path) -> Path:
+    return csv_dir / f"{COMBINED_BEST_CONFIG_STEM}.csv"
+
+
+def merge_combined_best_rows(
+    existing: list[dict[str, Any]],
+    new_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Replace rows that share (family, archive_layout, condition); keep other models."""
+    new_keys = {
+        (str(r.get("family", "")), str(r.get("archive_layout", "")), str(r.get("condition", "")))
+        for r in new_rows
+    }
+    kept = [
+        r
+        for r in existing
+        if (str(r.get("family", "")), str(r.get("archive_layout", "")), str(r.get("condition", "")))
+        not in new_keys
+    ]
+    return kept + new_rows
+
+
 CSV_FIELDNAMES: tuple[str, ...] = (
     "selection",
     "model_group",

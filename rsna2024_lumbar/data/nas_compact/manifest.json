@@ -64,6 +64,26 @@
       "exported_trials": 1664,
       "skipped_trials": 0,
       "bytes_written": 33022494
+    },
+    {
+      "label": "EfficientNet 2D",
+      "family": "efficientnet",
+      "layout": "2d",
+      "source_root": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\EfficientNet\\2D",
+      "dest_root": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\EfficientNet\\2d",
+      "exported_trials": 720,
+      "skipped_trials": 0,
+      "bytes_written": 9238060
+    },
+    {
+      "label": "EfficientNet 3D",
+      "family": "efficientnet3d",
+      "layout": "3d",
+      "source_root": "F:\\datasets_lumbar\\rsna-2024-lumbar-spine-degenerative-classification\\runs\\NAS results\\EfficientNet\\3D",
+      "dest_root": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\EfficientNet\\3d",
+      "exported_trials": 1664,
+      "skipped_trials": 0,
+      "bytes_written": 35953444
     }
   ]
 }

@@ -32,3 +32,14 @@ Outputs land under `rsna2024_lumbar/data/ordinal_benchmark/<family>_<layout>/<co
 - `refit_manifest.json` — NAS trial id and hyperparameters used
 
 Set `RSNA2024_DATA_ROOT` / `RSNA2024_CROPS_ROOT` instead of CLI paths when convenient.
+
+### EfficientNet (and other NAS archives without refit)
+
+OA at the NAS best validation epoch (from compact `training_history.csv`):
+
+```bash
+python -m rsna2024_lumbar.ordinal nas-history \
+  --best-config rsna2024_lumbar/data/nas_compact/best_configs/nas_best_efficientnet_2d.json
+```
+
+Full O-MAE / QWK / SER require a refit run (checkpoints are not stored in NAS trial folders).

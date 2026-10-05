@@ -237,6 +237,7 @@ rsna20*/data/processed/**
 !rsna20*/data/processed/README.md
 rsna2024_lumbar/nas/training_bundle/**
 !rsna2024_lumbar/nas/training_bundle/.gitkeep
+!rsna2024_lumbar/nas/training_bundle/train_vit_lumbar.py
 
 # Full raw DICOM dump stays local. Label CSVs + a few smoke studies are force-added.
 rsna20*/data/raw/**

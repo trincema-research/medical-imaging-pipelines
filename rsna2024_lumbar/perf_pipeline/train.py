@@ -86,8 +86,9 @@ def build_train_command(
     if hp.get("image_height") is not None:
         cmd.extend(["--image-height", str(int(hp["image_height"]))])
 
-    if hp.get("head_hidden_dim") is not None:
-        cmd.extend(["--head-hidden-dim", str(int(hp["head_hidden_dim"]))])
+    hidden = hp.get("head_hidden_dim")
+    if hidden not in (None, ""):
+        cmd.extend(["--head-hidden-dim", str(int(hidden))])
 
     if hp.get("freeze_backbone"):
         cmd.append("--freeze-backbone")

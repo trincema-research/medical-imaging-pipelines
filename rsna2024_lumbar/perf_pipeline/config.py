@@ -1,4 +1,4 @@
-"""Load NAS best-config JSON/CSV entries for refit runs."""
+"""Load NAS best-config JSON/CSV entries for performance pipeline runs."""
 
 from __future__ import annotations
 
@@ -45,9 +45,20 @@ def hyperparameters_dict(entry: dict[str, Any]) -> dict[str, Any]:
     return {k: v for k, v in entry.items() if k not in ("metrics", "condition", "family")}
 
 
-def refit_slug(entry: dict[str, Any]) -> str:
+def entry_slug(entry: dict[str, Any]) -> str:
     hp = hyperparameters_dict(entry)
     family = entry.get("family") or hp.get("model_type", "model")
     layout = entry.get("archive_layout") or hp.get("input_layout", "2d")
     condition = entry.get("condition", "unknown")
     return f"{family}_{layout}/{condition}"
+
+
+def list_best_config_files(config_dir: Path) -> list[Path]:
+    """Per-model best configs (excludes combined ``nas_best_all`` files)."""
+    skip = {"nas_best_all", "nas_best_vit_maxvit_convnext_all"}
+    paths: list[Path] = []
+    for path in sorted(config_dir.glob("nas_best_*.json")):
+        if path.stem in skip:
+            continue
+        paths.append(path)
+    return paths

@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Sequence
+from typing import Dict, Sequence
 
 import numpy as np
 from sklearn.metrics import cohen_kappa_score
 
 DEFAULT_IGNORE_LABEL = -1
-ORDINAL_CLASS_LABELS = (0, 1, 2)
+SEVERITY_CLASS_LABELS = (0, 1, 2)
 
 
 def _as_int_arrays(
@@ -23,7 +23,6 @@ def _as_int_arrays(
 
 
 def ordinal_accuracy(y_true: np.ndarray, y_pred: np.ndarray) -> float:
-    """Exact match rate on valid samples (same as accuracy for ordered classes)."""
     y_true, y_pred = _as_int_arrays(y_true, y_pred)
     if y_true.size == 0:
         return 0.0
@@ -31,7 +30,6 @@ def ordinal_accuracy(y_true: np.ndarray, y_pred: np.ndarray) -> float:
 
 
 def ordinal_mae(y_true: np.ndarray, y_pred: np.ndarray) -> float:
-    """Mean absolute grade distance."""
     y_true, y_pred = _as_int_arrays(y_true, y_pred)
     if y_true.size == 0:
         return 0.0
@@ -42,9 +40,8 @@ def quadratic_weighted_kappa(
     y_true: np.ndarray,
     y_pred: np.ndarray,
     *,
-    labels: Sequence[int] = ORDINAL_CLASS_LABELS,
+    labels: Sequence[int] = SEVERITY_CLASS_LABELS,
 ) -> float:
-    """Quadratic weighted kappa; distant disagreements penalized more strongly."""
     y_true, y_pred = _as_int_arrays(y_true, y_pred)
     if y_true.size == 0:
         return 0.0
@@ -59,24 +56,18 @@ def quadratic_weighted_kappa(
 
 
 def severe_error_rate(y_true: np.ndarray, y_pred: np.ndarray) -> float:
-    """Fraction of predictions with grade gap >= 2 (e.g. true 0 vs pred 2)."""
     y_true, y_pred = _as_int_arrays(y_true, y_pred)
     if y_true.size == 0:
         return 0.0
     return float(np.mean(np.abs(y_true - y_pred) >= 2))
 
 
-def compute_ordinal_metrics(
+def compute_severity_metrics(
     y_true: np.ndarray,
     y_pred: np.ndarray,
     *,
     prefix: str = "",
 ) -> Dict[str, float]:
-    """
-    Core ordinal metrics for one flat label vector.
-
-    Keys (with optional prefix): oa, omae, qwk, ser.
-    """
     p = f"{prefix}_" if prefix else ""
     return {
         f"{p}oa": ordinal_accuracy(y_true, y_pred),
@@ -86,10 +77,5 @@ def compute_ordinal_metrics(
     }
 
 
-def metric_display_names() -> Dict[str, str]:
-    return {
-        "oa": "Ordinal Accuracy (OA)",
-        "omae": "Ordinal MAE (O-MAE)",
-        "qwk": "Quadratic Weighted Kappa (QWK)",
-        "ser": "Severe Error Rate (SER)",
-    }
+# Backward-compatible aliases
+compute_ordinal_metrics = compute_severity_metrics

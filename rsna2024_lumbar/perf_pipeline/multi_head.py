@@ -1,4 +1,4 @@
-"""Five-head logits/targets → ordinal metrics (overall + per lumbar level)."""
+"""Five-head logits/targets → severity metrics (overall + per lumbar level)."""
 
 from __future__ import annotations
 
@@ -6,24 +6,20 @@ from typing import Any, Dict
 
 import numpy as np
 
-from rsna2024_lumbar.ordinal.metrics import (
+from rsna2024_lumbar.perf_pipeline.severity_metrics import (
     DEFAULT_IGNORE_LABEL,
-    compute_ordinal_metrics,
+    compute_severity_metrics,
 )
 
-# Match bundled training constants (avoid importing torch bundle at import time).
 LUMBAR_LEVELS = ("L1_L2", "L2_L3", "L3_L4", "L4_L5", "L5_S1")
 
 
-def compute_multi_head_ordinal_metrics(
+def compute_multi_head_severity_metrics(
     logits: np.ndarray,
     targets: np.ndarray,
     *,
     ignore_label: int = DEFAULT_IGNORE_LABEL,
 ) -> Dict[str, float]:
-    """
-    logits: (N, 5, C), targets: (N, 5)
-    """
     metrics: Dict[str, float] = {}
     num_levels = logits.shape[1]
     level_oa: list[float] = []
@@ -42,7 +38,7 @@ def compute_multi_head_ordinal_metrics(
             metrics[f"qwk_{level_key}"] = 0.0
             metrics[f"ser_{level_key}"] = 0.0
             continue
-        level_m = compute_ordinal_metrics(y_true[valid], y_pred[valid])
+        level_m = compute_severity_metrics(y_true[valid], y_pred[valid])
         metrics[f"oa_{level_key}"] = level_m["oa"]
         metrics[f"omae_{level_key}"] = level_m["omae"]
         metrics[f"qwk_{level_key}"] = level_m["qwk"]
@@ -61,7 +57,7 @@ def compute_multi_head_ordinal_metrics(
     flat_pred = logits.reshape(-1, logits.shape[-1]).argmax(axis=-1)
     valid_flat = flat_true != ignore_label
     if valid_flat.any():
-        overall = compute_ordinal_metrics(flat_true[valid_flat], flat_pred[valid_flat])
+        overall = compute_severity_metrics(flat_true[valid_flat], flat_pred[valid_flat])
         metrics["oa_overall"] = overall["oa"]
         metrics["omae_overall"] = overall["omae"]
         metrics["qwk_overall"] = overall["qwk"]
@@ -74,7 +70,10 @@ def compute_multi_head_ordinal_metrics(
     return metrics
 
 
-def merge_ordinal_metrics(
+compute_multi_head_ordinal_metrics = compute_multi_head_severity_metrics
+
+
+def merge_severity_metrics(
     epoch_history: Dict[str, Any],
     prefix: str,
     metrics: Dict[str, float],
@@ -83,7 +82,7 @@ def merge_ordinal_metrics(
         epoch_history[f"{prefix}_{key}"] = value
 
 
-def append_ordinal_to_epoch_history(
+def append_severity_to_epoch_history(
     epoch_history: Dict[str, Any],
     prefix: str,
     logits: np.ndarray,
@@ -91,10 +90,13 @@ def append_ordinal_to_epoch_history(
     *,
     ignore_label: int = DEFAULT_IGNORE_LABEL,
 ) -> None:
-    merge_ordinal_metrics(
+    merge_severity_metrics(
         epoch_history,
         prefix,
-        compute_multi_head_ordinal_metrics(
+        compute_multi_head_severity_metrics(
             logits, targets, ignore_label=ignore_label
         ),
     )
+
+
+append_ordinal_to_epoch_history = append_severity_to_epoch_history

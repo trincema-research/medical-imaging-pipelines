@@ -1,4 +1,4 @@
-"""Ordinal metrics at the NAS best epoch from archived ``training_history.csv``."""
+"""OA at NAS best val epoch from compact ``training_history.csv`` (no retrain)."""
 
 from __future__ import annotations
 
@@ -8,11 +8,10 @@ from typing import Any
 import pandas as pd
 
 from rsna2024_lumbar.nas.compact import HISTORY_FILENAME
-from rsna2024_lumbar.ordinal.config import hyperparameters_dict, load_best_config
+from rsna2024_lumbar.perf_pipeline.config import hyperparameters_dict, load_best_config
 
 
 def _history_path_for_entry(entry: dict[str, Any], *, compact_root: Path) -> Path | None:
-    """Resolve compact ``training_history.csv`` for a best-config JSON entry."""
     family = entry.get("family") or hyperparameters_dict(entry).get("model_type", "")
     layout = entry.get("archive_layout") or hyperparameters_dict(entry).get("input_layout", "2d")
     condition = entry.get("condition")
@@ -42,30 +41,11 @@ def _history_path_for_entry(entry: dict[str, Any], *, compact_root: Path) -> Pat
     return None
 
 
-def _best_epoch_row(df: pd.DataFrame) -> pd.Series:
-    if "val_acc" not in df.columns:
-        return df.iloc[-1]
-    return df.loc[df["val_acc"].idxmax()]
-
-
-def _oa_from_accuracy_overall(row: pd.Series, prefix: str) -> float | None:
-    key = f"{prefix}_accuracy_overall"
-    if key not in row or pd.isna(row[key]):
-        return None
-    return float(row[key])
-
-
 def summarize_entry_from_nas_history(
     entry: dict[str, Any],
     *,
     compact_root: Path,
 ) -> dict[str, Any]:
-    """
-    At the best ``val_acc`` epoch in NAS history, map ``*_accuracy_overall`` to OA.
-
-    O-MAE / QWK / SER are not stored in NAS histories (no per-sample preds); use refit
-    for full ordinal metrics.
-    """
     hist_path = _history_path_for_entry(entry, compact_root=compact_root)
     out: dict[str, Any] = {
         "condition": entry.get("condition"),
@@ -80,16 +60,17 @@ def summarize_entry_from_nas_history(
         out["note"] = "missing compact training_history.csv"
         return out
     df = pd.read_csv(hist_path)
-    row = _best_epoch_row(df)
+    idx = df["val_acc"].idxmax() if "val_acc" in df.columns else df.index[-1]
+    row = df.loc[idx]
     out["best_epoch"] = int(row.get("epoch", -1))
     for prefix in ("train", "val", "test"):
-        oa = _oa_from_accuracy_overall(row, prefix)
-        if oa is not None:
-            out[f"{prefix}_oa_overall"] = oa
+        key = f"{prefix}_accuracy_overall"
+        if key in row and not pd.isna(row[key]):
+            out[f"{prefix}_oa_overall"] = float(row[key])
     return out
 
 
-def write_nas_history_ordinal_summary(
+def write_nas_snapshot_csv(
     best_config_path: Path,
     *,
     compact_root: Path,

@@ -1,4 +1,4 @@
-"""Default paths for ordinal refit runs."""
+"""Paths for the post-NAS performance pipeline."""
 
 from __future__ import annotations
 
@@ -13,25 +13,29 @@ from rsna2024_lumbar.nas.paths import (
     default_data_root,
 )
 
-ORDINAL_RESULTS_DIR = YEAR_ROOT / "data" / "ordinal_benchmark"
+RESULTS_DIR = YEAR_ROOT / "data" / "perf_pipeline" / "results"
 DEFAULT_BEST_CONFIG_DIR = YEAR_ROOT / "data" / "nas_compact" / "best_configs"
+METRICS_ENV_VAR = "RSNA2024_PERF_PIPELINE_METRICS"
+LEGACY_METRICS_ENV_VAR = "RSNA2024_ORDINAL_METRICS"
+DEFAULT_REPEATS = 5
+DEFAULT_SPLIT_SEEDS = (42, 142, 242, 342, 442)
 
 
-def ordinal_output_dir(entry_slug: str, *, output_base: Path | None = None) -> Path:
-    base = output_base or ORDINAL_RESULTS_DIR
-    return base / Path(entry_slug)
+def model_results_dir(config_stem: str, *, output_base: Path | None = None) -> Path:
+    return (output_base or RESULTS_DIR) / config_stem
 
 
-def bundle_train_script() -> Path:
-    path = BUNDLE_DIR / "train_vit_lumbar.py"
-    if not path.is_file():
-        raise FileNotFoundError(
-            f"Missing {path}. Pack NAS bundle or sync training_bundle from legacy repo."
-        )
-    return path
+def run_output_dir(
+    config_stem: str,
+    condition: str,
+    repeat_index: int,
+    *,
+    output_base: Path | None = None,
+) -> Path:
+    return model_results_dir(config_stem, output_base=output_base) / condition / f"repeat_{repeat_index:02d}"
 
 
-def refit_env() -> dict[str, str]:
+def pipeline_env() -> dict[str, str]:
     env = os.environ.copy()
     bundle = str(BUNDLE_DIR.resolve())
     repo = str(REPO_ROOT.resolve())
@@ -40,7 +44,8 @@ def refit_env() -> dict[str, str]:
     if prev:
         parts.append(prev)
     env["PYTHONPATH"] = os.pathsep.join(parts)
-    env["RSNA2024_ORDINAL_METRICS"] = "1"
+    env[METRICS_ENV_VAR] = "1"
+    env[LEGACY_METRICS_ENV_VAR] = "1"
     env.setdefault("MPLBACKEND", "Agg")
     return env
 

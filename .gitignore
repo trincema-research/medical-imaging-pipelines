@@ -247,3 +247,10 @@ rsna20*/data/raw/**
 !rsna20*/data/raw/train_series_descriptions.csv
 
 # NAS compact exports are committed under rsna2024_lumbar/data/nas_compact/ (see README there).
+
+# Local perf-pipeline training runs (commit pipeline_results.csv / nas_snapshot*.csv only)
+rsna2024_lumbar/data/perf_pipeline/results/**/repeat_*/
+rsna2024_lumbar/data/ordinal_benchmark/**/*
+!rsna2024_lumbar/data/ordinal_benchmark/README.md
+rsna2024_lumbar/data/perf_pipeline/results/**/*.pt
+rsna2024_lumbar/data/perf_pipeline/results/**/*.png

@@ -1,4 +1,4 @@
-"""Run refit training from NAS best-config entries."""
+"""Launch bundled training for one NAS best-config entry."""
 
 from __future__ import annotations
 
@@ -8,15 +8,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import pandas as pd
-
-from rsna2024_lumbar.ordinal.config import hyperparameters_dict, refit_slug
-from rsna2024_lumbar.ordinal.paths import (
-    ordinal_output_dir,
-    refit_env,
-    resolve_crops_root,
-    resolve_data_root,
-)
+from rsna2024_lumbar.perf_pipeline.config import hyperparameters_dict
+from rsna2024_lumbar.perf_pipeline.paths import pipeline_env, resolve_crops_root, resolve_data_root
 from rsna2024_lumbar.preprocessing.constants import CROP_POLICY_CENTERED
 
 
@@ -32,6 +25,7 @@ def build_train_command(
     max_studies: int | None = None,
     progress: bool = True,
     split_seed: int | None = 42,
+    seed: int | None = 42,
 ) -> list[str]:
     hp = hyperparameters_dict(entry)
     condition = entry["condition"]
@@ -47,7 +41,7 @@ def build_train_command(
     cmd: list[str] = [
         sys.executable,
         "-m",
-        "rsna2024_lumbar.ordinal.train_entry",
+        "rsna2024_lumbar.perf_pipeline.train_entry",
         "--data-root",
         str(data_root),
         "--condition",
@@ -111,6 +105,8 @@ def build_train_command(
         cmd.extend(["--max-studies", str(max_studies)])
     if split_seed is not None:
         cmd.extend(["--split-seed", str(split_seed)])
+    if seed is not None:
+        cmd.extend(["--seed", str(seed)])
 
     return cmd
 
@@ -121,10 +117,14 @@ def write_run_manifest(
     *,
     command: list[str],
     source_config: Path,
+    repeat_index: int,
+    split_seed: int,
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     manifest = {
         "source_best_config": str(source_config.resolve()),
+        "repeat_index": repeat_index,
+        "split_seed": split_seed,
         "nas_trial_id": entry.get("trial_id"),
         "condition": entry.get("condition"),
         "family": entry.get("family"),
@@ -132,72 +132,45 @@ def write_run_manifest(
         "nas_metrics": entry.get("metrics"),
         "train_command": command,
     }
-    with (output_dir / "refit_manifest.json").open("w", encoding="utf-8") as fh:
+    with (output_dir / "pipeline_run_manifest.json").open("w", encoding="utf-8") as fh:
         json.dump(manifest, fh, indent=2)
 
 
-def extract_best_epoch_summary(run_dir: Path) -> dict[str, Any] | None:
-    csv_path = run_dir / "training_metrics.csv"
-    if not csv_path.is_file():
-        return None
-    df = pd.read_csv(csv_path)
-    if df.empty:
-        return None
-    if "val_acc" in df.columns:
-        idx = df["val_acc"].idxmax()
-        row = df.loc[idx]
-    else:
-        row = df.iloc[-1]
-    summary: dict[str, Any] = {"best_epoch": int(row.get("epoch", -1))}
-    for col in df.columns:
-        if col == "epoch":
-            continue
-        if any(
-            col.startswith(p)
-            for p in ("train_", "val_", "test_")
-        ) and any(
-            m in col
-            for m in ("oa_", "omae_", "qwk_", "ser_", "_oa", "_omae", "_qwk", "_ser")
-        ):
-            summary[col] = row[col]
-        elif col.endswith(("_oa_overall", "_omae_overall", "_qwk_overall", "_ser_overall")):
-            summary[col] = row[col]
-    return summary
-
-
-def run_entry_refit(
+def run_training(
     entry: dict[str, Any],
     *,
     source_config: Path,
+    output_dir: Path,
     data_root: Path | None = None,
     crops_root: Path | None = None,
     epochs: int = 50,
-    output_base: Path | None = None,
     max_studies: int | None = None,
+    split_seed: int = 42,
+    seed: int = 42,
+    repeat_index: int = 1,
     dry_run: bool = False,
 ) -> int:
-    slug = refit_slug(entry)
-    out = ordinal_output_dir(slug, output_base=output_base)
     cmd = build_train_command(
         entry,
         data_root=resolve_data_root(data_root),
         crops_root=crops_root,
         epochs=epochs,
-        output_dir=out,
+        output_dir=output_dir,
         max_studies=max_studies,
+        split_seed=split_seed,
+        seed=seed,
     )
-    write_run_manifest(out, entry, command=cmd, source_config=source_config)
-    print(f"Refit {slug} -> {out}")
-    print(" ".join(cmd))
+    write_run_manifest(
+        output_dir,
+        entry,
+        command=cmd,
+        source_config=source_config,
+        repeat_index=repeat_index,
+        split_seed=split_seed,
+    )
+    print(f"Pipeline run repeat_{repeat_index:02d} -> {output_dir}")
     if dry_run:
+        print(" ".join(cmd))
         return 0
-    env = refit_env()
-    completed = subprocess.run(cmd, env=env, check=False)
+    completed = subprocess.run(cmd, env=pipeline_env(), check=False)
     return int(completed.returncode)
-
-
-def write_refit_summary_csv(rows: list[dict[str, Any]], path: Path) -> None:
-    if not rows:
-        return
-    path.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows).to_csv(path, index=False)

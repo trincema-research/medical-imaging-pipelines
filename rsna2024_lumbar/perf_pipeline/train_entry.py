@@ -1,15 +1,16 @@
-"""Run bundled training with ordinal metrics (``RSNA2024_ORDINAL_METRICS=1``)."""
+"""Run bundled training with severity metrics enabled."""
 
 from __future__ import annotations
 
 import os
 import sys
 
-from rsna2024_lumbar.ordinal.paths import BUNDLE_DIR, refit_env
+from rsna2024_lumbar.nas.paths import BUNDLE_DIR
+from rsna2024_lumbar.perf_pipeline.paths import pipeline_env
 
 
 def main(argv: list[str] | None = None) -> None:
-    env = refit_env()
+    env = pipeline_env()
     os.environ.update(env)
     bundle = str(BUNDLE_DIR.resolve())
     if bundle not in sys.path:

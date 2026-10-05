@@ -26,6 +26,7 @@ import contextlib
 import csv
 import json
 import math
+import os
 import random
 import time
 from pathlib import Path
@@ -192,6 +193,23 @@ def merge_multi_head_metrics(
     """Add prefixed keys from compute_multi_head_metrics into epoch_history."""
     for key, value in metrics.items():
         epoch_history[f"{prefix}_{key}"] = value
+
+
+def _append_severity_metrics_if_enabled(
+    epoch_history: Dict[str, Any],
+    prefix: str,
+    logits: np.ndarray,
+    targets: np.ndarray,
+) -> None:
+    if os.environ.get("RSNA2024_PERF_PIPELINE_METRICS") != "1" and os.environ.get(
+        "RSNA2024_ORDINAL_METRICS"
+    ) != "1":
+        return
+    try:
+        from rsna2024_lumbar.perf_pipeline.multi_head import append_severity_to_epoch_history
+    except ImportError:
+        return
+    append_severity_to_epoch_history(epoch_history, prefix, logits, targets)
 
 
 def save_per_level_confusion_matrices(

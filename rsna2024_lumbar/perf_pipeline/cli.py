@@ -5,7 +5,11 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from rsna2024_lumbar.perf_pipeline.config import list_best_config_files
+from rsna2024_lumbar.perf_pipeline.config import (
+    iter_entries,
+    list_best_config_files,
+    load_best_config,
+)
 from rsna2024_lumbar.perf_pipeline.nas_snapshot import (
     snapshot_all_best_configs,
     write_nas_snapshot_csv,
@@ -14,9 +18,25 @@ from rsna2024_lumbar.perf_pipeline.paths import (
     DEFAULT_BEST_CONFIG_DIR,
     DEFAULT_REPEATS,
     RESULTS_DIR,
+    run_output_dir,
 )
-from rsna2024_lumbar.perf_pipeline.results import write_pipeline_results_csv
-from rsna2024_lumbar.perf_pipeline.runner import run_best_config_pipeline
+from rsna2024_lumbar.perf_pipeline.results import (
+    load_combined_pipeline_results,
+    write_pipeline_results_csv,
+)
+from rsna2024_lumbar.perf_pipeline.runner import (
+    resolve_repeat_seeds,
+    run_best_config_pipeline,
+    run_is_complete,
+)
+
+
+def _filter_config_paths(config_dir: Path, only: list[str] | None) -> list[Path]:
+    paths = list_best_config_files(config_dir)
+    if not only:
+        return paths
+    want = {s.removesuffix(".json") for s in only}
+    return [p for p in paths if p.stem in want]
 
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -42,6 +62,18 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     run.add_argument("--output-base", type=Path, default=RESULTS_DIR)
     run.add_argument("--max-studies", type=int, default=None)
     run.add_argument("--dry-run", action="store_true")
+    run.add_argument(
+        "--skip-completed",
+        action="store_true",
+        help="Skip repeats whose run dir already has training_metrics.csv through --epochs.",
+    )
+    run.add_argument(
+        "--early-stop-patience",
+        type=int,
+        default=None,
+        metavar="N",
+        help="Stop after N epochs without val improvement (NAS default on cloud: 5).",
+    )
 
     run_all = sub.add_parser("run-all", help="Run pipeline for every per-model nas_best_*.json.")
     run_all.add_argument("--config-dir", type=Path, default=DEFAULT_BEST_CONFIG_DIR)
@@ -52,6 +84,24 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     run_all.add_argument("--output-base", type=Path, default=RESULTS_DIR)
     run_all.add_argument("--max-studies", type=int, default=None)
     run_all.add_argument("--dry-run", action="store_true")
+    run_all.add_argument("--skip-completed", action="store_true")
+    run_all.add_argument("--early-stop-patience", type=int, default=None, metavar="N")
+    run_all.add_argument(
+        "--only",
+        nargs="+",
+        default=None,
+        metavar="STEM",
+        help="Limit to config stems (e.g. nas_best_vit_2d nas_best_efficientnet_2d).",
+    )
+
+    status = sub.add_parser(
+        "status",
+        help="Count completed perf_pipeline repeats (for resume / second GPU).",
+    )
+    status.add_argument("--config-dir", type=Path, default=DEFAULT_BEST_CONFIG_DIR)
+    status.add_argument("--epochs", type=int, default=50)
+    status.add_argument("--repeats", type=int, default=3)
+    status.add_argument("--output-base", type=Path, default=RESULTS_DIR)
 
     snap = sub.add_parser(
         "nas-snapshot",
@@ -127,15 +177,16 @@ def cmd_run(args: argparse.Namespace) -> int:
         output_base=args.output_base,
         max_studies=args.max_studies,
         dry_run=args.dry_run,
+        skip_completed=args.skip_completed,
+        early_stop_patience=args.early_stop_patience,
     )
     return rc
 
 
 def cmd_run_all(args: argparse.Namespace) -> int:
     rc = 0
-    combined: list[dict] = []
-    for cfg_path in list_best_config_files(args.config_dir):
-        code, rows = run_best_config_pipeline(
+    for cfg_path in _filter_config_paths(args.config_dir, args.only):
+        code, _ = run_best_config_pipeline(
             cfg_path,
             data_root=args.data_root,
             crops_root=args.crops_root,
@@ -144,17 +195,44 @@ def cmd_run_all(args: argparse.Namespace) -> int:
             output_base=args.output_base,
             max_studies=args.max_studies,
             dry_run=args.dry_run,
+            skip_completed=args.skip_completed,
+            early_stop_patience=args.early_stop_patience,
         )
         if code != 0:
             rc = code
-        combined.extend(rows)
-    if combined and not args.dry_run:
-        write_pipeline_results_csv(
-            combined,
-            args.output_base / "pipeline_results_all_models.csv",
-        )
-        print(f"Wrote combined {args.output_base / 'pipeline_results_all_models.csv'}")
+    if not args.dry_run:
+        combined = load_combined_pipeline_results(args.output_base)
+        if combined:
+            out = args.output_base / "pipeline_results_all_models.csv"
+            write_pipeline_results_csv(combined, out)
+            print(f"Wrote combined {out} ({len(combined)} rows)")
     return rc
+
+
+def cmd_status(args: argparse.Namespace) -> int:
+    total_expected = 0
+    total_done = 0
+    for cfg_path in list_best_config_files(args.config_dir):
+        config = load_best_config(cfg_path)
+        repeat_seeds = resolve_repeat_seeds(args.repeats, None)
+        n_entries = sum(1 for _ in iter_entries(config))
+        expected = n_entries * len(repeat_seeds)
+        done = 0
+        for entry in iter_entries(config):
+            for repeat_index, _ in enumerate(repeat_seeds, start=1):
+                run_dir = run_output_dir(
+                    cfg_path.stem,
+                    str(entry["condition"]),
+                    repeat_index,
+                    output_base=args.output_base,
+                )
+                if run_is_complete(run_dir, args.epochs):
+                    done += 1
+        total_expected += expected
+        total_done += done
+        print(f"{cfg_path.stem}: {done}/{expected} repeats complete")
+    print(f"TOTAL: {total_done}/{total_expected} repeats (target {args.repeats} per condition)")
+    return 0 if total_done >= total_expected else 1
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -169,6 +247,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(cmd_run(args))
     if args.command == "run-all":
         raise SystemExit(cmd_run_all(args))
+    if args.command == "status":
+        raise SystemExit(cmd_status(args))
     raise SystemExit(f"Unknown command: {args.command}")
 
 

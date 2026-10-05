@@ -81,6 +81,16 @@ def write_pipeline_results_csv(rows: list[dict[str, Any]], path: Path) -> None:
     pd.DataFrame(rows, columns=list(PIPELINE_RESULTS_COLUMNS)).to_csv(path, index=False)
 
 
+def load_combined_pipeline_results(output_base: Path) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for path in sorted(output_base.glob("nas_best_*/pipeline_results.csv")):
+        df = pd.read_csv(path)
+        if df.empty:
+            continue
+        rows.extend(df.to_dict(orient="records"))
+    return rows
+
+
 def write_per_run_best_epoch_csv(
     training_metrics_path: Path,
     output_path: Path,

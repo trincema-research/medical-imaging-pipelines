@@ -35,9 +35,52 @@ python -m rsna2024_lumbar.perf_pipeline run \
   --data-root /path/to/data/raw \
   --crops-root /path/to/data/processed/centered
 
-# All per-model best configs
-python -m rsna2024_lumbar.perf_pipeline run-all --epochs 50 --data-root ... --crops-root ...
+# All per-model best configs (3 repeats for PR)
+python -m rsna2024_lumbar.perf_pipeline run-all --repeats 3 --epochs 50 --data-root ... --crops-root ...
+
+# Progress (expect 8 models × 5 conditions × 3 repeats = 120)
+python -m rsna2024_lumbar.perf_pipeline status --repeats 3 --epochs 50
+
+# Resume / second GPU: skip finished repeats; shard with --only
+python -m rsna2024_lumbar.perf_pipeline run-all --repeats 3 --epochs 50 --skip-completed \
+  --only nas_best_vit_2d nas_best_maxvit_2d --data-root ... --crops-root ...
 ```
+
+**Training terminals:** keep at most **two** GPU training jobs at once (one `run-all` or `run` per GPU). Do not restart legacy `ordinal refit` — use `perf_pipeline` only.
+
+## Cloud (single GPU)
+
+Pack on a machine with labels, best configs, and PNG crops:
+
+```bash
+python -m rsna2024_lumbar.perf_pipeline.pack_cloud \
+  --output lumbar_perf_pipeline_cloud.zip \
+  --repeats 5 --epochs 50 --early-stop-patience 5 \
+  --legacy-root /path/to/rsna-2024-lumbar-spine-degenerative-classification
+```
+
+On the cloud VM (unpack only):
+
+```bash
+python -m rsna2024_lumbar.perf_pipeline.unpack_cloud \
+  --zip lumbar_perf_pipeline_cloud.zip --dest ./perf_cloud
+```
+
+Install + train (defaults: 5 repeats, patience 5, all 8 models):
+
+```bash
+cd perf_cloud   # repo root with pyproject.toml
+python -m rsna2024_lumbar.perf_pipeline.deploy_cloud --repo-root . --skip-completed
+```
+
+One-shot unpack + deploy:
+
+```bash
+python -m rsna2024_lumbar.perf_pipeline.deploy_cloud \
+  --zip lumbar_perf_pipeline_cloud.zip --dest ./perf_cloud --repeats 5
+```
+
+Entry points: `rsna2024-perf-pipeline-pack`, `-unpack`, `-deploy`. See `PERF_PIPELINE_CLOUD_RUN.txt` inside the zip.
 
 ## Output layout
 

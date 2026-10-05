@@ -26,6 +26,7 @@ def build_train_command(
     progress: bool = True,
     split_seed: int | None = 42,
     seed: int | None = 42,
+    early_stop_patience: int | None = None,
 ) -> list[str]:
     hp = hyperparameters_dict(entry)
     condition = entry["condition"]
@@ -108,6 +109,8 @@ def build_train_command(
         cmd.extend(["--split-seed", str(split_seed)])
     if seed is not None:
         cmd.extend(["--seed", str(seed)])
+    if early_stop_patience is not None:
+        cmd.extend(["--early-stop-patience", str(int(early_stop_patience))])
 
     return cmd
 
@@ -150,6 +153,7 @@ def run_training(
     seed: int = 42,
     repeat_index: int = 1,
     dry_run: bool = False,
+    early_stop_patience: int | None = None,
 ) -> int:
     cmd = build_train_command(
         entry,
@@ -160,6 +164,7 @@ def run_training(
         max_studies=max_studies,
         split_seed=split_seed,
         seed=seed,
+        early_stop_patience=early_stop_patience,
     )
     write_run_manifest(
         output_dir,

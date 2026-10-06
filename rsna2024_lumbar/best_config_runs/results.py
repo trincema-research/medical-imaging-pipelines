@@ -29,12 +29,24 @@ PIPELINE_RESULTS_COLUMNS: tuple[str, ...] = (
     "train_f1_macro_levels",
     "val_f1_macro_levels",
     "test_f1_macro_levels",
+    "train_precision_macro_levels",
+    "val_precision_macro_levels",
+    "test_precision_macro_levels",
+    "train_recall_macro_levels",
+    "val_recall_macro_levels",
+    "test_recall_macro_levels",
     "train_accuracy_overall",
     "val_accuracy_overall",
     "test_accuracy_overall",
     "train_f1_macro_overall",
     "val_f1_macro_overall",
     "test_f1_macro_overall",
+    "train_precision_macro_overall",
+    "val_precision_macro_overall",
+    "test_precision_macro_overall",
+    "train_recall_macro_overall",
+    "val_recall_macro_overall",
+    "test_recall_macro_overall",
     "train_oa_overall",
     "train_omae_overall",
     "train_qwk_overall",
@@ -78,8 +90,12 @@ def row_from_training_metrics(
         out[f"{split}_loss"] = _get(row, f"{split}_loss")
         out[f"{split}_accuracy_macro_levels"] = _get(row, f"{split}_accuracy_macro_levels")
         out[f"{split}_f1_macro_levels"] = _get(row, f"{split}_f1_macro_levels")
+        out[f"{split}_precision_macro_levels"] = _get(row, f"{split}_precision_macro_levels")
+        out[f"{split}_recall_macro_levels"] = _get(row, f"{split}_recall_macro_levels")
         out[f"{split}_accuracy_overall"] = _get(row, f"{split}_accuracy_overall")
         out[f"{split}_f1_macro_overall"] = _get(row, f"{split}_f1_macro_overall")
+        out[f"{split}_precision_macro_overall"] = _get(row, f"{split}_precision_macro_overall")
+        out[f"{split}_recall_macro_overall"] = _get(row, f"{split}_recall_macro_overall")
         out[f"{split}_oa_overall"] = _get(row, f"{split}_oa_overall")
         out[f"{split}_omae_overall"] = _get(row, f"{split}_omae_overall")
         out[f"{split}_qwk_overall"] = _get(row, f"{split}_qwk_overall")

@@ -21,6 +21,8 @@ NAS tells you what worked in search; best_config_runs produces **auditable, comp
 | `nas_best_*/nas_snapshot_*.csv` | Same, one file per layout. |
 | `nas_best_*/pipeline_results.csv` | One row per **condition × repeat** at best val epoch (retrain). |
 | `pipeline_results_all_models.csv` | Combined retrain rows across layouts. |
+| `article_summary_by_condition.csv` | Per model × condition: **mean ± std** over repeats at **best val epoch** (`*_pm` columns). |
+| `article_summary_metrics_long.csv` | Same aggregates in long form (`metric`, `mean`, `std`, `mean_pm_std`). |
 | `*/pipeline_run_summary.json` | Repeat count, config path, harvest metadata. |
 
 Local **`repeat_*`** run directories (metrics per epoch, checkpoints) are **gitignored**; only the summary CSVs above are tracked.
@@ -34,6 +36,12 @@ Rebuild summaries from a downloaded results tree (no full retrain):
 
 ```bash
 python -m rsna2024_lumbar.best_config_runs.harvest_results --results-root /path/to/results
+```
+
+Article tables (after `pipeline_results.csv` exist):
+
+```bash
+python -m rsna2024_lumbar.best_config_runs article-summary --output-base rsna2024_lumbar/data/best_config_runs/results
 ```
 
 Regenerate NAS OA snapshots:

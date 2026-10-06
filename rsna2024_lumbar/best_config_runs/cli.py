@@ -24,6 +24,7 @@ from rsna2024_lumbar.best_config_runs.results import (
     load_combined_pipeline_results,
     write_pipeline_results_csv,
 )
+from rsna2024_lumbar.best_config_runs.article_summary import write_article_summaries
 from rsna2024_lumbar.best_config_runs.runner import (
     resolve_repeat_seeds,
     run_best_config_pipeline,
@@ -129,6 +130,18 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
     list_cfg = sub.add_parser("list-configs", help="List per-model nas_best_*.json files.")
     list_cfg.add_argument("--config-dir", type=Path, default=DEFAULT_BEST_CONFIG_DIR)
+
+    article = sub.add_parser(
+        "article-summary",
+        help="Mean ± std over repeats at best val epoch (article CSV tables).",
+    )
+    article.add_argument("--output-base", type=Path, default=RESULTS_DIR)
+    article.add_argument(
+        "--decimals",
+        type=int,
+        default=4,
+        help="Decimal places in mean ± std strings (default: 4).",
+    )
 
     return p.parse_args(argv)
 
@@ -249,6 +262,14 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(cmd_run_all(args))
     if args.command == "status":
         raise SystemExit(cmd_status(args))
+    if args.command == "article-summary":
+        wide, long = write_article_summaries(
+            args.output_base,
+            decimals=args.decimals,
+        )
+        print(f"Wrote {wide}")
+        print(f"Wrote {long}")
+        raise SystemExit(0)
     raise SystemExit(f"Unknown command: {args.command}")
 
 

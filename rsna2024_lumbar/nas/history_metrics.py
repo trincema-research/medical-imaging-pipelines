@@ -19,6 +19,8 @@ def _level_metric_fields() -> tuple[str, ...]:
         for level in LUMBAR_LEVELS:
             fields.append(f"{prefix}_accuracy_{level}")
             fields.append(f"{prefix}_f1_macro_{level}")
+            fields.append(f"{prefix}_precision_macro_{level}")
+            fields.append(f"{prefix}_recall_macro_{level}")
     return tuple(fields)
 
 
@@ -31,6 +33,18 @@ NAS_BEST_EPOCH_CLASSIFICATION_FIELDS: tuple[str, ...] = (
     "train_f1_macro_overall",
     "val_f1_macro_overall",
     "test_f1_macro_overall",
+    "train_precision_macro_levels",
+    "val_precision_macro_levels",
+    "test_precision_macro_levels",
+    "train_recall_macro_levels",
+    "val_recall_macro_levels",
+    "test_recall_macro_levels",
+    "train_precision_macro_overall",
+    "val_precision_macro_overall",
+    "test_precision_macro_overall",
+    "train_recall_macro_overall",
+    "val_recall_macro_overall",
+    "test_recall_macro_overall",
     "train_accuracy_overall",
     "val_accuracy_overall",
     "test_accuracy_overall",

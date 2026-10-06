@@ -26,6 +26,7 @@ import contextlib
 import csv
 import json
 import math
+import os
 import random
 import time
 from pathlib import Path
@@ -35,7 +36,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.utils.data import DataLoader
 
@@ -137,6 +138,9 @@ def compute_multi_head_metrics(
     num_levels = logits.shape[1]
     level_accs = []
     level_f1s = []
+    level_precisions = []
+    level_recalls = []
+    class_labels = list(range(len(SEVERITY_CLASSES)))
 
     for level_idx in range(num_levels):
         y_true = targets[:, level_idx]
@@ -145,22 +149,48 @@ def compute_multi_head_metrics(
         if not valid.any():
             metrics[f"accuracy_{LUMBAR_LEVELS[level_idx]}"] = 0.0
             metrics[f"f1_macro_{LUMBAR_LEVELS[level_idx]}"] = 0.0
+            metrics[f"precision_macro_{LUMBAR_LEVELS[level_idx]}"] = 0.0
+            metrics[f"recall_macro_{LUMBAR_LEVELS[level_idx]}"] = 0.0
             continue
-        acc = accuracy_score(y_true[valid], y_pred[valid])
+        y_t = y_true[valid]
+        y_p = y_pred[valid]
+        acc = accuracy_score(y_t, y_p)
         f1 = f1_score(
-            y_true[valid],
-            y_pred[valid],
+            y_t,
+            y_p,
             average="macro",
-            labels=list(range(len(SEVERITY_CLASSES))),
+            labels=class_labels,
+            zero_division=0,
+        )
+        prec = precision_score(
+            y_t,
+            y_p,
+            average="macro",
+            labels=class_labels,
+            zero_division=0,
+        )
+        rec = recall_score(
+            y_t,
+            y_p,
+            average="macro",
+            labels=class_labels,
             zero_division=0,
         )
         metrics[f"accuracy_{LUMBAR_LEVELS[level_idx]}"] = float(acc)
         metrics[f"f1_macro_{LUMBAR_LEVELS[level_idx]}"] = float(f1)
+        metrics[f"precision_macro_{LUMBAR_LEVELS[level_idx]}"] = float(prec)
+        metrics[f"recall_macro_{LUMBAR_LEVELS[level_idx]}"] = float(rec)
         level_accs.append(acc)
         level_f1s.append(f1)
+        level_precisions.append(prec)
+        level_recalls.append(rec)
 
     metrics["accuracy_macro_levels"] = float(np.mean(level_accs)) if level_accs else 0.0
     metrics["f1_macro_levels"] = float(np.mean(level_f1s)) if level_f1s else 0.0
+    metrics["precision_macro_levels"] = (
+        float(np.mean(level_precisions)) if level_precisions else 0.0
+    )
+    metrics["recall_macro_levels"] = float(np.mean(level_recalls)) if level_recalls else 0.0
 
     all_true = targets[targets != IGNORE_LABEL]
     all_pred = logits.reshape(-1, logits.shape[-1]).argmax(axis=-1)
@@ -169,18 +199,39 @@ def compute_multi_head_metrics(
         metrics["accuracy_overall"] = float(
             accuracy_score(all_true, all_pred[all_valid])
         )
+        y_o = all_pred[all_valid]
         metrics["f1_macro_overall"] = float(
             f1_score(
                 all_true,
-                all_pred[all_valid],
+                y_o,
                 average="macro",
-                labels=list(range(len(SEVERITY_CLASSES))),
+                labels=class_labels,
+                zero_division=0,
+            )
+        )
+        metrics["precision_macro_overall"] = float(
+            precision_score(
+                all_true,
+                y_o,
+                average="macro",
+                labels=class_labels,
+                zero_division=0,
+            )
+        )
+        metrics["recall_macro_overall"] = float(
+            recall_score(
+                all_true,
+                y_o,
+                average="macro",
+                labels=class_labels,
                 zero_division=0,
             )
         )
     else:
         metrics["accuracy_overall"] = 0.0
         metrics["f1_macro_overall"] = 0.0
+        metrics["precision_macro_overall"] = 0.0
+        metrics["recall_macro_overall"] = 0.0
     return metrics
 
 
@@ -192,6 +243,33 @@ def merge_multi_head_metrics(
     """Add prefixed keys from compute_multi_head_metrics into epoch_history."""
     for key, value in metrics.items():
         epoch_history[f"{prefix}_{key}"] = value
+
+
+def _pipeline_severity_metrics_enabled() -> bool:
+    return os.environ.get("RSNA2024_BEST_CONFIG_RUNS_METRICS") == "1" or (
+        os.environ.get("RSNA2024_PERF_PIPELINE_METRICS") == "1"
+        or os.environ.get("RSNA2024_ORDINAL_METRICS") == "1"
+    )
+
+
+def _append_pipeline_severity_metrics(
+    epoch_history: Dict[str, Any],
+    train_logits: np.ndarray,
+    train_targets: np.ndarray,
+    val_logits: np.ndarray,
+    val_targets: np.ndarray,
+    test_logits: np.ndarray,
+    test_targets: np.ndarray,
+) -> None:
+    try:
+        from rsna2024_lumbar.best_config_runs.multi_head import (
+            append_severity_to_epoch_history,
+        )
+    except ImportError:
+        return
+    append_severity_to_epoch_history(epoch_history, "train", train_logits, train_targets)
+    append_severity_to_epoch_history(epoch_history, "val", val_logits, val_targets)
+    append_severity_to_epoch_history(epoch_history, "test", test_logits, test_targets)
 
 
 def save_per_level_confusion_matrices(
@@ -1079,6 +1157,16 @@ def main(argv: List[str] | None = None) -> None:
             ("test", test_metrics),
         ):
             merge_multi_head_metrics(epoch_history, prefix, metric_dict)
+        if _pipeline_severity_metrics_enabled():
+            _append_pipeline_severity_metrics(
+                epoch_history,
+                train_logits,
+                train_targets,
+                val_logits,
+                val_targets,
+                test_logits,
+                test_targets,
+            )
         history.append(epoch_history)
 
         write_mode = "a" if csv_initialized else "w"

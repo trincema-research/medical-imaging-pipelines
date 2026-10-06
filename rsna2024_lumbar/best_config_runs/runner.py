@@ -30,7 +30,10 @@ def run_is_complete(run_dir: Path, epochs: int) -> bool:
         return False
     if df.empty or "epoch" not in df.columns:
         return False
-    return int(df["epoch"].max()) >= int(epochs)
+    if int(df["epoch"].max()) >= int(epochs):
+        return True
+    # Early-stopped runs write training_history.json when the loop exits.
+    return (run_dir / "training_history.json").is_file()
 
 
 def collect_model_result_rows(

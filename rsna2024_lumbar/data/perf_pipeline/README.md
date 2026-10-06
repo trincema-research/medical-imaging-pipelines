@@ -15,7 +15,8 @@ NAS tells you what worked in search; perf_pipeline produces **auditable, compara
 
 - `nas_snapshots_all_models.csv` — OA at NAS best val epoch (all model layouts, no GPU).
 - Per-model `nas_snapshot_<config>.csv` — same, one file per `nas_best_*.json`.
-- After local `run` / `run-all`: `pipeline_results.csv` (full severity + accuracy on retrain).
+- After `run` / `run-all` (or cloud): `pipeline_results.csv` and `pipeline_results_all_models.csv` (acc/F1 at best val epoch; severity columns when metrics hook is enabled).
+- Rebuild summaries from a downloaded `results/` tree: `python -m rsna2024_lumbar.perf_pipeline.harvest_results --results-root /path/to/results`.
 
 Regenerate NAS snapshots:
 

@@ -1,4 +1,4 @@
-"""Zip code, labels, NAS best configs, and optional PNG crops for cloud perf_pipeline runs."""
+"""Zip code, labels, NAS best configs, and optional PNG crops for cloud best_config_runs runs."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 
 from rsna2024_lumbar.nas.paths import REPO_ROOT
-from rsna2024_lumbar.perf_pipeline.cloud_common import (
+from rsna2024_lumbar.best_config_runs.cloud_common import (
     CLOUD_RUN_NAME,
     MANIFEST_NAME,
     arcname,
@@ -17,17 +17,20 @@ from rsna2024_lumbar.perf_pipeline.cloud_common import (
     collect_pack_files,
     stage_bundle_if_needed,
 )
-from rsna2024_lumbar.perf_pipeline.paths import DEFAULT_BEST_CONFIG_DIR, DEFAULT_REPEATS
+from rsna2024_lumbar.best_config_runs.paths import DEFAULT_BEST_CONFIG_DIR, DEFAULT_REPEATS
+
+CLOUD_RUNNER = REPO_ROOT / "lumbar_best_config_runs.py"
+CLOUD_RUNNER_ZIP_NAME = "lumbar_best_config_runs.py"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(
-        description="Create a zip for single-GPU perf_pipeline retrain on cloud (metrics + severity CSVs)."
+        description="Create a zip for single-GPU best_config_runs retrain on cloud (metrics + severity CSVs)."
     )
     p.add_argument(
         "--output",
         type=Path,
-        default=REPO_ROOT / "lumbar_perf_pipeline_cloud.zip",
+        default=REPO_ROOT / "lumbar_best_config_runs_cloud.zip",
         help="Output zip path.",
     )
     p.add_argument(
@@ -106,6 +109,8 @@ def main(argv: list[str] | None = None) -> None:
                 include_crops=include_crops,
             ),
         )
+        if CLOUD_RUNNER.is_file():
+            zf.write(CLOUD_RUNNER, CLOUD_RUNNER_ZIP_NAME)
     size_mb = output.stat().st_size / (1024 * 1024)
     print(f"Wrote {output} ({size_mb:.1f} MB)")
     print(f"  files: {len(files)}")

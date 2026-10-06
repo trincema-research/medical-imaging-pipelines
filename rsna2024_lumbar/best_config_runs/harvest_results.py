@@ -6,9 +6,9 @@ import argparse
 import json
 from pathlib import Path
 
-from rsna2024_lumbar.perf_pipeline.config import list_best_config_files, load_best_config
-from rsna2024_lumbar.perf_pipeline.paths import DEFAULT_BEST_CONFIG_DIR, RESULTS_DIR
-from rsna2024_lumbar.perf_pipeline.results import row_from_training_metrics, write_pipeline_results_csv
+from rsna2024_lumbar.best_config_runs.config import list_best_config_files, load_best_config
+from rsna2024_lumbar.best_config_runs.paths import DEFAULT_BEST_CONFIG_DIR, RESULTS_DIR
+from rsna2024_lumbar.best_config_runs.results import row_from_training_metrics, write_pipeline_results_csv
 
 
 def harvest_model_dir(
@@ -99,7 +99,7 @@ def harvest_tree(
 
 
 def main(argv: list[str] | None = None) -> None:
-    p = argparse.ArgumentParser(description="Harvest perf_pipeline summary CSVs from run folders.")
+    p = argparse.ArgumentParser(description="Harvest best_config_runs summary CSVs from run folders.")
     p.add_argument(
         "--results-root",
         type=Path,

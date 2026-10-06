@@ -20,6 +20,7 @@ dependencies = [
 dev = ["pytest>=8.0", "scikit-learn>=1.3"]
 kaggle = ["kaggle>=1.6"]
 nas = ["torch>=2.1", "torchvision>=0.16"]
+best_config_runs = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
 perf_pipeline = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
 ordinal = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
 
@@ -35,11 +36,15 @@ rsna2024-nas-deploy = "rsna2024_lumbar.nas.deploy:main"
 rsna2024-nas-best = "rsna2024_lumbar.nas.best:main"
 rsna2024-nas-summarize = "rsna2024_lumbar.nas.summarize:main"
 rsna2024-nas-export-compact = "rsna2024_lumbar.nas.export_compact:main"
-rsna2024-perf-pipeline = "rsna2024_lumbar.perf_pipeline.cli:main"
-rsna2024-perf-pipeline-pack = "rsna2024_lumbar.perf_pipeline.pack_cloud:main"
-rsna2024-perf-pipeline-unpack = "rsna2024_lumbar.perf_pipeline.unpack_cloud:main"
-rsna2024-perf-pipeline-deploy = "rsna2024_lumbar.perf_pipeline.deploy_cloud:main"
-rsna2024-ordinal = "rsna2024_lumbar.perf_pipeline.cli:main"
+rsna2024-best-config-runs = "rsna2024_lumbar.best_config_runs.cli:main"
+rsna2024-best-config-runs-pack = "rsna2024_lumbar.best_config_runs.pack_cloud:main"
+rsna2024-best-config-runs-unpack = "rsna2024_lumbar.best_config_runs.unpack_cloud:main"
+rsna2024-best-config-runs-deploy = "rsna2024_lumbar.best_config_runs.deploy_cloud:main"
+rsna2024-perf-pipeline = "rsna2024_lumbar.best_config_runs.cli:main"
+rsna2024-perf-pipeline-pack = "rsna2024_lumbar.best_config_runs.pack_cloud:main"
+rsna2024-perf-pipeline-unpack = "rsna2024_lumbar.best_config_runs.unpack_cloud:main"
+rsna2024-perf-pipeline-deploy = "rsna2024_lumbar.best_config_runs.deploy_cloud:main"
+rsna2024-ordinal = "rsna2024_lumbar.best_config_runs.cli:main"
 
 [tool.setuptools.package-data]
 "rsna2024_lumbar.nas" = ["configs/*.json"]

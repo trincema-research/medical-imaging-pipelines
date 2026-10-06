@@ -8,8 +8,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from rsna2024_lumbar.perf_pipeline.config import hyperparameters_dict
-from rsna2024_lumbar.perf_pipeline.paths import pipeline_env, resolve_crops_root, resolve_data_root
+from rsna2024_lumbar.best_config_runs.config import hyperparameters_dict
+from rsna2024_lumbar.best_config_runs.paths import pipeline_env, resolve_crops_root, resolve_data_root
 from rsna2024_lumbar.preprocessing.constants import CROP_POLICY_CENTERED
 
 
@@ -42,7 +42,7 @@ def build_train_command(
     cmd: list[str] = [
         sys.executable,
         "-m",
-        "rsna2024_lumbar.perf_pipeline.train_entry",
+        "rsna2024_lumbar.best_config_runs.train_entry",
         "--data-root",
         str(data_root),
         "--condition",

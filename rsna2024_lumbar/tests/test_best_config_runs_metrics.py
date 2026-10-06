@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from rsna2024_lumbar.perf_pipeline.multi_head import compute_multi_head_severity_metrics
-from rsna2024_lumbar.perf_pipeline.severity_metrics import (
+from rsna2024_lumbar.best_config_runs.multi_head import compute_multi_head_severity_metrics
+from rsna2024_lumbar.best_config_runs.severity_metrics import (
     compute_severity_metrics,
     ordinal_accuracy,
     ordinal_mae,

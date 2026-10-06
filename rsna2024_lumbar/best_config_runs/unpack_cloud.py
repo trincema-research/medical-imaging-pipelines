@@ -1,4 +1,4 @@
-"""Extract a perf_pipeline cloud zip and verify layout."""
+"""Extract a best_config_runs cloud zip and verify layout."""
 
 from __future__ import annotations
 
@@ -6,11 +6,11 @@ import argparse
 import zipfile
 from pathlib import Path
 
-from rsna2024_lumbar.perf_pipeline.cloud_common import MANIFEST_NAME, read_manifest, repo_root_from_extracted
+from rsna2024_lumbar.best_config_runs.cloud_common import MANIFEST_NAME, read_manifest, repo_root_from_extracted
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Unpack lumbar perf_pipeline cloud zip.")
+    p = argparse.ArgumentParser(description="Unpack lumbar best_config_runs cloud zip.")
     p.add_argument("--zip", type=Path, required=True, help="Archive from pack_cloud.")
     p.add_argument(
         "--dest",

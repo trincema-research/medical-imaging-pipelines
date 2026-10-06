@@ -1,110 +1,14 @@
-# Performance pipeline results
+# Moved → `best_config_runs`
 
-## What is this stage?
+This path is **legacy**. Committed CSVs and docs live under:
 
-| | |
-|--|--|
-| **Package** | `rsna2024_lumbar/perf_pipeline/` — [module README](../../perf_pipeline/README.md) |
-| **Name** | **Performance pipeline** (`perf_pipeline`) |
-| **Comes after** | `data/` (inputs) → `nas/` (search + `nas_compact/best_configs`) |
-| **Main purpose** | **Confirm** NAS winners: retrain with a fixed protocol, default **5 repeats** per condition (split seeds), and write **train / val / test** metrics to CSV under this folder. |
-
-NAS tells you what worked in search; perf_pipeline produces **auditable, comparable** numbers for reporting and papers.
-
-## Committed CSVs in git (article-friendly)
-
-| File | Description |
-|------|-------------|
-| `nas_snapshots_all_models.csv` | **OA only** at NAS best val epoch (all 8 layouts; from compact histories, no GPU). |
-| `nas_best_*/nas_snapshot_*.csv` | Same, one file per layout. |
-| `nas_best_*/pipeline_results.csv` | One row per **condition × repeat** at best val epoch (retrain). |
-| `pipeline_results_all_models.csv` | Combined retrain rows across layouts. |
-| `*/pipeline_run_summary.json` | Repeat count, config path, harvest metadata. |
-
-Local **`repeat_*`** run directories (metrics per epoch, checkpoints) are **gitignored**; only the summary CSVs above are tracked.
-
-### Metric columns
-
-- **Always (when retrain finished):** `train/val/test` `acc`, `accuracy_overall`, `f1_macro_overall`, `best_epoch`.
-- **Severity (OA, O-MAE, QWK, SER):** filled when training runs with `RSNA2024_PERF_PIPELINE_METRICS=1` and an updated `train_vit_lumbar.py` in the bundle. If the cloud zip used an older bundle, severity columns may be **empty** while acc/F1 are still valid — re-run or refresh the bundle and harvest again.
-
-Rebuild summaries from a downloaded results tree (no full retrain):
+- **[`data/best_config_runs/`](../best_config_runs/README.md)** — results, snapshots, article CSVs  
+- **[`rsna2024_lumbar/best_config_runs/`](../../best_config_runs/README.md)** — Python package (CLI, cloud pack)
 
 ```bash
-python -m rsna2024_lumbar.perf_pipeline.harvest_results --results-root /path/to/results
-```
-
-Regenerate NAS OA snapshots:
-
-```bash
-python -m rsna2024_lumbar.perf_pipeline nas-snapshot-all
-```
-
-## Run locally
-
-```bash
-pip install -e ".[perf_pipeline,dev]"
-
-python -m rsna2024_lumbar.perf_pipeline run \
-  --best-config rsna2024_lumbar/data/nas_compact/best_configs/nas_best_efficientnet_2d.json \
-  --epochs 50 --early-stop-patience 5 \
+python -m rsna2024_lumbar.best_config_runs run-all --repeats 5 --epochs 50 \
   --data-root rsna2024_lumbar/data/raw \
   --crops-root rsna2024_lumbar/data/processed/centered
-
-python -m rsna2024_lumbar.perf_pipeline run-all --repeats 5 --epochs 50 --skip-completed \
-  --data-root rsna2024_lumbar/data/raw \
-  --crops-root rsna2024_lumbar/data/processed/centered
-
-python -m rsna2024_lumbar.perf_pipeline status --repeats 5 --epochs 50
 ```
 
-Use **`--only nas_best_vit_2d …`** to shard across two GPUs; at most **two** training terminals at once.
-
-## Cloud (single GPU)
-
-### Simple (recommended)
-
-On the VM, place **`lumbar_perf_pipeline_cloud.zip`** and repo-root **`lumbar_perf_cloud.py`** in the same directory:
-
-```bash
-python lumbar_perf_cloud.py unzip
-python lumbar_perf_cloud.py run --repeats 5 --skip-completed
-# one step: python lumbar_perf_cloud.py all --repeats 5
-```
-
-Use `--early-stop-patience 0` for full 50 epochs without NAS-style early stop.
-
-### Advanced (pack / module deploy)
-
-Pack on a machine with labels, best configs, and PNG crops:
-
-```bash
-python -m rsna2024_lumbar.perf_pipeline.pack_cloud \
-  --output lumbar_perf_pipeline_cloud.zip \
-  --repeats 5 --epochs 50 --early-stop-patience 5 \
-  --legacy-root /path/to/rsna-2024-lumbar-spine-degenerative-classification
-```
-
-Unpack and train:
-
-```bash
-python -m rsna2024_lumbar.perf_pipeline.deploy_cloud \
-  --zip lumbar_perf_pipeline_cloud.zip --dest ./perf_cloud --repeats 5 --skip-completed
-```
-
-Entry points: `rsna2024-perf-pipeline-pack`, `-unpack`, `-deploy`. See `PERF_PIPELINE_CLOUD_RUN.txt` inside the zip.
-
-## Output layout (local disk)
-
-```
-data/perf_pipeline/results/<nas_best_* stem>/
-  pipeline_results.csv
-  pipeline_run_summary.json
-  nas_snapshot_<stem>.csv          # optional NAS OA
-  <condition>/repeat_01/           # gitignored
-    training_metrics.csv
-    best_epoch_results.csv
-    ...
-```
-
-Full CLI map: [../../perf_pipeline/README.md](../../perf_pipeline/README.md).
+Local logs or old run trees under `data/perf_pipeline/` are gitignored; move or delete them locally if you still have this folder.

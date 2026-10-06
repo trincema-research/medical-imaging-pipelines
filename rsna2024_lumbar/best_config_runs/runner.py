@@ -8,14 +8,14 @@ from typing import Any, Sequence
 
 import pandas as pd
 
-from rsna2024_lumbar.perf_pipeline.config import iter_entries, load_best_config
-from rsna2024_lumbar.perf_pipeline.paths import (
+from rsna2024_lumbar.best_config_runs.config import iter_entries, load_best_config
+from rsna2024_lumbar.best_config_runs.paths import (
     DEFAULT_SPLIT_SEEDS,
     model_results_dir,
     run_output_dir,
 )
-from rsna2024_lumbar.perf_pipeline.results import write_per_run_best_epoch_csv, write_pipeline_results_csv
-from rsna2024_lumbar.perf_pipeline.train import run_training
+from rsna2024_lumbar.best_config_runs.results import write_per_run_best_epoch_csv, write_pipeline_results_csv
+from rsna2024_lumbar.best_config_runs.train import run_training
 
 
 def run_is_complete(run_dir: Path, epochs: int) -> bool:

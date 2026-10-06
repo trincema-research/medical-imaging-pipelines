@@ -42,4 +42,4 @@ Set ``LUMBAR_NAS_RESULTS_ROOT`` or pass ``--archive-root`` to your ``NAS results
 | ``best_configs/nas_best_all.csv`` | 40 rows (8 layouts × 5 conditions) |
 | ``manifest.json`` | Export metadata |
 
-**Next stage:** [perf_pipeline](../perf_pipeline/README.md) reads ``best_configs/`` and writes retrain metrics under ``data/perf_pipeline/results/``.
+**Next stage:** [best_config_runs](../../best_config_runs/README.md) reads ``best_configs/`` and writes retrain metrics under [data/best_config_runs/results/](../best_config_runs/README.md).

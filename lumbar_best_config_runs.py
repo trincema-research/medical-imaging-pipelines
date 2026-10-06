@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-Lumbar perf_pipeline on a cloud GPU — one script, no repo checkout required to unzip.
+Lumbar best_config_runs on a cloud GPU — one script, no repo checkout required to unzip.
 
 Typical workflow (zip + this file in /workspace):
 
   # 1) Extract
-  python lumbar_perf_cloud.py unzip
+  python lumbar_best_config_runs.py unzip
 
   # 2) Train (installs deps, then run-all on one GPU)
-  python lumbar_perf_cloud.py run --repeats 5
+  python lumbar_best_config_runs.py run --repeats 5
 
 Or both steps:
 
-  python lumbar_perf_cloud.py all --repeats 5
+  python lumbar_best_config_runs.py all --repeats 5
 """
 
 from __future__ import annotations
@@ -25,8 +25,8 @@ import sys
 import zipfile
 from pathlib import Path
 
-MANIFEST_NAME = "perf_pipeline_deploy_manifest.json"
-DEFAULT_ZIP = "lumbar_perf_pipeline_cloud.zip"
+MANIFEST_NAME = "best_config_runs_deploy_manifest.json"
+DEFAULT_ZIP = "lumbar_best_config_runs_cloud.zip"
 DEFAULT_DEST = "perf_cloud"
 
 
@@ -80,7 +80,7 @@ def cmd_run(
         raise SystemExit(f"Not a repo root: {repo_root}")
 
     if not skip_install:
-        _run([sys.executable, "-m", "pip", "install", "-e", ".[perf_pipeline]"], cwd=repo_root)
+        _run([sys.executable, "-m", "pip", "install", "-e", ".[best_config_runs]"], cwd=repo_root)
         req = repo_root / "rsna2024_lumbar" / "nas" / "requirements-nas-cloud.txt"
         if req.is_file():
             _run([sys.executable, "-m", "pip", "install", "-r", str(req)], cwd=repo_root)
@@ -88,7 +88,7 @@ def cmd_run(
     argv = [
         sys.executable,
         "-m",
-        "rsna2024_lumbar.perf_pipeline",
+        "rsna2024_lumbar.best_config_runs",
         "run-all",
         "--repeats",
         str(repeats),
@@ -116,7 +116,7 @@ def resolve_repo_root(dest: Path) -> Path:
 
 def main() -> None:
     here = Path.cwd()
-    p = argparse.ArgumentParser(description="Unzip and run lumbar perf_pipeline on one GPU.")
+    p = argparse.ArgumentParser(description="Unzip and run lumbar best_config_runs on one GPU.")
     sub = p.add_subparsers(dest="command", required=True)
 
     u = sub.add_parser("unzip", help="Extract the cloud zip only.")

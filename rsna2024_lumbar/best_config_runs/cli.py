@@ -5,26 +5,26 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from rsna2024_lumbar.perf_pipeline.config import (
+from rsna2024_lumbar.best_config_runs.config import (
     iter_entries,
     list_best_config_files,
     load_best_config,
 )
-from rsna2024_lumbar.perf_pipeline.nas_snapshot import (
+from rsna2024_lumbar.best_config_runs.nas_snapshot import (
     snapshot_all_best_configs,
     write_nas_snapshot_csv,
 )
-from rsna2024_lumbar.perf_pipeline.paths import (
+from rsna2024_lumbar.best_config_runs.paths import (
     DEFAULT_BEST_CONFIG_DIR,
     DEFAULT_REPEATS,
     RESULTS_DIR,
     run_output_dir,
 )
-from rsna2024_lumbar.perf_pipeline.results import (
+from rsna2024_lumbar.best_config_runs.results import (
     load_combined_pipeline_results,
     write_pipeline_results_csv,
 )
-from rsna2024_lumbar.perf_pipeline.runner import (
+from rsna2024_lumbar.best_config_runs.runner import (
     resolve_repeat_seeds,
     run_best_config_pipeline,
     run_is_complete,
@@ -96,7 +96,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
     status = sub.add_parser(
         "status",
-        help="Count completed perf_pipeline repeats (for resume / second GPU).",
+        help="Count completed best_config_runs repeats (for resume / second GPU).",
     )
     status.add_argument("--config-dir", type=Path, default=DEFAULT_BEST_CONFIG_DIR)
     status.add_argument("--epochs", type=int, default=50)

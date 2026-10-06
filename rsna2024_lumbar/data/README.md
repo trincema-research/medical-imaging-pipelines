@@ -7,7 +7,8 @@ validate.py      ✔  check a dump before preprocess
 raw/             ⬇  label CSVs + 2 smoke studies (git); full train_images/ local
 processed/       ⬆  centered/ PNG cache (local)
 nas_compact/     📊  NAS training histories + best-config CSVs (git)
-perf_pipeline/   ✔  retrain summary CSVs + NAS OA snapshots (git; not repeat_* runs)
+best_config_runs/   ✔  retrain summary CSVs + NAS OA snapshots (git; not repeat_* runs)
+perf_pipeline/      ↪  renamed — README only; use best_config_runs/
 ```
 
 Scripts stay **here** (not in `raw/`) so git can track them and `python -m rsna2024_lumbar.data.<name>` works. Label CSVs live in `raw/`; DICOMs and crops stay local.
@@ -35,4 +36,4 @@ python -m rsna2024_lumbar.data.validate --data-root rsna2024_lumbar/tests/fixtur
 
 Every data script prints a trace (`START` · `STEP` · `DATA` · `OK` · `DONE` · `NEXT` · `WARN` · `FAIL`). Tokens are never logged (only `token_set` / `KGAT_` prefix). The same lines append under [../traces/](../traces/README.md): `download.log` / `unzip.log` / `validate.log` plus `pipeline.log` (all components, time order).
 
-Expected `raw/` layout: [raw/README.md](raw/README.md). Crops: [processed/README.md](processed/README.md). NAS compact: [nas_compact/README.md](nas_compact/README.md). Perf pipeline outputs: [perf_pipeline/README.md](perf_pipeline/README.md).
+Expected `raw/` layout: [raw/README.md](raw/README.md). Crops: [processed/README.md](processed/README.md). NAS compact: [nas_compact/README.md](nas_compact/README.md). Perf pipeline outputs: [best_config_runs/README.md](best_config_runs/README.md).

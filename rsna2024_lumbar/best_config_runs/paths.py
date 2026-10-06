@@ -1,4 +1,4 @@
-"""Paths for the post-NAS performance pipeline."""
+"""Paths for NAS best-config retrain runs (``best_config_runs``)."""
 
 from __future__ import annotations
 
@@ -13,10 +13,11 @@ from rsna2024_lumbar.nas.paths import (
     default_data_root,
 )
 
-RESULTS_DIR = YEAR_ROOT / "data" / "perf_pipeline" / "results"
+RESULTS_DIR = YEAR_ROOT / "data" / "best_config_runs" / "results"
 DEFAULT_BEST_CONFIG_DIR = YEAR_ROOT / "data" / "nas_compact" / "best_configs"
-METRICS_ENV_VAR = "RSNA2024_PERF_PIPELINE_METRICS"
-LEGACY_METRICS_ENV_VAR = "RSNA2024_ORDINAL_METRICS"
+METRICS_ENV_VAR = "RSNA2024_BEST_CONFIG_RUNS_METRICS"
+LEGACY_PERF_PIPELINE_ENV_VAR = "RSNA2024_PERF_PIPELINE_METRICS"
+LEGACY_ORDINAL_ENV_VAR = "RSNA2024_ORDINAL_METRICS"
 DEFAULT_REPEATS = 5
 DEFAULT_SPLIT_SEEDS = (42, 142, 242, 342, 442)
 
@@ -45,7 +46,8 @@ def pipeline_env() -> dict[str, str]:
         parts.append(prev)
     env["PYTHONPATH"] = os.pathsep.join(parts)
     env[METRICS_ENV_VAR] = "1"
-    env[LEGACY_METRICS_ENV_VAR] = "1"
+    env[LEGACY_PERF_PIPELINE_ENV_VAR] = "1"
+    env[LEGACY_ORDINAL_ENV_VAR] = "1"
     env.setdefault("MPLBACKEND", "Agg")
     return env
 

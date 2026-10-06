@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from rsna2024_lumbar.perf_pipeline.config import iter_entries, list_best_config_files, load_best_config
+from rsna2024_lumbar.best_config_runs.config import iter_entries, list_best_config_files, load_best_config
 
 
 def test_load_best_config_json(tmp_path: Path):

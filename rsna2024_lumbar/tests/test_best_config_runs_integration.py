@@ -1,4 +1,4 @@
-"""Integration tests for perf_pipeline (repo best configs + nas_compact)."""
+"""Integration tests for best_config_runs (repo best configs + nas_compact)."""
 
 from __future__ import annotations
 
@@ -7,15 +7,15 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from rsna2024_lumbar.perf_pipeline.cli import main as cli_main
-from rsna2024_lumbar.perf_pipeline.config import list_best_config_files
-from rsna2024_lumbar.perf_pipeline.nas_snapshot import (
+from rsna2024_lumbar.best_config_runs.cli import main as cli_main
+from rsna2024_lumbar.best_config_runs.config import list_best_config_files
+from rsna2024_lumbar.best_config_runs.nas_snapshot import (
     snapshot_all_best_configs,
     summarize_entry_from_nas_history,
     write_nas_snapshot_csv,
 )
-from rsna2024_lumbar.perf_pipeline.paths import DEFAULT_BEST_CONFIG_DIR
-from rsna2024_lumbar.perf_pipeline.runner import resolve_repeat_seeds, run_best_config_pipeline
+from rsna2024_lumbar.best_config_runs.paths import DEFAULT_BEST_CONFIG_DIR
+from rsna2024_lumbar.best_config_runs.runner import resolve_repeat_seeds, run_best_config_pipeline
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 BEST_CONFIG_DIR = REPO_ROOT / "rsna2024_lumbar" / "data" / "nas_compact" / "best_configs"

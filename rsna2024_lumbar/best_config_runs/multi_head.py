@@ -6,7 +6,7 @@ from typing import Any, Dict
 
 import numpy as np
 
-from rsna2024_lumbar.perf_pipeline.severity_metrics import (
+from rsna2024_lumbar.best_config_runs.severity_metrics import (
     DEFAULT_IGNORE_LABEL,
     compute_severity_metrics,
 )

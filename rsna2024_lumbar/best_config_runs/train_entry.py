@@ -6,7 +6,7 @@ import os
 import sys
 
 from rsna2024_lumbar.nas.paths import BUNDLE_DIR
-from rsna2024_lumbar.perf_pipeline.paths import pipeline_env
+from rsna2024_lumbar.best_config_runs.paths import pipeline_env
 
 
 def main(argv: list[str] | None = None) -> None:

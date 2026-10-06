@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from rsna2024_lumbar.perf_pipeline.train import build_train_command
+from rsna2024_lumbar.best_config_runs.train import build_train_command
 
 
 def test_build_train_command_skips_empty_head_hidden_dim(tmp_path: Path):

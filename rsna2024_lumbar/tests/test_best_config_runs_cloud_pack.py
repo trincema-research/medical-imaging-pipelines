@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from rsna2024_lumbar.perf_pipeline.cloud_common import collect_pack_files
+from rsna2024_lumbar.best_config_runs.cloud_common import collect_pack_files
 
 
 def test_collect_pack_includes_best_configs_and_code(tmp_path: Path, monkeypatch):
     repo = tmp_path / "repo"
     year = repo / "rsna2024_lumbar"
-    (year / "perf_pipeline").mkdir(parents=True)
-    (year / "perf_pipeline" / "cli.py").write_text("# cli\n", encoding="utf-8")
+    (year / "best_config_runs").mkdir(parents=True)
+    (year / "best_config_runs" / "cli.py").write_text("# cli\n", encoding="utf-8")
     (year / "preprocessing").mkdir()
     (year / "preprocessing" / "constants.py").write_text("# c\n", encoding="utf-8")
     (year / "nas").mkdir()
@@ -28,7 +28,7 @@ def test_collect_pack_includes_best_configs_and_code(tmp_path: Path, monkeypatch
     (repo / "pyproject.toml").write_text("[project]\nname='t'\n", encoding="utf-8")
 
     import rsna2024_lumbar.nas.paths as nas_paths
-    import rsna2024_lumbar.perf_pipeline.cloud_common as cloud_common
+    import rsna2024_lumbar.best_config_runs.cloud_common as cloud_common
 
     monkeypatch.setattr(nas_paths, "REPO_ROOT", repo)
     monkeypatch.setattr(nas_paths, "YEAR_ROOT", year)
@@ -36,7 +36,7 @@ def test_collect_pack_includes_best_configs_and_code(tmp_path: Path, monkeypatch
     monkeypatch.setattr(cloud_common, "YEAR_ROOT", year)
     monkeypatch.setattr(cloud_common, "LABEL_CSVS", ("train.csv",))
     monkeypatch.setattr(cloud_common, "CODE_PATHS", (
-        year / "perf_pipeline",
+        year / "best_config_runs",
         year / "preprocessing",
         year / "nas",
         year / "__init__.py",

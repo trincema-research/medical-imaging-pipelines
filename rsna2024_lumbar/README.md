@@ -4,8 +4,9 @@
 ⚙  preprocessing/     crop DICOMs → PNG cache
 …  models/            later
 …  training/          later
-⚙  nas/               NAS grids · GPU launch · cloud pack/deploy (EfficientNet/ConvNeXt/…)
-⬇  data/              download.py · unzip.py · validate.py · raw/ · processed/
+⚙  nas/               NAS grids · GPU launch · cloud pack/deploy (8 families)
+✔  perf_pipeline/     retrain NAS best configs · severity metrics · cloud zip
+⬇  data/              raw/ · processed/ · nas_compact/ · perf_pipeline/results/
 ☰  traces/            download.log · unzip.log · validate.log · pipeline.log
 ✔  tests/             pytest + synthetic mini-dump
 ```
@@ -86,6 +87,26 @@ python -m rsna2024_lumbar.nas --family efficientnet3d --list
 | `efficientnet3d` | 384 | 1920 | `runs/lumbar_nas_efficientnet3d` |
 
 `--crop-policy centered|extend50` sets PNG size. Shard across **1 / 2 / 4 / 8** GPUs (`--num-gpus 0` = auto). Training uses bundled `vit_nas_lumbar.py` (staged by `nas.pack`). Depth: [nas/README.md](nas/README.md).
+
+## ✔ Performance pipeline (after NAS)
+
+Confirm NAS winners: fixed retrain protocol, multiple split-seed repeats, CSV metrics for papers/PRs.
+
+```bash
+pip install -e ".[perf_pipeline,dev]"
+
+# All eight nas_best_* layouts (default 5 repeats)
+python -m rsna2024_lumbar.perf_pipeline run-all --repeats 5 --epochs 50 \
+  --data-root rsna2024_lumbar/data/raw \
+  --crops-root rsna2024_lumbar/data/processed/centered
+
+# NAS OA only (no GPU): nas-snapshot-all → data/perf_pipeline/results/
+python -m rsna2024_lumbar.perf_pipeline nas-snapshot-all
+```
+
+Cloud (single GPU): pack with `perf_pipeline.pack_cloud`, or copy repo-root **`lumbar_perf_cloud.py`** next to the zip and run `python lumbar_perf_cloud.py all --repeats 5`.
+
+Depth: [perf_pipeline/README.md](perf_pipeline/README.md) · results: [data/perf_pipeline/README.md](data/perf_pipeline/README.md).
 
 ## ✔ Tests
 

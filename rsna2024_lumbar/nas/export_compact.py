@@ -15,7 +15,11 @@ from rsna2024_lumbar.nas.compact import (
 from rsna2024_lumbar.nas.extract import extract_best_for_target
 from rsna2024_lumbar.nas.rank import DEFAULT_RANK_METRIC, RANK_METRICS
 from rsna2024_lumbar.nas.report import (
+    COMBINED_BEST_CONFIG_STEM,
+    LEGACY_COMBINED_BEST_CONFIG_STEM,
+    combined_best_config_csv_path,
     default_json_path,
+    merge_combined_best_rows,
     rows_best_per_condition,
     write_best_csv,
     write_best_json,
@@ -162,17 +166,33 @@ def main(argv: list[str] | None = None) -> None:
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
     if best_rows:
-        combined = output_base / "best_configs" / "nas_best_vit_maxvit_convnext_all.csv"
-        write_best_csv(combined, best_rows)
-        combined_json = combined.with_suffix(".json")
+        cfg_dir = output_base / "best_configs"
+        combined = combined_best_config_csv_path(cfg_dir)
+        existing_rows: list[dict] = []
+        if combined.is_file():
+            import csv as _csv
+
+            with combined.open(encoding="utf-8", newline="") as fh:
+                existing_rows = list(_csv.DictReader(fh))
+        merged = merge_combined_best_rows(existing_rows, best_rows)
+        write_best_csv(combined, merged)
         write_best_json(
-            combined_json,
-            best_rows,
+            combined.with_suffix(".json"),
+            merged,
             rank_metric=args.metric,
             archive_root=archive,
-            label="ViT / MaxViT / ConvNeXt (all layouts)",
+            label="All NAS model groups (best per condition)",
         )
-        print(f"Wrote best-config CSVs and JSON under {output_base / 'best_configs'}")
+        legacy = cfg_dir / f"{LEGACY_COMBINED_BEST_CONFIG_STEM}.csv"
+        write_best_csv(legacy, merged)
+        write_best_json(
+            legacy.with_suffix(".json"),
+            merged,
+            rank_metric=args.metric,
+            archive_root=archive,
+            label="All NAS model groups (best per condition)",
+        )
+        print(f"Wrote best-config CSVs and JSON under {cfg_dir} ({COMBINED_BEST_CONFIG_STEM})")
 
     print(f"Wrote {manifest_path}")
 

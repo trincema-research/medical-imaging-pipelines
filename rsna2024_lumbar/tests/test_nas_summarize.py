@@ -13,8 +13,8 @@ from rsna2024_lumbar.tests.nas_fixtures import write_nas_result as _write_result
 
 
 def test_targets_for_groups():
-    all_six = targets_for_groups(None)
-    assert len(all_six) == len(ARCHIVE_RESULT_TARGETS) == 6
+    all_targets = targets_for_groups(None)
+    assert len(all_targets) == len(ARCHIVE_RESULT_TARGETS) == 8
     vit_only = targets_for_groups(["vit"])
     assert len(vit_only) == 2
     assert {t.layout for t in vit_only} == {"2d", "3d"}

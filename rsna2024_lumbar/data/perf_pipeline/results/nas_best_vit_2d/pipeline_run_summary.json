@@ -1,0 +1,7 @@
+{
+  "best_config": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\best_configs\\nas_best_vit_2d.json",
+  "model_label": "ViT 2D",
+  "repeats": 5,
+  "run_count": 19,
+  "harvested_from": "F:\\Download\\results (2)\\results"
+}

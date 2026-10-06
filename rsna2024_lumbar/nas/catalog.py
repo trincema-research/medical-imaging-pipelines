@@ -1,4 +1,4 @@
-"""Legacy NAS archive layout: ViT, MaxViT, ConvNeXt × 2D / 3D."""
+"""Legacy NAS archive layout: ViT, MaxViT, ConvNeXt, EfficientNet × 2D / 3D."""
 
 from __future__ import annotations
 
@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from rsna2024_lumbar.nas.families import (
     FAMILY_CONVNEXT,
     FAMILY_CONVNEXT3D,
+    FAMILY_EFFICIENTNET,
+    FAMILY_EFFICIENTNET3D,
     FAMILY_MAXVIT,
     FAMILY_MAXVIT3D,
     FAMILY_VIT,
@@ -16,11 +18,13 @@ from rsna2024_lumbar.nas.families import (
 MODEL_GROUP_VIT = "vit"
 MODEL_GROUP_MAXVIT = "maxvit"
 MODEL_GROUP_CONVNEXT = "convnext"
+MODEL_GROUP_EFFICIENTNET = "efficientnet"
 
 MODEL_GROUPS: tuple[str, ...] = (
     MODEL_GROUP_VIT,
     MODEL_GROUP_MAXVIT,
     MODEL_GROUP_CONVNEXT,
+    MODEL_GROUP_EFFICIENTNET,
 )
 
 
@@ -78,6 +82,20 @@ ARCHIVE_RESULT_TARGETS: tuple[ArchiveResultTarget, ...] = (
         model_group=MODEL_GROUP_CONVNEXT,
         archive_folder="Convnext",
         label="ConvNeXt 3D",
+    ),
+    ArchiveResultTarget(
+        family=FAMILY_EFFICIENTNET,
+        layout="2d",
+        model_group=MODEL_GROUP_EFFICIENTNET,
+        archive_folder="EfficientNet",
+        label="EfficientNet 2D",
+    ),
+    ArchiveResultTarget(
+        family=FAMILY_EFFICIENTNET3D,
+        layout="3d",
+        model_group=MODEL_GROUP_EFFICIENTNET,
+        archive_folder="EfficientNet",
+        label="EfficientNet 3D",
     ),
 )
 

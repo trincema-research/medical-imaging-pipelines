@@ -237,6 +237,7 @@ rsna20*/data/processed/**
 !rsna20*/data/processed/README.md
 rsna2024_lumbar/nas/training_bundle/**
 !rsna2024_lumbar/nas/training_bundle/.gitkeep
+!rsna2024_lumbar/nas/training_bundle/train_vit_lumbar.py
 
 # Full raw DICOM dump stays local. Label CSVs + a few smoke studies are force-added.
 rsna20*/data/raw/**
@@ -246,3 +247,13 @@ rsna20*/data/raw/**
 !rsna20*/data/raw/train_series_descriptions.csv
 
 # NAS compact exports are committed under rsna2024_lumbar/data/nas_compact/ (see README there).
+
+# Local perf-pipeline training runs (commit pipeline_results*.csv / nas_snapshot*.csv; not repeat_* artifacts)
+rsna2024_lumbar/data/perf_pipeline/results/**/repeat_*/
+!rsna2024_lumbar/data/perf_pipeline/results/**/pipeline_results.csv
+!rsna2024_lumbar/data/perf_pipeline/results/pipeline_results_all_models.csv
+!rsna2024_lumbar/data/perf_pipeline/results/**/pipeline_run_summary.json
+rsna2024_lumbar/data/ordinal_benchmark/**/*
+!rsna2024_lumbar/data/ordinal_benchmark/README.md
+rsna2024_lumbar/data/perf_pipeline/results/**/*.pt
+rsna2024_lumbar/data/perf_pipeline/results/**/*.png

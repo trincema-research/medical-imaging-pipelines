@@ -42,6 +42,7 @@ Article tables (after `pipeline_results.csv` exist):
 
 ```bash
 python -m rsna2024_lumbar.best_config_runs article-summary --output-base rsna2024_lumbar/data/best_config_runs/results
+python -m rsna2024_lumbar.best_config_runs validate-results --output-base rsna2024_lumbar/data/best_config_runs/results
 ```
 
 Regenerate NAS OA snapshots:

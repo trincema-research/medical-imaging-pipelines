@@ -248,6 +248,9 @@ def run_best_config_pipeline(
             if not metrics_path.is_file():
                 continue
 
+    if dry_run:
+        return rc, []
+
     all_rows = collect_model_result_rows(
         config_stem=config_stem,
         config=config,

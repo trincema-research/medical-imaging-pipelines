@@ -15,6 +15,12 @@ pip install -e ".[best_config_runs,dev]"
 
 Console entry points: `rsna2024-best-config-runs` (aliases: `rsna2024-perf-pipeline`, `rsna2024-ordinal`), `-pack`, `-unpack`, `-deploy`.
 
+After harvest / before merging result CSVs:
+
+```bash
+python -m rsna2024_lumbar.best_config_runs validate-results --output-base rsna2024_lumbar/data/best_config_runs/results
+```
+
 ## CLI (`python -m rsna2024_lumbar.best_config_runs`)
 
 | Command | Purpose |

@@ -28,6 +28,7 @@ from rsna2024_lumbar.best_config_runs.results import (
     write_pipeline_results_csv,
 )
 from rsna2024_lumbar.best_config_runs.article_summary import write_article_summaries
+from rsna2024_lumbar.best_config_runs.validate_results import format_report, validate_results_tree
 from rsna2024_lumbar.best_config_runs.runner import (
     finalize_all_model_summaries,
     resolve_repeat_seeds,
@@ -196,6 +197,27 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=int,
         default=4,
         help="Decimal places in mean ± std strings (default: 4).",
+    )
+
+    validate = sub.add_parser(
+        "validate-results",
+        help="Check pipeline CSVs, article tables, and repeat audit JSON under output-base.",
+    )
+    validate.add_argument("--output-base", type=Path, default=RESULTS_DIR)
+    validate.add_argument(
+        "--strict-full-models",
+        action="store_true",
+        help="Require full 5×5 repeat grids for the six complete retrain layouts.",
+    )
+    validate.add_argument(
+        "--allow-missing-severity",
+        action="store_true",
+        help="Do not require populated OA/O-MAE/QWK/SER columns.",
+    )
+    validate.add_argument(
+        "--no-audit-files",
+        action="store_true",
+        help="Skip training_history.json / run_config.json checks.",
     )
 
     return p.parse_args(argv)
@@ -411,6 +433,15 @@ def main(argv: list[str] | None = None) -> None:
         print(f"Wrote {wide}")
         print(f"Wrote {long}")
         raise SystemExit(0)
+    if args.command == "validate-results":
+        report = validate_results_tree(
+            args.output_base.resolve(),
+            require_severity=not args.allow_missing_severity,
+            strict_full_models=args.strict_full_models,
+            check_audit_files=not args.no_audit_files,
+        )
+        print(format_report(report))
+        raise SystemExit(0 if report.ok else 1)
     raise SystemExit(f"Unknown command: {args.command}")
 
 

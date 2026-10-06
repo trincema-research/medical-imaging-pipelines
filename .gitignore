@@ -257,6 +257,8 @@ rsna2024_lumbar/data/best_config_runs/results/**/repeat_*/
 !rsna2024_lumbar/data/best_config_runs/results/**/pipeline_results.csv
 !rsna2024_lumbar/data/best_config_runs/results/pipeline_results_all_models.csv
 !rsna2024_lumbar/data/best_config_runs/results/**/pipeline_run_summary.json
+!rsna2024_lumbar/data/best_config_runs/results/**/nas_snapshot_*.csv
+!rsna2024_lumbar/data/best_config_runs/results/nas_snapshots_all_models.csv
 rsna2024_lumbar/data/ordinal_benchmark/**/*
 !rsna2024_lumbar/data/ordinal_benchmark/README.md
 rsna2024_lumbar/data/best_config_runs/results/**/*.pt

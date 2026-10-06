@@ -1,10 +1,10 @@
 # Best-config runs (`best_config_runs`)
 
-Stage **3** in the lumbar stack: **`data/`** → **`nas/`** (search + `nas_compact/best_configs`) → **`best_config_runs/`** (retrain NAS winners and publish CSV metrics).
+Stage **3** in the lumbar stack: **`data/`** → **`nas/`** (search + `nas_compact/best_configs`) → retrain NAS winners and publish CSV metrics.
 
 | Doc | Contents |
 |-----|----------|
-| [../data/best_config_runs/README.md](../data/best_config_runs/README.md) | Results layout, cloud zip, committed CSVs, article tables |
+| [../data/best_config_runs/README.md](../data/best_config_runs/README.md) | Results layout, cloud zip, committed CSVs (same as former `perf_pipeline`) |
 | This file | CLI map and module layout |
 
 ## Install

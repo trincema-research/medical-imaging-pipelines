@@ -20,6 +20,15 @@ PIPELINE_RESULTS_COLUMNS: tuple[str, ...] = (
     "train_acc",
     "val_acc",
     "test_acc",
+    "train_loss",
+    "val_loss",
+    "test_loss",
+    "train_accuracy_macro_levels",
+    "val_accuracy_macro_levels",
+    "test_accuracy_macro_levels",
+    "train_f1_macro_levels",
+    "val_f1_macro_levels",
+    "test_f1_macro_levels",
     "train_accuracy_overall",
     "val_accuracy_overall",
     "test_accuracy_overall",
@@ -66,6 +75,9 @@ def row_from_training_metrics(
     out["val_acc"] = _get(row, "val_acc")
     out["test_acc"] = _get(row, "test_acc")
     for split in ("train", "val", "test"):
+        out[f"{split}_loss"] = _get(row, f"{split}_loss")
+        out[f"{split}_accuracy_macro_levels"] = _get(row, f"{split}_accuracy_macro_levels")
+        out[f"{split}_f1_macro_levels"] = _get(row, f"{split}_f1_macro_levels")
         out[f"{split}_accuracy_overall"] = _get(row, f"{split}_accuracy_overall")
         out[f"{split}_f1_macro_overall"] = _get(row, f"{split}_f1_macro_overall")
         out[f"{split}_oa_overall"] = _get(row, f"{split}_oa_overall")

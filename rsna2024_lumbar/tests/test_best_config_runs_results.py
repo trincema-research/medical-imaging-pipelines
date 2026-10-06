@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from rsna2024_lumbar.perf_pipeline.results import (
+from rsna2024_lumbar.best_config_runs.results import (
     PIPELINE_RESULTS_COLUMNS,
     row_from_training_metrics,
 )

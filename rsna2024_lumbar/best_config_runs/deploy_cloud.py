@@ -1,4 +1,4 @@
-"""Install deps and run perf_pipeline on one GPU (optionally after unpack)."""
+"""Install deps and run best_config_runs on one GPU (optionally after unpack)."""
 
 from __future__ import annotations
 
@@ -8,15 +8,15 @@ import sys
 from pathlib import Path
 
 from rsna2024_lumbar.nas.paths import BUNDLE_DIR, default_crops_root, default_data_root
-from rsna2024_lumbar.perf_pipeline.cloud_common import read_manifest, repo_root_from_extracted
-from rsna2024_lumbar.perf_pipeline.paths import DEFAULT_BEST_CONFIG_DIR, DEFAULT_REPEATS, RESULTS_DIR
-from rsna2024_lumbar.perf_pipeline.unpack_cloud import unpack
+from rsna2024_lumbar.best_config_runs.cloud_common import read_manifest, repo_root_from_extracted
+from rsna2024_lumbar.best_config_runs.paths import DEFAULT_BEST_CONFIG_DIR, DEFAULT_REPEATS, RESULTS_DIR
+from rsna2024_lumbar.best_config_runs.unpack_cloud import unpack
 from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(
-        description="Unpack (optional), install torch deps, run perf_pipeline run-all on one GPU."
+        description="Unpack (optional), install torch deps, run best_config_runs run-all on one GPU."
     )
     p.add_argument("--zip", type=Path, default=None, help="If set, unpack to --dest before training.")
     p.add_argument("--dest", type=Path, default=None, help="Unpack target when using --zip.")
@@ -98,7 +98,7 @@ def main(argv: list[str] | None = None) -> None:
         return
 
     if not args.skip_install:
-        _run([sys.executable, "-m", "pip", "install", "-e", ".[perf_pipeline]"], cwd=repo_root)
+        _run([sys.executable, "-m", "pip", "install", "-e", ".[best_config_runs]"], cwd=repo_root)
         req = repo_root / "rsna2024_lumbar" / "nas" / "requirements-nas-cloud.txt"
         if req.is_file():
             _run([sys.executable, "-m", "pip", "install", "-r", str(req)], cwd=repo_root)
@@ -110,7 +110,7 @@ def main(argv: list[str] | None = None) -> None:
     run_argv = [
         sys.executable,
         "-m",
-        "rsna2024_lumbar.perf_pipeline",
+        "rsna2024_lumbar.best_config_runs",
         "run-all",
         "--repeats",
         str(args.repeats),

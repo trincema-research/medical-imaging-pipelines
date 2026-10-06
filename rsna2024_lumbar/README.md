@@ -5,8 +5,8 @@
 …  models/            later
 …  training/          later
 ⚙  nas/               NAS grids · GPU launch · cloud pack/deploy (8 families)
-✔  perf_pipeline/     retrain NAS best configs · severity metrics · cloud zip
-⬇  data/              raw/ · processed/ · nas_compact/ · perf_pipeline/results/
+✔  best_config_runs/     retrain NAS best configs · severity metrics · cloud zip
+⬇  data/              raw/ · processed/ · nas_compact/ · best_config_runs/results/
 ☰  traces/            download.log · unzip.log · validate.log · pipeline.log
 ✔  tests/             pytest + synthetic mini-dump
 ```
@@ -88,25 +88,25 @@ python -m rsna2024_lumbar.nas --family efficientnet3d --list
 
 `--crop-policy centered|extend50` sets PNG size. Shard across **1 / 2 / 4 / 8** GPUs (`--num-gpus 0` = auto). Training uses bundled `vit_nas_lumbar.py` (staged by `nas.pack`). Depth: [nas/README.md](nas/README.md).
 
-## ✔ Performance pipeline (after NAS)
+## ✔ Best-config runs (after NAS)
 
 Confirm NAS winners: fixed retrain protocol, multiple split-seed repeats, CSV metrics for papers/PRs.
 
 ```bash
-pip install -e ".[perf_pipeline,dev]"
+pip install -e ".[best_config_runs,dev]"
 
 # All eight nas_best_* layouts (default 5 repeats)
-python -m rsna2024_lumbar.perf_pipeline run-all --repeats 5 --epochs 50 \
+python -m rsna2024_lumbar.best_config_runs run-all --repeats 5 --epochs 50 \
   --data-root rsna2024_lumbar/data/raw \
   --crops-root rsna2024_lumbar/data/processed/centered
 
-# NAS OA only (no GPU): nas-snapshot-all → data/perf_pipeline/results/
-python -m rsna2024_lumbar.perf_pipeline nas-snapshot-all
+# NAS OA only (no GPU): nas-snapshot-all → data/best_config_runs/results/
+python -m rsna2024_lumbar.best_config_runs nas-snapshot-all
 ```
 
-Cloud (single GPU): pack with `perf_pipeline.pack_cloud`, or copy repo-root **`lumbar_perf_cloud.py`** next to the zip and run `python lumbar_perf_cloud.py all --repeats 5`.
+Cloud (single GPU): pack with `best_config_runs.pack_cloud`, or copy **`lumbar_best_config_runs.py`** next to the zip and run `python lumbar_best_config_runs.py all --repeats 5`.
 
-Depth: [perf_pipeline/README.md](perf_pipeline/README.md) · results: [data/perf_pipeline/README.md](data/perf_pipeline/README.md).
+Depth: [best_config_runs/README.md](best_config_runs/README.md) · results: [data/best_config_runs/README.md](data/best_config_runs/README.md).
 
 ## ✔ Tests
 

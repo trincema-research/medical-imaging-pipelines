@@ -8,7 +8,7 @@ from typing import Any
 import pandas as pd
 
 from rsna2024_lumbar.nas.compact import HISTORY_FILENAME
-from rsna2024_lumbar.perf_pipeline.config import hyperparameters_dict, load_best_config
+from rsna2024_lumbar.best_config_runs.config import hyperparameters_dict, load_best_config
 
 
 def _history_path_for_entry(entry: dict[str, Any], *, compact_root: Path) -> Path | None:
@@ -95,7 +95,7 @@ def snapshot_all_best_configs(
     compact_root: Path,
     output_base: Path,
 ) -> list[dict[str, Any]]:
-    from rsna2024_lumbar.perf_pipeline.config import list_best_config_files
+    from rsna2024_lumbar.best_config_runs.config import list_best_config_files
 
     all_rows: list[dict[str, Any]] = []
     for cfg_path in list_best_config_files(config_dir):

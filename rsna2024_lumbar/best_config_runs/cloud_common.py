@@ -1,4 +1,4 @@
-"""Shared helpers for perf_pipeline cloud pack / unpack."""
+"""Shared helpers for best_config_runs cloud pack / unpack."""
 
 from __future__ import annotations
 
@@ -9,14 +9,14 @@ from typing import Any
 
 from rsna2024_lumbar.nas.bundle import default_legacy_root, iter_bundle_files, stage_training_bundle
 from rsna2024_lumbar.nas.paths import BUNDLE_DIR, REPO_ROOT, YEAR_ROOT
-from rsna2024_lumbar.perf_pipeline.config import list_best_config_files
+from rsna2024_lumbar.best_config_runs.config import list_best_config_files
 from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
 
-MANIFEST_NAME = "perf_pipeline_deploy_manifest.json"
-CLOUD_RUN_NAME = "PERF_PIPELINE_CLOUD_RUN.txt"
+MANIFEST_NAME = "best_config_runs_deploy_manifest.json"
+CLOUD_RUN_NAME = "BEST_CONFIG_RUNS_CLOUD_RUN.txt"
 
 CODE_PATHS = (
-    YEAR_ROOT / "perf_pipeline",
+    YEAR_ROOT / "best_config_runs",
     YEAR_ROOT / "preprocessing",
     YEAR_ROOT / "nas",
     YEAR_ROOT / "__init__.py",
@@ -24,7 +24,7 @@ CODE_PATHS = (
     REPO_ROOT / "pyproject.toml",
     REPO_ROOT / "requirements.txt",
     YEAR_ROOT / "nas" / "requirements-nas-cloud.txt",
-    YEAR_ROOT / "data" / "perf_pipeline" / "README.md",
+    YEAR_ROOT / "data" / "best_config_runs" / "README.md",
 )
 
 SKIP_DIR_NAMES = {"__pycache__", ".pytest_cache", "runs", "training_bundle"}
@@ -38,7 +38,7 @@ def repo_root_from_extracted(extract_dir: Path) -> Path:
         if candidate.is_dir() and (candidate / "pyproject.toml").is_file():
             return candidate.resolve()
     raise SystemExit(
-        f"No pyproject.toml under {extract_dir}. Unzip the perf_pipeline cloud archive into an empty folder."
+        f"No pyproject.toml under {extract_dir}. Unzip the best_config_runs cloud archive into an empty folder."
     )
 
 
@@ -140,7 +140,7 @@ def build_manifest(
 ) -> dict[str, Any]:
     configs = [p.name for p in list_best_config_files(best_config_dir)]
     return {
-        "schema": "perf_pipeline_cloud_v1",
+        "schema": "best_config_runs_cloud_v1",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "include_crops": include_crops,
         "crop_policy": crop_policy,
@@ -167,22 +167,22 @@ def cloud_run_text(
     )
     return "\n".join(
         [
-            "# Performance pipeline — single-GPU cloud run",
+            "# Best-config runs — single-GPU cloud retrain",
             "",
             "# 1) Unpack (if you only copied the zip):",
-            "python -m rsna2024_lumbar.perf_pipeline.unpack_cloud --zip lumbar_perf_pipeline_cloud.zip --dest ./perf_cloud",
+            "python -m rsna2024_lumbar.best_config_runs.unpack_cloud --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud",
             "",
             "# 2) Install + train (from extracted repo root, directory with pyproject.toml):",
-            "python -m rsna2024_lumbar.perf_pipeline.deploy_cloud \\",
+            "python -m rsna2024_lumbar.best_config_runs.deploy_cloud \\",
             f"  --repo-root . --repeats {repeats} --epochs {epochs}{patience_flag} \\",
             "  --skip-completed",
             "",
             "# Or unpack + deploy in one step:",
-            "python -m rsna2024_lumbar.perf_pipeline.deploy_cloud \\",
-            f"  --zip lumbar_perf_pipeline_cloud.zip --dest ./perf_cloud --repeats {repeats} --epochs {epochs}{patience_flag}",
+            "python -m rsna2024_lumbar.best_config_runs.deploy_cloud \\",
+            f"  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud --repeats {repeats} --epochs {epochs}{patience_flag}",
             "",
             f"Crops in zip: {'yes' if include_crops else 'no — need rsna2024_lumbar/data/processed/centered/'}",
-            "Outputs: rsna2024_lumbar/data/perf_pipeline/results/pipeline_results_all_models.csv",
+            "Outputs: rsna2024_lumbar/data/best_config_runs/results/pipeline_results_all_models.csv",
             "",
         ]
     )

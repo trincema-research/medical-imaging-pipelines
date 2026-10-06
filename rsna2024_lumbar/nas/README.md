@@ -99,4 +99,4 @@ Set ``LUMBAR_NAS_RESULTS_ROOT`` to the ``NAS results`` folder to omit ``--archiv
 
 ## After NAS — performance pipeline
 
-Use ``nas_compact/best_configs/nas_best_*.json`` as input to [perf_pipeline](../perf_pipeline/README.md): retrain with split-seed repeats and write ``data/perf_pipeline/results/pipeline_results*.csv``. NAS search OA (no retrain) via ``python -m rsna2024_lumbar.perf_pipeline nas-snapshot-all``.
+Use ``nas_compact/best_configs/nas_best_*.json`` as input to [best_config_runs](../best_config_runs/README.md): retrain with split-seed repeats and write ``data/best_config_runs/results/pipeline_results*.csv``. NAS search OA (no retrain) via ``python -m rsna2024_lumbar.best_config_runs nas-snapshot-all``.

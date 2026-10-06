@@ -24,8 +24,9 @@ def test_severity_from_val_confusion_matrices(tmp_path: Path):
     assert 0 <= m["val_omae_overall"] <= 1.0
 
 
-def test_backfill_oa_from_accuracy():
+def test_backfill_oa_from_accuracy_only_when_legacy():
     row = pd.Series({"train_accuracy_overall": 0.88, "val_accuracy_overall": 0.9})
-    out = backfill_severity_on_series(row, repeat_dir=None)
+    assert "train_oa_overall" not in backfill_severity_on_series(row, repeat_dir=None, legacy=False)
+    out = backfill_severity_on_series(row, repeat_dir=None, legacy=True)
     assert out["train_oa_overall"] == 0.88
     assert out["val_oa_overall"] == 0.9

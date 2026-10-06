@@ -7,8 +7,8 @@ Typical workflow (zip + this file in /workspace):
   # 1) Extract
   python lumbar_best_config_runs.py unzip
 
-  # 2) Train (installs deps, then run-all on one GPU)
-  python lumbar_best_config_runs.py run --repeats 5
+  # 2) Train (installs deps, then run-all on 8 GPUs by default)
+  python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8
 
 Or both steps:
 
@@ -72,6 +72,7 @@ def cmd_run(
     repeats: int,
     epochs: int,
     patience: int,
+    num_gpus: int,
     skip_completed: bool,
     skip_install: bool,
 ) -> None:
@@ -103,6 +104,8 @@ def cmd_run(
     ]
     if skip_completed:
         argv.append("--skip-completed")
+    if num_gpus != 1:
+        argv.extend(["--num-gpus", str(num_gpus)])
 
     completed = subprocess.run(argv, cwd=repo_root, check=False)
     raise SystemExit(completed.returncode)
@@ -116,7 +119,7 @@ def resolve_repo_root(dest: Path) -> Path:
 
 def main() -> None:
     here = Path.cwd()
-    p = argparse.ArgumentParser(description="Unzip and run lumbar best_config_runs on one GPU.")
+    p = argparse.ArgumentParser(description="Unzip and run lumbar best_config_runs (parallel GPUs).")
     sub = p.add_subparsers(dest="command", required=True)
 
     u = sub.add_parser("unzip", help="Extract the cloud zip only.")
@@ -134,6 +137,13 @@ def main() -> None:
     r.add_argument("--repeats", type=int, default=5)
     r.add_argument("--epochs", type=int, default=50)
     r.add_argument("--early-stop-patience", type=int, default=5)
+    r.add_argument(
+        "--num-gpus",
+        type=int,
+        default=8,
+        metavar="N",
+        help="Parallel GPUs for run-all (default: 8; use 1 for sequential).",
+    )
     r.add_argument("--skip-completed", action="store_true", default=True)
     r.add_argument("--no-skip-completed", action="store_false", dest="skip_completed")
     r.add_argument("--skip-install", action="store_true")
@@ -145,6 +155,7 @@ def main() -> None:
     a.add_argument("--repeats", type=int, default=5)
     a.add_argument("--epochs", type=int, default=50)
     a.add_argument("--early-stop-patience", type=int, default=5)
+    a.add_argument("--num-gpus", type=int, default=8, metavar="N")
     a.add_argument("--skip-completed", action="store_true", default=True)
     a.add_argument("--no-skip-completed", action="store_false", dest="skip_completed")
     a.add_argument("--skip-install", action="store_true")
@@ -163,6 +174,7 @@ def main() -> None:
             repeats=args.repeats,
             epochs=args.epochs,
             patience=args.early_stop_patience,
+            num_gpus=args.num_gpus,
             skip_completed=args.skip_completed,
             skip_install=args.skip_install,
         )
@@ -176,6 +188,7 @@ def main() -> None:
             repeats=args.repeats,
             epochs=args.epochs,
             patience=args.early_stop_patience,
+            num_gpus=args.num_gpus,
             skip_completed=args.skip_completed,
             skip_install=args.skip_install,
         )

@@ -76,7 +76,7 @@ def row_from_training_metrics(
     *,
     meta: dict[str, Any],
     repeat_dir: Path | None = None,
-    split_seed: int = 0,
+    legacy_severity_backfill: bool = False,
 ) -> dict[str, Any]:
     df = pd.read_csv(training_metrics_path)
     if df.empty:
@@ -85,7 +85,7 @@ def row_from_training_metrics(
     row = backfill_severity_on_series(
         df.loc[idx],
         repeat_dir=repeat_dir or training_metrics_path.parent,
-        split_seed=split_seed,
+        legacy=legacy_severity_backfill,
     )
 
     out: dict[str, Any] = {k: meta.get(k, "") for k in PIPELINE_RESULTS_COLUMNS}

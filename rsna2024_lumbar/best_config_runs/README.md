@@ -25,7 +25,7 @@ Console entry points: `rsna2024-best-config-runs` (aliases: `rsna2024-perf-pipel
 | `list-configs` | Print paths under `best_configs/` |
 | `nas-snapshot` / `nas-snapshot-all` | OA from NAS compact histories (no GPU) |
 
-Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-completed`, `--only` (shard models), `--data-root`, `--crops-root`.
+Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-completed`, `--only`, `--num-gpus` (1=sequential, 0=auto 2/4/8, or 2/4/8 parallel workers), `--save-checkpoints` (default off), `--data-root`, `--crops-root`.
 
 ## Module layout
 

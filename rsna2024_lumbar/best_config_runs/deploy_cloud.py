@@ -16,7 +16,7 @@ from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(
-        description="Unpack (optional), install torch deps, run best_config_runs run-all on one GPU."
+        description="Unpack (optional), install torch deps, run best_config_runs run-all (parallel GPUs)."
     )
     p.add_argument("--zip", type=Path, default=None, help="If set, unpack to --dest before training.")
     p.add_argument("--dest", type=Path, default=None, help="Unpack target when using --zip.")
@@ -47,6 +47,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         metavar="STEM",
         help="Optional subset of nas_best_* stems.",
+    )
+    p.add_argument(
+        "--num-gpus",
+        type=int,
+        default=8,
+        metavar="N",
+        help="Shard run-all across GPUs: 1=sequential, 0=auto, or 2/4/8 (default: 8).",
     )
     return p.parse_args(argv)
 
@@ -129,6 +136,8 @@ def main(argv: list[str] | None = None) -> None:
         run_argv.extend(["--output-base", str(args.output_base)])
     if args.only:
         run_argv.extend(["--only", *args.only])
+    if args.num_gpus != 1:
+        run_argv.extend(["--num-gpus", str(args.num_gpus)])
 
     print(f"+ {' '.join(run_argv)}")
     completed = subprocess.run(run_argv, cwd=repo_root, check=False)

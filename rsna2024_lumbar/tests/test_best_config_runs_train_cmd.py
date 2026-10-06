@@ -24,3 +24,5 @@ def test_build_train_command_skips_empty_head_hidden_dim(tmp_path: Path):
         split_seed=42,
     )
     assert "--head-hidden-dim" not in cmd
+    assert "--log-pipeline-metrics" in cmd
+    assert "--save-checkpoints" not in cmd

@@ -25,12 +25,12 @@ NAS tells you what worked in search; best_config_runs produces **auditable, comp
 | `article_summary_metrics_long.csv` | Same aggregates in long form (`metric`, `mean`, `std`, `mean_pm_std`). |
 | `*/pipeline_run_summary.json` | Repeat count, config path, harvest metadata. |
 
-Local **`repeat_*`** run directories (metrics per epoch, checkpoints) are **gitignored**; only the summary CSVs above are tracked.
+Under each **`nas_best_*/<condition>/repeat_XX/`**, git tracks **`training_history.json`** and **`run_config.json`** only (audit / reproducibility). Other repeat artifacts (`training_metrics.csv`, confusion matrices, checkpoints) stay **local/gitignored**.
 
 ### Metric columns
 
 - **Always (when retrain finished):** `train/val/test` `acc`, `accuracy_overall`, `f1_macro_overall`, `best_epoch`.
-- **Severity (OA, O-MAE, QWK, SER):** logged during training when `RSNA2024_BEST_CONFIG_RUNS_METRICS=1` (see `train_vit_lumbar.py`). **`harvest_results`** also **backfills** missing columns from saved val confusion matrices (val O-MAE/QWK/SER) and from per-level accuracies at the best val epoch (train/test O-MAE/QWK/SER when CMs are absent). **OA** matches `*_accuracy_overall`. Re-run training for exact train/test severity without estimation.
+- **Severity (OA, O-MAE, QWK, SER) + precision/recall:** logged **each epoch** when training is launched via `best_config_runs` (`--log-pipeline-metrics` on `train_vit_lumbar.py`). **`harvest_results`** reads those columns as-is; optional `--legacy-severity-backfill` only fills missing **OA** from accuracy and **val** O-MAE/QWK/SER from val confusion matrices (old cloud bundles without the hook).
 
 Rebuild summaries from a downloaded results tree (no full retrain):
 
@@ -68,18 +68,18 @@ python -m rsna2024_lumbar.best_config_runs run-all --repeats 5 --epochs 50 --ski
 python -m rsna2024_lumbar.best_config_runs status --repeats 5 --epochs 50
 ```
 
-Use **`--only nas_best_vit_2d …`** to shard across two GPUs; at most **two** training terminals at once.
+Use **`--num-gpus 4`** (or `0` for auto) on `run-all` to shard pending jobs across GPUs; optional **`--only`** limits models. Checkpoints are **off** unless **`--save-checkpoints`**.
 
-## Cloud (single GPU)
+## Cloud (8 GPUs)
 
 ### Simple (recommended)
 
-On the VM, place **`lumbar_best_config_runs_cloud.zip`** and repo-root **`lumbar_best_config_runs.py`** in the same directory:
+On an 8-GPU VM, place **`lumbar_best_config_runs_cloud.zip`** and repo-root **`lumbar_best_config_runs.py`** in the same directory:
 
 ```bash
 python lumbar_best_config_runs.py unzip
-python lumbar_best_config_runs.py run --repeats 5 --skip-completed
-# one step: python lumbar_best_config_runs.py all --repeats 5
+python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8 --skip-completed
+# one step: python lumbar_best_config_runs.py all --repeats 5 --num-gpus 8
 ```
 
 Use `--early-stop-patience 0` for full 50 epochs without NAS-style early stop.
@@ -91,7 +91,8 @@ Pack on a machine with labels, best configs, and PNG crops:
 ```bash
 python -m rsna2024_lumbar.best_config_runs.pack_cloud \
   --output lumbar_best_config_runs_cloud.zip \
-  --repeats 5 --epochs 50 --early-stop-patience 5 \
+  --repeats 5 --epochs 50 --early-stop-patience 5 --num-gpus 8 \
+  --skip-bundle \
   --legacy-root /path/to/rsna-2024-lumbar-spine-degenerative-classification
 ```
 

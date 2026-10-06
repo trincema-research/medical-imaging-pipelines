@@ -252,11 +252,15 @@ rsna20*/data/raw/**
 rsna2024_lumbar/data/perf_pipeline/**/*
 !rsna2024_lumbar/data/perf_pipeline/README.md
 
-# Best-config runs: commit summary CSVs only (not repeat_* artifacts)
-rsna2024_lumbar/data/best_config_runs/results/**/repeat_*/
+# Best-config runs: commit summary CSVs + lightweight repeat audit files (not full repeat trees)
+rsna2024_lumbar/data/best_config_runs/results/**/repeat_*/*
+!rsna2024_lumbar/data/best_config_runs/results/**/repeat_*/training_history.json
+!rsna2024_lumbar/data/best_config_runs/results/**/repeat_*/run_config.json
+rsna2024_lumbar/data/best_config_runs/results/retrain_pr/
 !rsna2024_lumbar/data/best_config_runs/results/**/pipeline_results.csv
 !rsna2024_lumbar/data/best_config_runs/results/pipeline_results_all_models.csv
 !rsna2024_lumbar/data/best_config_runs/results/**/pipeline_run_summary.json
+!rsna2024_lumbar/data/best_config_runs/results/article_summary_*.csv
 rsna2024_lumbar/data/ordinal_benchmark/**/*
 !rsna2024_lumbar/data/ordinal_benchmark/README.md
 rsna2024_lumbar/data/best_config_runs/results/**/*.pt

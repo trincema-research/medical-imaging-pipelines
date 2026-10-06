@@ -3,5 +3,5 @@
   "model_label": "EfficientNet 3D",
   "repeats": 5,
   "run_count": 25,
-  "harvested_from": "F:\\Download\\results (2)\\results"
+  "harvested_from": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\best_config_runs\\results"
 }

@@ -136,6 +136,7 @@ def build_manifest(
     repeats: int,
     epochs: int,
     early_stop_patience: int | None,
+    num_gpus: int,
     best_config_dir: Path,
 ) -> dict[str, Any]:
     configs = [p.name for p in list_best_config_files(best_config_dir)]
@@ -148,6 +149,8 @@ def build_manifest(
         "repeats_default": repeats,
         "epochs_default": epochs,
         "early_stop_patience_default": early_stop_patience,
+        "num_gpus_default": num_gpus,
+        "save_checkpoints_default": False,
         "best_config_files": configs,
         "expected_result_rows": len(configs) * 5 * repeats,
     }
@@ -158,6 +161,7 @@ def cloud_run_text(
     repeats: int,
     epochs: int,
     early_stop_patience: int | None,
+    num_gpus: int,
     include_crops: bool,
 ) -> str:
     patience_flag = (
@@ -165,21 +169,30 @@ def cloud_run_text(
         if early_stop_patience is not None
         else ""
     )
+    gpu_flag = f" --num-gpus {num_gpus}"
     return "\n".join(
         [
-            "# Best-config runs — single-GPU cloud retrain",
+            f"# Best-config runs — {num_gpus}-GPU parallel cloud retrain (checkpoints off by default)",
+            "",
+            "# Simple (zip + lumbar_best_config_runs.py in same folder):",
+            "python lumbar_best_config_runs.py all --repeats {repeats} --epochs {epochs}{patience}{gpus} --skip-completed".format(
+                repeats=repeats,
+                epochs=epochs,
+                patience=patience_flag,
+                gpus=gpu_flag,
+            ),
             "",
             "# 1) Unpack (if you only copied the zip):",
             "python -m rsna2024_lumbar.best_config_runs.unpack_cloud --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud",
             "",
             "# 2) Install + train (from extracted repo root, directory with pyproject.toml):",
             "python -m rsna2024_lumbar.best_config_runs.deploy_cloud \\",
-            f"  --repo-root . --repeats {repeats} --epochs {epochs}{patience_flag} \\",
+            f"  --repo-root . --repeats {repeats} --epochs {epochs}{patience_flag}{gpu_flag} \\",
             "  --skip-completed",
             "",
             "# Or unpack + deploy in one step:",
             "python -m rsna2024_lumbar.best_config_runs.deploy_cloud \\",
-            f"  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud --repeats {repeats} --epochs {epochs}{patience_flag}",
+            f"  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud --repeats {repeats} --epochs {epochs}{patience_flag}{gpu_flag} --skip-completed",
             "",
             f"Crops in zip: {'yes' if include_crops else 'no — need rsna2024_lumbar/data/processed/centered/'}",
             "Outputs: rsna2024_lumbar/data/best_config_runs/results/pipeline_results_all_models.csv",

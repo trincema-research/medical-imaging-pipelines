@@ -6,10 +6,13 @@ import argparse
 from pathlib import Path
 
 from rsna2024_lumbar.best_config_runs.config import (
+    filter_config_paths,
     iter_entries,
     list_best_config_files,
     load_best_config,
 )
+from rsna2024_lumbar.best_config_runs.jobs import list_pipeline_jobs
+from rsna2024_lumbar.best_config_runs.parallel import run_parallel_workers
 from rsna2024_lumbar.best_config_runs.nas_snapshot import (
     snapshot_all_best_configs,
     write_nas_snapshot_csv,
@@ -26,18 +29,52 @@ from rsna2024_lumbar.best_config_runs.results import (
 )
 from rsna2024_lumbar.best_config_runs.article_summary import write_article_summaries
 from rsna2024_lumbar.best_config_runs.runner import (
+    finalize_all_model_summaries,
     resolve_repeat_seeds,
     run_best_config_pipeline,
     run_is_complete,
+    run_jobs_file,
+    run_pipeline_jobs,
 )
+from rsna2024_lumbar.nas.gpus import count_visible_cuda_devices
 
 
-def _filter_config_paths(config_dir: Path, only: list[str] | None) -> list[Path]:
-    paths = list_best_config_files(config_dir)
-    if not only:
-        return paths
-    want = {s.removesuffix(".json") for s in only}
-    return [p for p in paths if p.stem in want]
+def _add_run_training_flags(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--save-checkpoints",
+        action="store_true",
+        help="Save best_model.pt / last_model.pt (default: metrics only).",
+    )
+    parser.add_argument(
+        "--num-gpus",
+        type=int,
+        default=1,
+        metavar="N",
+        help="Parallel GPUs: 1=sequential, 0=auto (2/4/8), or 2/4/8.",
+    )
+    parser.add_argument(
+        "--visible-gpus",
+        type=int,
+        default=None,
+        help=argparse.SUPPRESS,
+    )
+
+
+def _worker_argv_from_args(args: argparse.Namespace) -> list[str]:
+    argv: list[str] = []
+    if args.data_root is not None:
+        argv.extend(["--data-root", str(args.data_root)])
+    if args.crops_root is not None:
+        argv.extend(["--crops-root", str(args.crops_root)])
+    argv.extend(["--output-base", str(args.output_base)])
+    argv.extend(["--epochs", str(args.epochs)])
+    if args.max_studies is not None:
+        argv.extend(["--max-studies", str(args.max_studies)])
+    if args.early_stop_patience is not None:
+        argv.extend(["--early-stop-patience", str(args.early_stop_patience)])
+    if getattr(args, "save_checkpoints", False):
+        argv.append("--save-checkpoints")
+    return argv
 
 
 def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -54,6 +91,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Run pipeline for one nas_best_*.json (5 repeats per condition by default).",
     )
     run.add_argument("--best-config", type=Path, required=True)
+    run.add_argument("--config-dir", type=Path, default=DEFAULT_BEST_CONFIG_DIR)
     run.add_argument("--condition", type=str, default=None)
     run.add_argument("--epochs", type=int, default=50)
     run.add_argument("--repeats", type=int, default=DEFAULT_REPEATS)
@@ -75,6 +113,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         metavar="N",
         help="Stop after N epochs without val improvement (NAS default on cloud: 5).",
     )
+    _add_run_training_flags(run)
 
     run_all = sub.add_parser("run-all", help="Run pipeline for every per-model nas_best_*.json.")
     run_all.add_argument("--config-dir", type=Path, default=DEFAULT_BEST_CONFIG_DIR)
@@ -94,6 +133,22 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         metavar="STEM",
         help="Limit to config stems (e.g. nas_best_vit_2d nas_best_efficientnet_2d).",
     )
+    run_all.add_argument("--seeds", type=int, nargs="+", default=None)
+    _add_run_training_flags(run_all)
+
+    worker = sub.add_parser(
+        "worker",
+        help="Run a JSON job list on one visible GPU (used by --num-gpus sharding).",
+    )
+    worker.add_argument("--jobs-file", type=Path, required=True)
+    worker.add_argument("--data-root", type=Path, default=None)
+    worker.add_argument("--crops-root", type=Path, default=None)
+    worker.add_argument("--output-base", type=Path, default=RESULTS_DIR)
+    worker.add_argument("--epochs", type=int, default=50)
+    worker.add_argument("--max-studies", type=int, default=None)
+    worker.add_argument("--early-stop-patience", type=int, default=None, metavar="N")
+    worker.add_argument("--save-checkpoints", action="store_true")
+    worker.add_argument("--dry-run", action="store_true")
 
     status = sub.add_parser(
         "status",
@@ -179,6 +234,37 @@ def cmd_nas_snapshot(args: argparse.Namespace) -> int:
 
 
 def cmd_run(args: argparse.Namespace) -> int:
+    if args.num_gpus != 1 and not args.dry_run:
+        jobs = list_pipeline_jobs(
+            args.config_dir,
+            repeats=args.repeats,
+            seeds=args.seeds,
+            only=[args.best_config.stem],
+            output_base=args.output_base,
+            epochs=args.epochs,
+            skip_completed=args.skip_completed,
+        )
+        if args.condition is not None:
+            jobs = [j for j in jobs if j.condition == args.condition]
+        visible = args.visible_gpus if args.visible_gpus is not None else count_visible_cuda_devices()
+        par_rc = run_parallel_workers(
+            jobs,
+            num_gpus=args.num_gpus,
+            visible_gpus=visible,
+            worker_argv_base=_worker_argv_from_args(args),
+        )
+        if par_rc >= 0:
+            if par_rc != 0:
+                return par_rc
+            finalize_all_model_summaries(
+                args.config_dir,
+                repeats=args.repeats,
+                seeds=args.seeds,
+                only=[args.best_config.stem],
+                epochs=args.epochs,
+                output_base=args.output_base,
+            )
+            return 0
     rc, _ = run_best_config_pipeline(
         args.best_config,
         data_root=args.data_root,
@@ -192,24 +278,77 @@ def cmd_run(args: argparse.Namespace) -> int:
         dry_run=args.dry_run,
         skip_completed=args.skip_completed,
         early_stop_patience=args.early_stop_patience,
+        save_checkpoints=args.save_checkpoints,
     )
     return rc
 
 
+def cmd_worker(args: argparse.Namespace) -> int:
+    return run_jobs_file(
+        args.jobs_file.resolve(),
+        data_root=args.data_root,
+        crops_root=args.crops_root,
+        epochs=args.epochs,
+        output_base=args.output_base,
+        max_studies=args.max_studies,
+        dry_run=args.dry_run,
+        early_stop_patience=args.early_stop_patience,
+        save_checkpoints=args.save_checkpoints,
+    )
+
+
 def cmd_run_all(args: argparse.Namespace) -> int:
+    if args.num_gpus != 1 and not args.dry_run:
+        jobs = list_pipeline_jobs(
+            args.config_dir,
+            repeats=args.repeats,
+            seeds=args.seeds,
+            only=args.only,
+            output_base=args.output_base,
+            epochs=args.epochs,
+            skip_completed=args.skip_completed,
+        )
+        visible = args.visible_gpus if args.visible_gpus is not None else count_visible_cuda_devices()
+        par_rc = run_parallel_workers(
+            jobs,
+            num_gpus=args.num_gpus,
+            visible_gpus=visible,
+            worker_argv_base=_worker_argv_from_args(args),
+        )
+        if par_rc >= 0:
+            if par_rc != 0:
+                return par_rc
+            finalize_all_model_summaries(
+                args.config_dir,
+                repeats=args.repeats,
+                seeds=args.seeds,
+                only=args.only,
+                epochs=args.epochs,
+                output_base=args.output_base,
+            )
+            if not args.dry_run:
+                combined = load_combined_pipeline_results(args.output_base)
+                if combined:
+                    out = args.output_base / "pipeline_results_all_models.csv"
+                    write_pipeline_results_csv(combined, out)
+                    print(f"Wrote combined {out} ({len(combined)} rows)")
+            return 0
+
     rc = 0
-    for cfg_path in _filter_config_paths(args.config_dir, args.only):
+    for cfg_path in filter_config_paths(args.config_dir, args.only):
         code, _ = run_best_config_pipeline(
             cfg_path,
             data_root=args.data_root,
             crops_root=args.crops_root,
             epochs=args.epochs,
             repeats=args.repeats,
+            seeds=args.seeds,
             output_base=args.output_base,
             max_studies=args.max_studies,
             dry_run=args.dry_run,
             skip_completed=args.skip_completed,
             early_stop_patience=args.early_stop_patience,
+            save_checkpoints=args.save_checkpoints,
         )
         if code != 0:
             rc = code
@@ -260,6 +399,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(cmd_run(args))
     if args.command == "run-all":
         raise SystemExit(cmd_run_all(args))
+    if args.command == "worker":
+        raise SystemExit(cmd_worker(args))
     if args.command == "status":
         raise SystemExit(cmd_status(args))
     if args.command == "article-summary":

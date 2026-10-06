@@ -1,6 +1,0 @@
-condition,family,archive_layout,trial_id,history_path,best_epoch,source,train_oa_overall,val_oa_overall,test_oa_overall
-spinal_canal_stenosis,efficientnet,2d,93,rsna2024_lumbar\data\nas_compact\EfficientNet\2d\spinal_canal_stenosis\trial_0093\training_history.csv,8,nas_training_history,0.935843373493976,0.9255172413793104,0.9103202846975088
-left_neural_foraminal_narrowing,efficientnet,2d,142,rsna2024_lumbar\data\nas_compact\EfficientNet\2d\left_neural_foraminal_narrowing\trial_0142\training_history.csv,7,nas_training_history,0.8618840579710145,0.8547297297297297,0.8412162162162162
-right_neural_foraminal_narrowing,efficientnet,2d,143,rsna2024_lumbar\data\nas_compact\EfficientNet\2d\right_neural_foraminal_narrowing\trial_0143\training_history.csv,6,nas_training_history,0.882069970845481,0.8565656565656565,0.8297297297297297
-left_subarticular_stenosis,efficientnet,2d,118,rsna2024_lumbar\data\nas_compact\EfficientNet\2d\left_subarticular_stenosis\trial_0118\training_history.csv,8,nas_training_history,0.8744664031620554,0.8222222222222222,0.8136882129277566
-right_subarticular_stenosis,efficientnet,2d,58,rsna2024_lumbar\data\nas_compact\EfficientNet\2d\right_subarticular_stenosis\trial_0058\training_history.csv,8,nas_training_history,0.8546172059984215,0.8192592592592592,0.8164794007490637

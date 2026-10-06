@@ -30,7 +30,7 @@ Local **`repeat_*`** run directories (metrics per epoch, checkpoints) are **giti
 ### Metric columns
 
 - **Always (when retrain finished):** `train/val/test` `acc`, `accuracy_overall`, `f1_macro_overall`, `best_epoch`.
-- **Severity (OA, O-MAE, QWK, SER):** filled when training runs with `RSNA2024_BEST_CONFIG_RUNS_METRICS=1` and an updated `train_vit_lumbar.py` in the bundle. If the cloud zip used an older bundle, severity columns may be **empty** while acc/F1 are still valid — re-run or refresh the bundle and harvest again.
+- **Severity (OA, O-MAE, QWK, SER):** logged during training when `RSNA2024_BEST_CONFIG_RUNS_METRICS=1` (see `train_vit_lumbar.py`). **`harvest_results`** also **backfills** missing columns from saved val confusion matrices (val O-MAE/QWK/SER) and from per-level accuracies at the best val epoch (train/test O-MAE/QWK/SER when CMs are absent). **OA** matches `*_accuracy_overall`. Re-run training for exact train/test severity without estimation.
 
 Rebuild summaries from a downloaded results tree (no full retrain):
 

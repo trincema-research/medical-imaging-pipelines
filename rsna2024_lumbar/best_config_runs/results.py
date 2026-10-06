@@ -7,6 +7,8 @@ from typing import Any
 
 import pandas as pd
 
+from rsna2024_lumbar.best_config_runs.severity_backfill import backfill_severity_on_series
+
 PIPELINE_RESULTS_COLUMNS: tuple[str, ...] = (
     "model_config",
     "model_label",
@@ -73,12 +75,18 @@ def row_from_training_metrics(
     training_metrics_path: Path,
     *,
     meta: dict[str, Any],
+    repeat_dir: Path | None = None,
+    split_seed: int = 0,
 ) -> dict[str, Any]:
     df = pd.read_csv(training_metrics_path)
     if df.empty:
         raise ValueError(f"Empty training metrics: {training_metrics_path}")
     idx = df["val_acc"].idxmax() if "val_acc" in df.columns else df.index[-1]
-    row = df.loc[idx]
+    row = backfill_severity_on_series(
+        df.loc[idx],
+        repeat_dir=repeat_dir or training_metrics_path.parent,
+        split_seed=split_seed,
+    )
 
     out: dict[str, Any] = {k: meta.get(k, "") for k in PIPELINE_RESULTS_COLUMNS}
     out.update(meta)

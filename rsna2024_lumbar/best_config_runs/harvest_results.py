@@ -49,7 +49,12 @@ def harvest_model_dir(
             "split_seed": split_seed,
             "nas_trial_id": trial_id,
         }
-        row = row_from_training_metrics(metrics_path, meta=meta)
+        row = row_from_training_metrics(
+            metrics_path,
+            meta=meta,
+            repeat_dir=repeat_dir,
+            split_seed=int(split_seed) if split_seed not in ("", None) else 0,
+        )
         row["run_dir"] = f"{config_stem}/{condition}/repeat_{repeat_index:02d}"
         rows.append(row)
     rows.sort(key=lambda r: (str(r.get("condition", "")), int(r.get("repeat_index", 0))))

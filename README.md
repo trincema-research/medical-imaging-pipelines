@@ -31,9 +31,12 @@ python -m rsna2024_lumbar.nas --family vit --list  # ⚙ NAS dry-run
 python -m rsna2024_lumbar.nas.launch --family efficientnet --num-gpus 8 --spawn --wait  # GPU shards
 python -m rsna2024_lumbar.nas.pack --profile efficientnet_deploy --legacy-root /path/to/lumbar  # deploy zip
 python -m rsna2024_lumbar.nas.deploy --family efficientnet --num-gpus 8 --all-conditions  # cloud one-shot
+python -m rsna2024_lumbar.perf_pipeline run-all --repeats 5 --epochs 50  # post-NAS retrain + CSV metrics
 ```
 
 **Cloud NAS:** pack includes code, label CSVs, optional `data/processed/centered/` PNGs, and a copied `vit_nas_lumbar.py` bundle. Unzip on the GPU box and run `nas.deploy` (see [rsna2024_lumbar/nas/README.md](rsna2024_lumbar/nas/README.md)).
+
+**Perf pipeline (after NAS):** retrain `nas_compact/best_configs/` winners; results under `data/perf_pipeline/results/`. Cloud helper: [lumbar_perf_cloud.py](lumbar_perf_cloud.py) · [rsna2024_lumbar/perf_pipeline/README.md](rsna2024_lumbar/perf_pipeline/README.md).
 
 Full export (copy `train.csv` + `train_images/` into `data/raw/`):
 

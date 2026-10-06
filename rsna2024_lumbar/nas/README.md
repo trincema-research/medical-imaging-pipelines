@@ -96,3 +96,7 @@ python -m rsna2024_lumbar.nas.export_compact --mode all --yes-all
 See [data/nas_compact/README.md](../data/nas_compact/README.md).
 
 Set ``LUMBAR_NAS_RESULTS_ROOT`` to the ``NAS results`` folder to omit ``--archive-root``. Metrics: ``val_acc`` (default), ``max_val_acc``, ``final_val_acc``, ``val_f1_macro_levels``, ``test_f1_macro_levels``, ``val_loss``. Module layout: ``results.py`` (load), ``rank.py`` (sort/shared pick), ``best.py`` (CLI).
+
+## After NAS — performance pipeline
+
+Use ``nas_compact/best_configs/nas_best_*.json`` as input to [perf_pipeline](../perf_pipeline/README.md): retrain with split-seed repeats and write ``data/perf_pipeline/results/pipeline_results*.csv``. NAS search OA (no retrain) via ``python -m rsna2024_lumbar.perf_pipeline nas-snapshot-all``.

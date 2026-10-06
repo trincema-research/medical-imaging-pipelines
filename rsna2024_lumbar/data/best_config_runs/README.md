@@ -11,6 +11,8 @@
 
 NAS tells you what worked in search; best_config_runs produces **auditable, comparable** numbers for reporting and papers.
 
+> **Legacy path:** `data/perf_pipeline/` → see [../perf_pipeline/README.md](../perf_pipeline/README.md). Use this folder (`data/best_config_runs/`) for all new results.
+
 ## Committed CSVs in git (article-friendly)
 
 | File | Description |

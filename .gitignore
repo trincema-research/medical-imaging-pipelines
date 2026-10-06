@@ -248,7 +248,11 @@ rsna20*/data/raw/**
 
 # NAS compact exports are committed under rsna2024_lumbar/data/nas_compact/ (see README there).
 
-# Local perf-pipeline training runs (commit pipeline_results*.csv / nas_snapshot*.csv; not repeat_* artifacts)
+# Legacy path (see data/perf_pipeline/README.md) — ignore local leftovers
+rsna2024_lumbar/data/perf_pipeline/**/*
+!rsna2024_lumbar/data/perf_pipeline/README.md
+
+# Best-config runs: commit summary CSVs only (not repeat_* artifacts)
 rsna2024_lumbar/data/best_config_runs/results/**/repeat_*/
 !rsna2024_lumbar/data/best_config_runs/results/**/pipeline_results.csv
 !rsna2024_lumbar/data/best_config_runs/results/pipeline_results_all_models.csv

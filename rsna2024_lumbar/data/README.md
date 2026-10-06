@@ -8,6 +8,7 @@ raw/             ⬇  label CSVs + 2 smoke studies (git); full train_images/ loc
 processed/       ⬆  centered/ PNG cache (local)
 nas_compact/     📊  NAS training histories + best-config CSVs (git)
 best_config_runs/   ✔  retrain summary CSVs + NAS OA snapshots (git; not repeat_* runs)
+perf_pipeline/      ↪  renamed — README only; use best_config_runs/
 ```
 
 Scripts stay **here** (not in `raw/`) so git can track them and `python -m rsna2024_lumbar.data.<name>` works. Label CSVs live in `raw/`; DICOMs and crops stay local.

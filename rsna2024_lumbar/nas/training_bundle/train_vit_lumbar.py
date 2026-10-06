@@ -261,12 +261,10 @@ def _append_pipeline_severity_metrics(
     test_logits: np.ndarray,
     test_targets: np.ndarray,
 ) -> None:
-    try:
-        from rsna2024_lumbar.best_config_runs.multi_head import (
-            append_severity_to_epoch_history,
-        )
-    except ImportError:
-        return
+    from rsna2024_lumbar.best_config_runs.multi_head import (
+        append_severity_to_epoch_history,
+    )
+
     append_severity_to_epoch_history(epoch_history, "train", train_logits, train_targets)
     append_severity_to_epoch_history(epoch_history, "val", val_logits, val_targets)
     append_severity_to_epoch_history(epoch_history, "test", test_logits, test_targets)
@@ -801,6 +799,14 @@ def parse_args(argv: List[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Save best_model.pt and last_model.pt. Default: metrics only.",
     )
+    parser.add_argument(
+        "--log-pipeline-metrics",
+        action="store_true",
+        help=(
+            "Log ordinal severity (OA, O-MAE, QWK, SER) each epoch for train/val/test. "
+            "Set by rsna2024_lumbar.best_config_runs training."
+        ),
+    )
     return parser.parse_args(argv)
 
 
@@ -1157,7 +1163,7 @@ def main(argv: List[str] | None = None) -> None:
             ("test", test_metrics),
         ):
             merge_multi_head_metrics(epoch_history, prefix, metric_dict)
-        if _pipeline_severity_metrics_enabled():
+        if args.log_pipeline_metrics or _pipeline_severity_metrics_enabled():
             _append_pipeline_severity_metrics(
                 epoch_history,
                 train_logits,

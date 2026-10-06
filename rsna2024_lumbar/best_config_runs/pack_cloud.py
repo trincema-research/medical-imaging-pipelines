@@ -25,7 +25,7 @@ CLOUD_RUNNER_ZIP_NAME = "lumbar_best_config_runs.py"
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(
-        description="Create a zip for single-GPU best_config_runs retrain on cloud (metrics + severity CSVs)."
+        description="Create a zip for multi-GPU best_config_runs retrain on cloud (metrics + severity CSVs)."
     )
     p.add_argument(
         "--output",
@@ -56,6 +56,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=int,
         default=5,
         help="Documented NAS-style early stopping for cloud deploy (default: 5).",
+    )
+    p.add_argument(
+        "--num-gpus",
+        type=int,
+        default=8,
+        metavar="N",
+        help="Documented parallel GPU count for cloud deploy (default: 8).",
     )
     p.add_argument(
         "--legacy-root",
@@ -91,6 +98,7 @@ def main(argv: list[str] | None = None) -> None:
         repeats=args.repeats,
         epochs=args.epochs,
         early_stop_patience=args.early_stop_patience,
+        num_gpus=args.num_gpus,
         best_config_dir=args.best_config_dir.resolve(),
     )
     repo_root = REPO_ROOT.resolve()
@@ -106,6 +114,7 @@ def main(argv: list[str] | None = None) -> None:
                 repeats=args.repeats,
                 epochs=args.epochs,
                 early_stop_patience=args.early_stop_patience,
+                num_gpus=args.num_gpus,
                 include_crops=include_crops,
             ),
         )
@@ -116,7 +125,10 @@ def main(argv: list[str] | None = None) -> None:
     print(f"  files: {len(files)}")
     print(f"  best configs: {len(manifest['best_config_files'])}")
     print(f"  crops: {'yes' if include_crops else 'no'}")
-    print(f"  cloud defaults: repeats={args.repeats} epochs={args.epochs} patience={args.early_stop_patience}")
+    print(
+        f"  cloud defaults: repeats={args.repeats} epochs={args.epochs} "
+        f"patience={args.early_stop_patience} num_gpus={args.num_gpus}"
+    )
 
 
 if __name__ == "__main__":

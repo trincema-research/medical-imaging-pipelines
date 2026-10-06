@@ -53,6 +53,14 @@ def entry_slug(entry: dict[str, Any]) -> str:
     return f"{family}_{layout}/{condition}"
 
 
+def filter_config_paths(config_dir: Path, only: list[str] | None) -> list[Path]:
+    paths = list_best_config_files(config_dir)
+    if not only:
+        return paths
+    want = {s.removesuffix(".json") for s in only}
+    return [p for p in paths if p.stem in want]
+
+
 def list_best_config_files(config_dir: Path) -> list[Path]:
     """Per-model best configs (excludes combined ``nas_best_all`` files)."""
     skip = {"nas_best_all", "nas_best_vit_maxvit_convnext_all"}

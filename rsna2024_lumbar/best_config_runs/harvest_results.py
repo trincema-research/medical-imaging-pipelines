@@ -17,6 +17,7 @@ def harvest_model_dir(
     config_stem: str,
     model_label: str,
     best_config_path: Path,
+    legacy_severity_backfill: bool = False,
 ) -> list[dict]:
     rows: list[dict] = []
     if not model_dir.is_dir():
@@ -49,7 +50,12 @@ def harvest_model_dir(
             "split_seed": split_seed,
             "nas_trial_id": trial_id,
         }
-        row = row_from_training_metrics(metrics_path, meta=meta)
+        row = row_from_training_metrics(
+            metrics_path,
+            meta=meta,
+            repeat_dir=repeat_dir,
+            legacy_severity_backfill=legacy_severity_backfill,
+        )
         row["run_dir"] = f"{config_stem}/{condition}/repeat_{repeat_index:02d}"
         rows.append(row)
     rows.sort(key=lambda r: (str(r.get("condition", "")), int(r.get("repeat_index", 0))))
@@ -61,6 +67,7 @@ def harvest_tree(
     *,
     config_dir: Path,
     output_base: Path,
+    legacy_severity_backfill: bool = False,
 ) -> list[dict]:
     combined: list[dict] = []
     for cfg_path in list_best_config_files(config_dir):
@@ -71,6 +78,7 @@ def harvest_tree(
             config_stem=cfg_path.stem,
             model_label=str(config.get("label") or cfg_path.stem),
             best_config_path=cfg_path,
+            legacy_severity_backfill=legacy_severity_backfill,
         )
         if not rows:
             print(f"Skip {cfg_path.stem}: no training_metrics.csv")
@@ -108,11 +116,20 @@ def main(argv: list[str] | None = None) -> None:
     )
     p.add_argument("--config-dir", type=Path, default=DEFAULT_BEST_CONFIG_DIR)
     p.add_argument("--output-base", type=Path, default=RESULTS_DIR)
+    p.add_argument(
+        "--legacy-severity-backfill",
+        action="store_true",
+        help=(
+            "Fill missing OA from accuracy and val O-MAE/QWK/SER from val confusion matrices only. "
+            "Default: require metrics logged during training (--log-pipeline-metrics)."
+        ),
+    )
     args = p.parse_args(argv)
     harvest_tree(
         args.results_root.resolve(),
         config_dir=args.config_dir.resolve(),
         output_base=args.output_base.resolve(),
+        legacy_severity_backfill=args.legacy_severity_backfill,
     )
 
 

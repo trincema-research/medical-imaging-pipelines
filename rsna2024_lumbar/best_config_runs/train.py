@@ -20,7 +20,7 @@ def build_train_command(
     crops_root: Path | None,
     epochs: int,
     output_dir: Path,
-    save_checkpoints: bool = True,
+    save_checkpoints: bool = False,
     best_metric: str = "val_acc",
     max_studies: int | None = None,
     progress: bool = True,
@@ -112,6 +112,8 @@ def build_train_command(
     if early_stop_patience is not None:
         cmd.extend(["--early-stop-patience", str(int(early_stop_patience))])
 
+    cmd.append("--log-pipeline-metrics")
+
     return cmd
 
 
@@ -154,6 +156,7 @@ def run_training(
     repeat_index: int = 1,
     dry_run: bool = False,
     early_stop_patience: int | None = None,
+    save_checkpoints: bool = False,
 ) -> int:
     cmd = build_train_command(
         entry,
@@ -165,6 +168,7 @@ def run_training(
         split_seed=split_seed,
         seed=seed,
         early_stop_patience=early_stop_patience,
+        save_checkpoints=save_checkpoints,
     )
     write_run_manifest(
         output_dir,

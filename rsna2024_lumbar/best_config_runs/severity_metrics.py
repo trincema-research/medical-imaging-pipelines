@@ -23,6 +23,7 @@ def _as_int_arrays(
 
 
 def ordinal_accuracy(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    """Exact-match rate on integer severity grades (same as sklearn ``accuracy_score``)."""
     y_true, y_pred = _as_int_arrays(y_true, y_pred)
     if y_true.size == 0:
         return 0.0

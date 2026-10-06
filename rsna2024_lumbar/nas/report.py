@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from rsna2024_lumbar.nas.history_metrics import NAS_BEST_EPOCH_CLASSIFICATION_FIELDS
 from rsna2024_lumbar.nas.rank import SharedConfigPick, metric_value
 from rsna2024_lumbar.nas.results import TrialRecord
 from rsna2024_lumbar.preprocessing.constants import CONDITIONS
@@ -50,6 +51,7 @@ METRIC_CSV_FIELDS: tuple[str, ...] = (
     "val_f1_macro_levels",
     "test_f1_macro_levels",
     "val_loss",
+    *NAS_BEST_EPOCH_CLASSIFICATION_FIELDS,
 )
 
 COMBINED_BEST_CONFIG_STEM = "nas_best_all"

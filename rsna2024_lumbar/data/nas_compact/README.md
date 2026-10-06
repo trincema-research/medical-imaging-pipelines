@@ -38,8 +38,8 @@ Set ``LUMBAR_NAS_RESULTS_ROOT`` or pass ``--archive-root`` to your ``NAS results
 | Path | Contents |
 |------|----------|
 | ``ViT/``, ``MaxViT/``, ``Convnext/``, ``EfficientNet/`` (2d + 3d) | ``training_history.csv`` + ``trial_config.json`` per trial |
-| ``best_configs/nas_best_*.json`` | One file per model layout (eight stems) |
+| ``best_configs/nas_best_*.json`` | One file per model layout (eight stems); metrics include NAS classification fields at best ``val_acc`` (macro/overall acc & F1, per-level, losses) |
 | ``best_configs/nas_best_all.csv`` | 40 rows (8 layouts × 5 conditions) |
 | ``manifest.json`` | Export metadata |
 
-**Next stage:** [best_config_runs](../../best_config_runs/README.md) reads ``best_configs/`` and writes retrain metrics under [data/best_config_runs/results/](../best_config_runs/README.md).
+**Next stage:** [best_config_runs](../../best_config_runs/README.md) — NAS snapshots [data/best_config_runs/results/](../best_config_runs/README.md); retrain summaries [data/ordinal_benchmark/results/](../ordinal_benchmark/README.md).

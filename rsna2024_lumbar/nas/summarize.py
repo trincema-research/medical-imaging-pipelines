@@ -20,8 +20,12 @@ from rsna2024_lumbar.nas.report import (
     write_best_csv,
     write_best_json,
 )
+from rsna2024_lumbar.nas.history_metrics import enrich_row_from_compact_history
+from rsna2024_lumbar.nas.paths import YEAR_ROOT
 from rsna2024_lumbar.nas.results import default_archive_root
 from rsna2024_lumbar.preprocessing.constants import CROP_POLICIES, CROP_POLICY_CENTERED
+
+DEFAULT_COMPACT_ROOT = YEAR_ROOT / "data" / "nas_compact"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -84,6 +88,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Fail if any expected archive is missing or empty (default: skip missing).",
     )
+    p.add_argument(
+        "--compact-root",
+        type=Path,
+        default=DEFAULT_COMPACT_ROOT,
+        help="nas_compact tree for training_history.csv (enriches best-config metrics).",
+    )
     return p.parse_args(argv)
 
 
@@ -137,10 +147,13 @@ def main(argv: list[str] | None = None) -> None:
             results_root=result.results_root,
             rank_metric=args.metric,
         )
+        compact_root = Path(args.compact_root).resolve()
         for row in rows:
             row["model_group"] = target.model_group
             row["archive_layout"] = target.layout
             row["archive_label"] = target.label
+            if compact_root.is_dir():
+                enrich_row_from_compact_history(row, compact_root=compact_root)
         if result.shared is not None:
             shared_rows = rows_shared_config(
                 result.shared,
@@ -152,6 +165,8 @@ def main(argv: list[str] | None = None) -> None:
                 row["model_group"] = target.model_group
                 row["archive_layout"] = target.layout
                 row["archive_label"] = target.label
+                if compact_root.is_dir():
+                    enrich_row_from_compact_history(row, compact_root=compact_root)
             rows.extend(shared_rows)
 
         out_path = args.csv_dir / default_csv_path(target.family, target.layout).name

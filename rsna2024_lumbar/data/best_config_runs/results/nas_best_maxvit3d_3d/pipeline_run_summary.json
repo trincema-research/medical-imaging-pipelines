@@ -2,6 +2,6 @@
   "best_config": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\best_configs\\nas_best_maxvit3d_3d.json",
   "model_label": "MaxViT 3D",
   "repeats": 5,
-  "run_count": 5,
+  "run_count": 25,
   "harvested_from": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\best_config_runs\\results"
 }

@@ -99,13 +99,4 @@ def test_committed_results_pass_default_validation():
 )
 def test_committed_full_models_strict():
     report = validate_results_tree(RESULTS_DIR, strict_full_models=True)
-    # MaxViT layouts are intentionally incomplete in the current harvest.
-    maxvit_gaps = [
-        i
-        for i in report.issues
-        if "nas_best_maxvit" in i.message
-        and i.code in ("incomplete_repeats", "missing_condition")
-    ]
-    assert maxvit_gaps
-    errors = [i for i in report.issues if i.level == "error"]
-    assert not errors
+    assert report.ok, report.issues

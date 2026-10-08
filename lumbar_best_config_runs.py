@@ -4,15 +4,18 @@ Lumbar best_config_runs on a cloud GPU — one script, no repo checkout required
 
 Typical workflow (zip + this file in /workspace):
 
-  # 1) Extract
+  # 1) Pack locally:
+  # python -m rsna2024_lumbar.best_config_runs.pack_cloud --output lumbar_best_config_runs_cloud.zip --num-gpus 8 --skip-bundle
+
+  # 2) Extract
   python lumbar_best_config_runs.py unzip
 
-  # 2) Train (installs deps, then run-all on 8 GPUs by default)
-  python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8
+  # 3) Train on 8 GPUs (condition-specific seeds 42-46). Do not run `all` after unzip.
+  python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8 --condition-specific-seeds
 
-Or both steps:
+Empty dest only (unzip + train):
 
-  python lumbar_best_config_runs.py all --repeats 5
+  python lumbar_best_config_runs.py all --repeats 5 --num-gpus 8 --condition-specific-seeds
 """
 
 from __future__ import annotations

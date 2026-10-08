@@ -10,6 +10,7 @@ def test_collect_pack_includes_best_configs_and_code(tmp_path: Path, monkeypatch
     year = repo / "rsna2024_lumbar"
     (year / "best_config_runs").mkdir(parents=True)
     (year / "best_config_runs" / "cli.py").write_text("# cli\n", encoding="utf-8")
+    (year / "best_config_runs" / "spinal_level.py").write_text("# spinal\n", encoding="utf-8")
     (year / "preprocessing").mkdir()
     (year / "preprocessing" / "constants.py").write_text("# c\n", encoding="utf-8")
     (year / "nas").mkdir()
@@ -54,3 +55,4 @@ def test_collect_pack_includes_best_configs_and_code(tmp_path: Path, monkeypatch
     assert "nas_best_all.json" not in names
     assert "train_vit_lumbar.py" in names
     assert "cli.py" in names
+    assert "spinal_level.py" in names

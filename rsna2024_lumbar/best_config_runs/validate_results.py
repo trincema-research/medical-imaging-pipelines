@@ -21,8 +21,17 @@ from rsna2024_lumbar.best_config_runs.condition_specific import (
     build_runs_dataframe,
     summarize_pipeline,
 )
+from rsna2024_lumbar.best_config_runs.spinal_level import (
+    OUTPUT_PIPELINE_SUMMARY as SPINAL_PIPELINE_SUMMARY,
+    aggregate_level_means,
+    build_runs_dataframe as build_spinal_runs,
+    summarize_pipeline as summarize_spinal_pipeline,
+)
 from rsna2024_lumbar.best_config_runs.paths import DEFAULT_REPEATS, DEFAULT_SPLIT_SEEDS, RESULTS_DIR
-from rsna2024_lumbar.best_config_runs.results import PIPELINE_RESULTS_COLUMNS
+from rsna2024_lumbar.best_config_runs.results import (
+    PIPELINE_RESULTS_BASE_COLUMNS,
+    PIPELINE_RESULTS_COLUMNS,
+)
 from rsna2024_lumbar.preprocessing.constants import CONDITIONS
 
 LUMBAR_CONDITIONS: tuple[str, ...] = tuple(sorted(CONDITIONS.keys()))
@@ -100,7 +109,7 @@ def validate_pipeline_results_dataframe(
         report.error("empty", f"{source}: no rows")
         return report
 
-    missing_cols = [c for c in PIPELINE_RESULTS_COLUMNS if c not in df.columns]
+    missing_cols = [c for c in PIPELINE_RESULTS_BASE_COLUMNS if c not in df.columns]
     if missing_cols:
         report.error("columns", f"{source}: missing columns: {', '.join(missing_cols)}")
         return report
@@ -270,6 +279,16 @@ def validate_results_tree(
     else:
         report.warning("missing_condition_specific", f"Missing {cond_path.name}")
 
+    spinal_path = output_base / SPINAL_PIPELINE_SUMMARY
+    if spinal_path.is_file():
+        report.issues.extend(
+            _validate_spinal_level(
+                all_rows, spinal_path, atol=atol, output_base=output_base
+            ).issues
+        )
+    else:
+        report.warning("missing_spinal_level", f"Missing {spinal_path.name}")
+
     if check_audit_files:
         report.issues.extend(_validate_repeat_audit_files(output_base).issues)
 
@@ -382,6 +401,55 @@ def _validate_condition_specific(
                 path=str(summary_path),
             )
     del exp_idx
+    return report
+
+
+def _validate_spinal_level(
+    pipeline_df: pd.DataFrame,
+    summary_path: Path,
+    *,
+    atol: float,
+    output_base: Path | None = None,
+) -> ValidationReport:
+    report = ValidationReport()
+    file_df = pd.read_csv(summary_path)
+    if file_df.empty:
+        report.error("spinal_level_empty", f"Empty {summary_path.name}", path=str(summary_path))
+        return report
+    expected = summarize_spinal_pipeline(
+        aggregate_level_means(build_spinal_runs(pipeline_df, output_base=output_base))
+    )
+    if expected.empty:
+        return report
+    sample = expected[
+        (expected["metric"] == "oa") & (expected["split"] == "validation")
+    ]
+    file_idx = file_df.set_index(["architecture", "representation", "metric", "split"])
+    for _, row in sample.iterrows():
+        if not _is_finite_number(row.get("macro_level_mean")):
+            continue
+        key = (row["architecture"], row["representation"], row["metric"], row["split"])
+        if key not in file_idx.index:
+            report.error(
+                "spinal_level_missing_group",
+                f"pipeline summary missing {key}",
+                path=str(summary_path),
+            )
+            continue
+        got = file_idx.loc[key]
+        if abs(float(got["macro_level_mean"]) - float(row["macro_level_mean"])) > atol:
+            report.error(
+                "spinal_level_macro_drift",
+                f"{key}: file={got['macro_level_mean']} recomputed={row['macro_level_mean']}",
+                path=str(summary_path),
+            )
+        if str(got["best_level"]) != str(row["best_level"]) or str(got["worst_level"]) != str(row["worst_level"]):
+            report.error(
+                "spinal_level_best_worst",
+                f"{key}: best/worst file={got['best_level']}/{got['worst_level']} "
+                f"recomputed={row['best_level']}/{row['worst_level']}",
+                path=str(summary_path),
+            )
     return report
 
 

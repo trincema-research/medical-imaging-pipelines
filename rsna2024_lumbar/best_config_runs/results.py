@@ -8,8 +8,25 @@ from typing import Any
 import pandas as pd
 
 from rsna2024_lumbar.best_config_runs.severity_backfill import backfill_severity_on_series
+from rsna2024_lumbar.preprocessing.constants import LUMBAR_LEVELS
 
-PIPELINE_RESULTS_COLUMNS: tuple[str, ...] = (
+
+def spinal_level_metric_columns() -> tuple[str, ...]:
+    """Per-level columns logged in training_metrics.csv (classical + ordinal)."""
+    cols: list[str] = []
+    classical = ("accuracy", "f1_macro", "precision_macro", "recall_macro")
+    ordinal = ("oa", "omae", "qwk", "ser")
+    for split in ("train", "val", "test"):
+        for level in LUMBAR_LEVELS:
+            for metric in classical:
+                cols.append(f"{split}_{metric}_{level}")
+            sev = level.upper()
+            for metric in ordinal:
+                cols.append(f"{split}_{metric}_{sev}")
+    return tuple(cols)
+
+
+PIPELINE_RESULTS_BASE_COLUMNS: tuple[str, ...] = (
     "model_config",
     "model_label",
     "family",
@@ -63,6 +80,10 @@ PIPELINE_RESULTS_COLUMNS: tuple[str, ...] = (
     "test_ser_overall",
     "run_dir",
 )
+PIPELINE_RESULTS_SPINAL_COLUMNS: tuple[str, ...] = spinal_level_metric_columns()
+PIPELINE_RESULTS_COLUMNS: tuple[str, ...] = (
+    PIPELINE_RESULTS_BASE_COLUMNS + PIPELINE_RESULTS_SPINAL_COLUMNS
+)
 
 
 def _get(row: pd.Series, key: str) -> Any:
@@ -108,6 +129,8 @@ def row_from_training_metrics(
         out[f"{split}_omae_overall"] = _get(row, f"{split}_omae_overall")
         out[f"{split}_qwk_overall"] = _get(row, f"{split}_qwk_overall")
         out[f"{split}_ser_overall"] = _get(row, f"{split}_ser_overall")
+    for col in PIPELINE_RESULTS_SPINAL_COLUMNS:
+        out[col] = _get(row, col)
     out["run_dir"] = str(training_metrics_path.parent)
     return {k: out.get(k, "") for k in PIPELINE_RESULTS_COLUMNS}
 

@@ -263,6 +263,8 @@ rsna2024_lumbar/data/best_config_runs/results/retrain_pr/
 !rsna2024_lumbar/data/best_config_runs/results/article_summary_*.csv
 !rsna2024_lumbar/data/best_config_runs/results/condition_specific_*.csv
 !rsna2024_lumbar/data/best_config_runs/results/condition_specific_*.json
+!rsna2024_lumbar/data/best_config_runs/results/spinal_level_*.csv
+!rsna2024_lumbar/data/best_config_runs/results/spinal_level_*.json
 rsna2024_lumbar/data/ordinal_benchmark/**/*
 !rsna2024_lumbar/data/ordinal_benchmark/README.md
 rsna2024_lumbar/data/best_config_runs/results/**/*.pt

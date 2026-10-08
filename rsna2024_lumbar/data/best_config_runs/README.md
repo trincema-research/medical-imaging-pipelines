@@ -90,7 +90,7 @@ Use **`--num-gpus 4`** (or `0` for auto) on `run-all` to shard pending jobs acro
 
 ## Cloud (8 GPUs)
 
-There is no separate condition-specific trainer. Pack the usual best_config_runs zip, unpack on the VM, then train with **`--condition-specific-seeds`** (split seeds 42–46). After `run-all`, `condition_specific_*.csv` is written automatically.
+There is no separate condition-specific or spinal-level trainer. Pack the usual best_config_runs zip, unpack on the VM, then train with **`--condition-specific-seeds`** (split seeds 42–46). After `run-all`, `condition_specific_*.csv` and `spinal_level_*.csv` are written automatically.
 
 ### 1) Pack (local machine)
 
@@ -159,7 +159,7 @@ python -m rsna2024_lumbar.best_config_runs.deploy_cloud \
 
 `--early-stop-patience 0` runs all 50 epochs. Entry points: `rsna2024-best-config-runs-unpack`, `rsna2024-best-config-runs-deploy`. See `BEST_CONFIG_RUNS_CLOUD_RUN.txt` inside the zip.
 
-### 4) Rebuild condition-specific tables (no GPU)
+### 4) Rebuild summary tables (no GPU)
 
 After training, from the extracted repo root:
 
@@ -168,9 +168,11 @@ python -m rsna2024_lumbar.best_config_runs.harvest_results \
   --results-root rsna2024_lumbar/data/best_config_runs/results
 python -m rsna2024_lumbar.best_config_runs condition-specific \
   --output-base rsna2024_lumbar/data/best_config_runs/results
+python -m rsna2024_lumbar.best_config_runs spinal-level \
+  --output-base rsna2024_lumbar/data/best_config_runs/results
 ```
 
-`harvest_results` also writes the condition-specific CSVs when `pipeline_results` is present.
+`harvest_results` also writes the condition-specific and spinal-level CSVs when `pipeline_results` is present.
 
 ## Output layout (local disk)
 

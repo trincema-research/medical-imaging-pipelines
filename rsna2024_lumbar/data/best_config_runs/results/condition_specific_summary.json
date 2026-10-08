@@ -1,0 +1,39 @@
+{
+  "n_runs_expected": 200,
+  "n_runs_found": 200,
+  "architectures": [
+    "ConvNeXt",
+    "EfficientNet",
+    "MaxViT",
+    "ViT"
+  ],
+  "representations": [
+    "2.5D-to-3D",
+    "2D"
+  ],
+  "conditions": [
+    "SCS",
+    "LFN",
+    "RFN",
+    "LSS",
+    "RSS"
+  ],
+  "seeds": [
+    "142",
+    "242",
+    "342",
+    "42",
+    "442"
+  ],
+  "protocol_seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "incomplete_groups": [],
+  "oa_equals_accuracy": true,
+  "oa_equals_accuracy_checked_rows": 600,
+  "ranking_notes": "oa_overall validation: best condition-macro is ConvNeXt 2D (0.8592); best condition SCS, worst RSS. f1_macro_overall validation: best condition-macro is ConvNeXt 2D (0.6941); best condition LSS, worst LFN. qwk_overall validation: best condition-macro is ConvNeXt 2D (0.7360); best condition SCS, worst LFN."
+}

@@ -30,8 +30,11 @@ python -m rsna2024_lumbar.best_config_runs validate-results --output-base rsna20
 | `status` | Count finished repeats (resume / second GPU) |
 | `list-configs` | Print paths under `best_configs/` |
 | `nas-snapshot` / `nas-snapshot-all` | OA from NAS compact histories (no GPU) |
+| `article-summary` | Mean ± std article CSV tables |
+| `condition-specific` | Beyond-Accuracy condition-macro / best / worst / range / std |
+| `validate-results` | Check harvested CSVs and summary tables |
 
-Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-completed`, `--only`, `--num-gpus` (1=sequential, 0=auto 2/4/8, or 2/4/8 parallel workers), `--save-checkpoints` (default off), `--data-root`, `--crops-root`.
+Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-completed`, `--only`, `--num-gpus` (1=sequential, 0=auto 2/4/8, or 2/4/8 parallel workers), `--save-checkpoints` (default off), `--data-root`, `--crops-root`. `--condition-specific-seeds` uses split seeds 42–46.
 
 ## Module layout
 
@@ -43,6 +46,8 @@ Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-complete
 | `train.py` / `train_entry.py` | Subprocess `train_vit_lumbar.py` with `RSNA2024_BEST_CONFIG_RUNS_METRICS=1` |
 | `runner.py` | Repeats × conditions orchestration |
 | `results.py` | `pipeline_results.csv` schema |
+| `article_summary.py` | Per-condition mean ± std article tables |
+| `condition_specific.py` | Condition-macro / best / worst / range / std |
 | `nas_snapshot.py` | NAS-history OA only |
 | `harvest_results.py` | Rebuild summary CSVs from downloaded `repeat_*/training_metrics.csv` |
 | `pack_cloud.py` / `unpack_cloud.py` / `deploy_cloud.py` | Cloud zip (advanced) |
@@ -54,8 +59,8 @@ Copy **`lumbar_best_config_runs.py`** (repo root) next to `lumbar_best_config_ru
 
 ```bash
 python lumbar_best_config_runs.py unzip
-python lumbar_best_config_runs.py run --repeats 5
-# or: python lumbar_best_config_runs.py all --repeats 5
+python lumbar_best_config_runs.py run --repeats 5 --condition-specific-seeds
+# or: python lumbar_best_config_runs.py all --repeats 5 --condition-specific-seeds
 ```
 
 Pack the zip locally: `python -m rsna2024_lumbar.best_config_runs.pack_cloud` (see data README).

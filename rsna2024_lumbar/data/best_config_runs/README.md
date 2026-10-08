@@ -23,6 +23,12 @@ NAS tells you what worked in search; best_config_runs produces **auditable, comp
 | `pipeline_results_all_models.csv` | Combined retrain rows across layouts. |
 | `article_summary_by_condition.csv` | Per model × condition: **mean ± std** over repeats at **best val epoch** (`*_pm` columns). |
 | `article_summary_metrics_long.csv` | Same aggregates in long form (`metric`, `mean`, `std`, `mean_pm_std`). |
+| `condition_specific_runs.csv` | Long table: architecture × representation × condition × seed × split. |
+| `condition_specific_by_condition.csv` | Five-run mean ± std per condition (do not mix incomplete groups). |
+| `condition_specific_pipeline_summary.csv` | Condition-macro mean, best/worst, range, std. |
+| `condition_specific_paper_table.csv` | Paper-ready mean ± std for val/test headline metrics. |
+| `condition_specific_radar_*.csv` | Wide radar tables (SCS, LFN, RFN, LSS, RSS). |
+| `condition_specific_summary.json` | Run counts, incomplete groups, OA==accuracy, ranking notes. |
 | `*/pipeline_run_summary.json` | Repeat count, config path, harvest metadata. |
 
 Under each **`nas_best_*/<condition>/repeat_XX/`**, git tracks **`training_history.json`** and **`run_config.json`** only (audit / reproducibility). Other repeat artifacts (`training_metrics.csv`, confusion matrices, checkpoints) stay **local/gitignored**.
@@ -42,8 +48,11 @@ Article tables (after `pipeline_results.csv` exist):
 
 ```bash
 python -m rsna2024_lumbar.best_config_runs article-summary --output-base rsna2024_lumbar/data/best_config_runs/results
+python -m rsna2024_lumbar.best_config_runs condition-specific --output-base rsna2024_lumbar/data/best_config_runs/results
 python -m rsna2024_lumbar.best_config_runs validate-results --output-base rsna2024_lumbar/data/best_config_runs/results
 ```
+
+Condition-specific tables are post-hoc on `pipeline_results` (same pattern as article-summary). Train with `--condition-specific-seeds` (42–46) for the Beyond-Accuracy protocol; existing harvested repeats keep their recorded `split_seed`. Incomplete 5-run groups are flagged and are not treated as complete.
 
 Regenerate NAS OA snapshots:
 
@@ -79,8 +88,8 @@ On an 8-GPU VM, place **`lumbar_best_config_runs_cloud.zip`** and repo-root **`l
 
 ```bash
 python lumbar_best_config_runs.py unzip
-python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8 --skip-completed
-# one step: python lumbar_best_config_runs.py all --repeats 5 --num-gpus 8
+python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8 --condition-specific-seeds --skip-completed
+# one step: python lumbar_best_config_runs.py all --repeats 5 --num-gpus 8 --condition-specific-seeds
 ```
 
 Use `--early-stop-patience 0` for full 50 epochs without NAS-style early stop.

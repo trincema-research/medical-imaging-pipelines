@@ -9,7 +9,12 @@ from pathlib import Path
 
 from rsna2024_lumbar.nas.paths import BUNDLE_DIR, default_crops_root, default_data_root
 from rsna2024_lumbar.best_config_runs.cloud_common import read_manifest, repo_root_from_extracted
-from rsna2024_lumbar.best_config_runs.paths import DEFAULT_BEST_CONFIG_DIR, DEFAULT_REPEATS, RESULTS_DIR
+from rsna2024_lumbar.best_config_runs.paths import (
+    CONDITION_SPECIFIC_SPLIT_SEEDS,
+    DEFAULT_BEST_CONFIG_DIR,
+    DEFAULT_REPEATS,
+    RESULTS_DIR,
+)
 from rsna2024_lumbar.best_config_runs.unpack_cloud import unpack
 from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
 
@@ -54,6 +59,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=8,
         metavar="N",
         help="Shard run-all across GPUs: 1=sequential, 0=auto, or 2/4/8 (default: 8).",
+    )
+    p.add_argument("--seeds", type=int, nargs="+", default=None)
+    p.add_argument(
+        "--condition-specific-seeds",
+        action="store_true",
+        help=f"Use split seeds {' '.join(str(s) for s in CONDITION_SPECIFIC_SPLIT_SEEDS)}.",
     )
     return p.parse_args(argv)
 
@@ -138,6 +149,10 @@ def main(argv: list[str] | None = None) -> None:
         run_argv.extend(["--only", *args.only])
     if args.num_gpus != 1:
         run_argv.extend(["--num-gpus", str(args.num_gpus)])
+    if args.condition_specific_seeds:
+        run_argv.append("--condition-specific-seeds")
+    elif args.seeds:
+        run_argv.extend(["--seeds", *[str(s) for s in args.seeds]])
 
     print(f"+ {' '.join(run_argv)}")
     completed = subprocess.run(run_argv, cwd=repo_root, check=False)

@@ -75,6 +75,8 @@ def cmd_run(
     num_gpus: int,
     skip_completed: bool,
     skip_install: bool,
+    seeds: list[int] | None = None,
+    condition_specific_seeds: bool = False,
 ) -> None:
     repo_root = repo_root.resolve()
     if not (repo_root / "pyproject.toml").is_file():
@@ -106,6 +108,10 @@ def cmd_run(
         argv.append("--skip-completed")
     if num_gpus != 1:
         argv.extend(["--num-gpus", str(num_gpus)])
+    if condition_specific_seeds:
+        argv.append("--condition-specific-seeds")
+    elif seeds:
+        argv.extend(["--seeds", *[str(s) for s in seeds]])
 
     completed = subprocess.run(argv, cwd=repo_root, check=False)
     raise SystemExit(completed.returncode)
@@ -147,6 +153,12 @@ def main() -> None:
     r.add_argument("--skip-completed", action="store_true", default=True)
     r.add_argument("--no-skip-completed", action="store_false", dest="skip_completed")
     r.add_argument("--skip-install", action="store_true")
+    r.add_argument("--seeds", type=int, nargs="+", default=None)
+    r.add_argument(
+        "--condition-specific-seeds",
+        action="store_true",
+        help="Use split seeds 42 43 44 45 46 (Beyond-Accuracy condition-specific protocol).",
+    )
 
     a = sub.add_parser("all", help="unzip then run (same flags as run).")
     a.add_argument("--zip", type=Path, default=Path(DEFAULT_ZIP))
@@ -159,6 +171,12 @@ def main() -> None:
     a.add_argument("--skip-completed", action="store_true", default=True)
     a.add_argument("--no-skip-completed", action="store_false", dest="skip_completed")
     a.add_argument("--skip-install", action="store_true")
+    a.add_argument("--seeds", type=int, nargs="+", default=None)
+    a.add_argument(
+        "--condition-specific-seeds",
+        action="store_true",
+        help="Use split seeds 42 43 44 45 46 (Beyond-Accuracy condition-specific protocol).",
+    )
 
     args = p.parse_args()
     os.chdir(here)
@@ -177,6 +195,8 @@ def main() -> None:
             num_gpus=args.num_gpus,
             skip_completed=args.skip_completed,
             skip_install=args.skip_install,
+            seeds=args.seeds,
+            condition_specific_seeds=args.condition_specific_seeds,
         )
         return
 
@@ -191,6 +211,8 @@ def main() -> None:
             num_gpus=args.num_gpus,
             skip_completed=args.skip_completed,
             skip_install=args.skip_install,
+            seeds=args.seeds,
+            condition_specific_seeds=args.condition_specific_seeds,
         )
         return
 

@@ -10,7 +10,8 @@ Typical workflow (zip + this file in /workspace):
   # 2) Extract
   python lumbar_best_config_runs.py unzip
 
-  # 3) Train on 8 GPUs (condition-specific seeds 42-46). Do not run `all` after unzip.
+  # 3) Train on 8 GPUs (seeds 42-46). After run-all, harvest writes condition-specific
+  #    and spinal-level CSVs. Do not run `all` after unzip.
   python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8 --condition-specific-seeds
 
 Empty dest only (unzip + train):

@@ -43,7 +43,8 @@ Under each **`nas_best_*/<condition>/repeat_XX/`**, git tracks **`training_histo
 ### Metric columns
 
 - **Always (when retrain finished):** `train/val/test` `acc`, `accuracy_overall`, `f1_macro_overall`, `best_epoch`.
-- **Severity (OA, O-MAE, QWK, SER) + precision/recall:** logged **each epoch** when training is launched via `best_config_runs` (`--log-pipeline-metrics` on `train_vit_lumbar.py`). **`harvest_results`** reads those columns as-is; optional `--legacy-severity-backfill` only fills missing **OA** from accuracy and **val** O-MAE/QWK/SER from val confusion matrices (old cloud bundles without the hook).
+- **Severity (OA, O-MAE, QWK, SER) + precision/recall:** logged **each epoch** when training is launched via `best_config_runs` (`--log-pipeline-metrics` on `train_vit_lumbar.py`). **`harvest_results`** copies overall **and per-level** (L1/L2 ... L5/S1) columns into `pipeline_results.csv`; optional `--legacy-severity-backfill` only fills missing **OA** from accuracy and **val** O-MAE/QWK/SER from val confusion matrices (old cloud bundles without the hook).
+- **Spinal-level tables** (`spinal_level_*.csv`) are post-hoc on those per-level columns (same 200 runs as condition-specific). Harvest / `run-all` write them automatically.
 
 Rebuild summaries from a downloaded results tree (no full retrain):
 

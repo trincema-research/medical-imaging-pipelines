@@ -49,7 +49,7 @@ Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-complete
 | `results.py` | `pipeline_results.csv` schema |
 | `article_summary.py` | Per-condition mean ± std article tables |
 | `condition_specific.py` | Condition-macro / best / worst / range / std |
-| `spinal_level.py` | Per-level ACC/F1/OA/O-MAE/QWK/SER, macro-level mean / best / worst |
+| `spinal_level.py` | Per-level ACC/F1/OA/O-MAE/QWK/SER from harvested pipeline_results, then macro-level mean / best / worst |
 | `nas_snapshot.py` | NAS-history OA only |
 | `harvest_results.py` | Rebuild summary CSVs from downloaded `repeat_*/training_metrics.csv` |
 | `pack_cloud.py` / `unpack_cloud.py` / `deploy_cloud.py` | Cloud zip (advanced) |

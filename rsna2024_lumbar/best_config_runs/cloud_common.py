@@ -195,7 +195,7 @@ def cloud_run_text(
             f"  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud --repeats {repeats} --epochs {epochs}{patience_flag}{gpu_flag} --condition-specific-seeds --skip-completed",
             "",
             f"Crops in zip: {'yes' if include_crops else 'no — need rsna2024_lumbar/data/processed/centered/'}",
-            "Outputs: pipeline_results_all_models.csv + condition_specific_*.csv under results/",
+            "Outputs: pipeline_results_all_models.csv + condition_specific_*.csv + spinal_level_*.csv under results/",
             "Split seeds (condition-specific protocol): 42 43 44 45 46",
             "",
         ]

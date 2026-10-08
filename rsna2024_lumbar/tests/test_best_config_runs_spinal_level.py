@@ -14,7 +14,10 @@ from rsna2024_lumbar.best_config_runs.spinal_level import (
     summarize_pipeline,
     write_spinal_level_outputs,
 )
-from rsna2024_lumbar.best_config_runs.results import PIPELINE_RESULTS_COLUMNS
+from rsna2024_lumbar.best_config_runs.results import (
+    PIPELINE_RESULTS_COLUMNS,
+    PIPELINE_RESULTS_SPINAL_COLUMNS,
+)
 from rsna2024_lumbar.preprocessing.constants import LUMBAR_LEVELS
 
 
@@ -116,3 +119,9 @@ def test_oa_equals_accuracy_and_heatmap(tmp_path: Path):
     assert paths["paper_table"].is_file()
     assert (tmp_path / "spinal_level_radar_validation.csv").is_file()
     assert (tmp_path / "spinal_level_heatmap_macro_f1_validation.csv").is_file()
+
+
+def test_schema_includes_per_level_harvest_columns():
+    assert "val_accuracy_l1_l2" in PIPELINE_RESULTS_SPINAL_COLUMNS
+    assert "val_oa_L4_L5" in PIPELINE_RESULTS_SPINAL_COLUMNS
+    assert "test_ser_L5_S1" in PIPELINE_RESULTS_COLUMNS

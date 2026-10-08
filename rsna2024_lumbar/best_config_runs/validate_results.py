@@ -28,7 +28,10 @@ from rsna2024_lumbar.best_config_runs.spinal_level import (
     summarize_pipeline as summarize_spinal_pipeline,
 )
 from rsna2024_lumbar.best_config_runs.paths import DEFAULT_REPEATS, DEFAULT_SPLIT_SEEDS, RESULTS_DIR
-from rsna2024_lumbar.best_config_runs.results import PIPELINE_RESULTS_COLUMNS
+from rsna2024_lumbar.best_config_runs.results import (
+    PIPELINE_RESULTS_BASE_COLUMNS,
+    PIPELINE_RESULTS_COLUMNS,
+)
 from rsna2024_lumbar.preprocessing.constants import CONDITIONS
 
 LUMBAR_CONDITIONS: tuple[str, ...] = tuple(sorted(CONDITIONS.keys()))
@@ -106,7 +109,7 @@ def validate_pipeline_results_dataframe(
         report.error("empty", f"{source}: no rows")
         return report
 
-    missing_cols = [c for c in PIPELINE_RESULTS_COLUMNS if c not in df.columns]
+    missing_cols = [c for c in PIPELINE_RESULTS_BASE_COLUMNS if c not in df.columns]
     if missing_cols:
         report.error("columns", f"{source}: missing columns: {', '.join(missing_cols)}")
         return report
@@ -279,7 +282,9 @@ def validate_results_tree(
     spinal_path = output_base / SPINAL_PIPELINE_SUMMARY
     if spinal_path.is_file():
         report.issues.extend(
-            _validate_spinal_level(all_rows, spinal_path, atol=atol).issues
+            _validate_spinal_level(
+                all_rows, spinal_path, atol=atol, output_base=output_base
+            ).issues
         )
     else:
         report.warning("missing_spinal_level", f"Missing {spinal_path.name}")
@@ -404,6 +409,7 @@ def _validate_spinal_level(
     summary_path: Path,
     *,
     atol: float,
+    output_base: Path | None = None,
 ) -> ValidationReport:
     report = ValidationReport()
     file_df = pd.read_csv(summary_path)
@@ -411,7 +417,7 @@ def _validate_spinal_level(
         report.error("spinal_level_empty", f"Empty {summary_path.name}", path=str(summary_path))
         return report
     expected = summarize_spinal_pipeline(
-        aggregate_level_means(build_spinal_runs(pipeline_df))
+        aggregate_level_means(build_spinal_runs(pipeline_df, output_base=output_base))
     )
     if expected.empty:
         return report
@@ -420,6 +426,8 @@ def _validate_spinal_level(
     ]
     file_idx = file_df.set_index(["architecture", "representation", "metric", "split"])
     for _, row in sample.iterrows():
+        if not _is_finite_number(row.get("macro_level_mean")):
+            continue
         key = (row["architecture"], row["representation"], row["metric"], row["split"])
         if key not in file_idx.index:
             report.error(

@@ -55,17 +55,41 @@ Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-complete
 | `pack_cloud.py` / `unpack_cloud.py` / `deploy_cloud.py` | Cloud zip (advanced) |
 | `cloud_common.py` | Shared pack manifest helpers |
 
-## Cloud (simple)
+## Cloud (pack / unpack / 8 GPUs)
 
-Copy **`lumbar_best_config_runs.py`** (repo root) next to `lumbar_best_config_runs_cloud.zip`:
+Copy **`lumbar_best_config_runs.py`** next to `lumbar_best_config_runs_cloud.zip`. Full notes: [../data/best_config_runs/README.md](../data/best_config_runs/README.md#cloud-8-gpus).
+
+Pack:
+
+```bash
+python -m rsna2024_lumbar.best_config_runs.pack_cloud \
+  --output lumbar_best_config_runs_cloud.zip \
+  --repeats 5 --epochs 50 --early-stop-patience 5 --num-gpus 8 \
+  --skip-bundle
+```
+
+Unpack, then train on 8 GPUs (do not run `all` after a successful `unzip`):
 
 ```bash
 python lumbar_best_config_runs.py unzip
-python lumbar_best_config_runs.py run --repeats 5 --condition-specific-seeds
-# or: python lumbar_best_config_runs.py all --repeats 5 --condition-specific-seeds
+python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8 --condition-specific-seeds
 ```
 
-Pack the zip locally: `python -m rsna2024_lumbar.best_config_runs.pack_cloud` (see data README).
+One step (empty dest only):
+
+```bash
+python lumbar_best_config_runs.py all --repeats 5 --num-gpus 8 --condition-specific-seeds
+```
+
+Module unpack / deploy:
+
+```bash
+python -m rsna2024_lumbar.best_config_runs.unpack_cloud \
+  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud
+python -m rsna2024_lumbar.best_config_runs.deploy_cloud \
+  --repo-root ./perf_cloud --repeats 5 --num-gpus 8 \
+  --condition-specific-seeds --skip-completed
+```
 
 ## Metrics note
 

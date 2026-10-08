@@ -90,38 +90,87 @@ Use **`--num-gpus 4`** (or `0` for auto) on `run-all` to shard pending jobs acro
 
 ## Cloud (8 GPUs)
 
-### Simple (recommended)
+There is no separate condition-specific trainer. Pack the usual best_config_runs zip, unpack on the VM, then train with **`--condition-specific-seeds`** (split seeds 42–46). After `run-all`, `condition_specific_*.csv` is written automatically.
 
-On an 8-GPU VM, place **`lumbar_best_config_runs_cloud.zip`** and repo-root **`lumbar_best_config_runs.py`** in the same directory:
+### 1) Pack (local machine)
 
-```bash
-python lumbar_best_config_runs.py unzip
-python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8 --condition-specific-seeds --skip-completed
-# one step: python lumbar_best_config_runs.py all --repeats 5 --num-gpus 8 --condition-specific-seeds
-```
-
-Use `--early-stop-patience 0` for full 50 epochs without NAS-style early stop.
-
-### Advanced (pack / module deploy)
-
-Pack on a machine with labels, best configs, and PNG crops:
+Needs labels, NAS best configs, PNG crops, and the training bundle (`train_vit_lumbar.py`). Copy **`lumbar_best_config_runs.py`** next to the zip when you upload.
 
 ```bash
 python -m rsna2024_lumbar.best_config_runs.pack_cloud \
   --output lumbar_best_config_runs_cloud.zip \
   --repeats 5 --epochs 50 --early-stop-patience 5 --num-gpus 8 \
-  --skip-bundle \
-  --legacy-root /path/to/rsna-2024-lumbar-spine-degenerative-classification
+  --skip-bundle
 ```
 
-Unpack and train:
+`--skip-bundle` uses the bundle already in this repo. Drop it and pass `--legacy-root /path/to/rsna-2024-lumbar-spine-degenerative-classification` to restage `train_vit_lumbar.py`. `--no-include-crops` omits the PNG cache (you must supply crops on the VM).
+
+Same pack via entry point: `rsna2024-best-config-runs-pack`.
+
+### 2) Unpack (cloud VM)
+
+Put **`lumbar_best_config_runs_cloud.zip`** and **`lumbar_best_config_runs.py`** in the same folder (for example `/workspace`):
+
+```bash
+python lumbar_best_config_runs.py unzip
+# extracts to ./perf_cloud
+```
+
+If `./perf_cloud` already exists: use `run` (next step), or `unzip --force`, or `--dest ./other_dir`.
+
+Module unpack (same extract):
+
+```bash
+python -m rsna2024_lumbar.best_config_runs.unpack_cloud \
+  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud
+```
+
+### 3) Execute on 8 GPUs
+
+If you already unzipped:
+
+```bash
+python lumbar_best_config_runs.py run --repeats 5 --num-gpus 8 --condition-specific-seeds
+```
+
+`--skip-completed` is on by default (resume). One-shot unzip+train only when the dest is empty:
+
+```bash
+python lumbar_best_config_runs.py all --repeats 5 --num-gpus 8 --condition-specific-seeds
+```
+
+From the extracted repo root (`perf_cloud`, the folder with `pyproject.toml`):
 
 ```bash
 python -m rsna2024_lumbar.best_config_runs.deploy_cloud \
-  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud --repeats 5 --skip-completed
+  --repo-root . \
+  --repeats 5 --epochs 50 --early-stop-patience 5 \
+  --num-gpus 8 --condition-specific-seeds --skip-completed
 ```
 
-Entry points: `rsna2024-best-config-runs-pack`, `-unpack`, `-deploy` (legacy: `rsna2024-perf-pipeline-*`). See `BEST_CONFIG_RUNS_CLOUD_RUN.txt` inside the zip.
+Or unpack + train in one module call:
+
+```bash
+python -m rsna2024_lumbar.best_config_runs.deploy_cloud \
+  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud \
+  --repeats 5 --epochs 50 --early-stop-patience 5 \
+  --num-gpus 8 --condition-specific-seeds --skip-completed
+```
+
+`--early-stop-patience 0` runs all 50 epochs. Entry points: `rsna2024-best-config-runs-unpack`, `rsna2024-best-config-runs-deploy`. See `BEST_CONFIG_RUNS_CLOUD_RUN.txt` inside the zip.
+
+### 4) Rebuild condition-specific tables (no GPU)
+
+After training, from the extracted repo root:
+
+```bash
+python -m rsna2024_lumbar.best_config_runs.harvest_results \
+  --results-root rsna2024_lumbar/data/best_config_runs/results
+python -m rsna2024_lumbar.best_config_runs condition-specific \
+  --output-base rsna2024_lumbar/data/best_config_runs/results
+```
+
+`harvest_results` also writes the condition-specific CSVs when `pipeline_results` is present.
 
 ## Output layout (local disk)
 

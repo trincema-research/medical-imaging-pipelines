@@ -1,0 +1,58 @@
+{
+  "n_runs_expected": 200,
+  "n_runs_found": 200,
+  "architectures": [
+    "ConvNeXt",
+    "EfficientNet",
+    "MaxViT",
+    "ViT"
+  ],
+  "representations": [
+    "2.5D-to-3D",
+    "2D"
+  ],
+  "conditions": [
+    "SCS",
+    "LFN",
+    "RFN",
+    "LSS",
+    "RSS"
+  ],
+  "spinal_levels": [
+    "L1/L2",
+    "L2/L3",
+    "L3/L4",
+    "L4/L5",
+    "L5/S1"
+  ],
+  "incomplete_groups": [],
+  "oa_equals_accuracy": true,
+  "oa_equals_accuracy_checked_rows": 3000,
+  "missing_class_warnings": [
+    "ConvNeXt 2.5D-to-3D LFN validation L1/L2: class 2 has zero support",
+    "ConvNeXt 2.5D-to-3D LFN validation L2/L3: class 2 has zero support",
+    "ConvNeXt 2.5D-to-3D RFN validation L2/L3: class 2 has zero support",
+    "ConvNeXt 2D LFN validation L1/L2: class 2 has zero support",
+    "ConvNeXt 2D LFN validation L2/L3: class 2 has zero support",
+    "ConvNeXt 2D RFN validation L2/L3: class 2 has zero support",
+    "EfficientNet 2.5D-to-3D LFN validation L1/L2: class 2 has zero support",
+    "EfficientNet 2.5D-to-3D LFN validation L2/L3: class 2 has zero support",
+    "EfficientNet 2.5D-to-3D RFN validation L2/L3: class 2 has zero support",
+    "EfficientNet 2D LFN validation L1/L2: class 2 has zero support",
+    "EfficientNet 2D LFN validation L2/L3: class 2 has zero support",
+    "EfficientNet 2D RFN validation L2/L3: class 2 has zero support",
+    "MaxViT 2.5D-to-3D LFN validation L1/L2: class 2 has zero support",
+    "MaxViT 2.5D-to-3D LFN validation L2/L3: class 2 has zero support",
+    "MaxViT 2.5D-to-3D RFN validation L2/L3: class 2 has zero support",
+    "MaxViT 2D LFN validation L1/L2: class 2 has zero support",
+    "MaxViT 2D LFN validation L2/L3: class 2 has zero support",
+    "MaxViT 2D RFN validation L2/L3: class 2 has zero support",
+    "ViT 2.5D-to-3D LFN validation L1/L2: class 2 has zero support",
+    "ViT 2.5D-to-3D LFN validation L2/L3: class 2 has zero support",
+    "ViT 2.5D-to-3D RFN validation L2/L3: class 2 has zero support",
+    "ViT 2D LFN validation L1/L2: class 2 has zero support",
+    "ViT 2D LFN validation L2/L3: class 2 has zero support",
+    "ViT 2D RFN validation L2/L3: class 2 has zero support"
+  ],
+  "ranking_notes": "ConvNeXt 2.5D-to-3D validation Macro-F1: macro-level 0.2866, best L1/L2, worst L4/L5, range 0.0895. ConvNeXt 2D validation Macro-F1: macro-level 0.6163, best L4/L5, worst L1/L2, range 0.1813. EfficientNet 2.5D-to-3D validation Macro-F1: macro-level 0.3568, best L4/L5, worst L1/L2, range 0.0593. EfficientNet 2D validation Macro-F1: macro-level 0.5713, best L4/L5, worst L1/L2, range 0.2610. MaxViT 2.5D-to-3D validation Macro-F1: macro-level 0.5106, best L4/L5, worst L1/L2, range 0.1987. MaxViT 2D validation Macro-F1: macro-level 0.5622, best L4/L5, worst L1/L2, range 0.2574. ViT 2.5D-to-3D validation Macro-F1: macro-level 0.3445, best L4/L5, worst L5/S1, range 0.0868. ViT 2D validation Macro-F1: macro-level 0.5358, best L4/L5, worst L1/L2, range 0.1185."
+}

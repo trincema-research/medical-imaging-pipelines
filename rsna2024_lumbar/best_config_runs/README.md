@@ -32,6 +32,7 @@ python -m rsna2024_lumbar.best_config_runs validate-results --output-base rsna20
 | `nas-snapshot` / `nas-snapshot-all` | OA from NAS compact histories (no GPU) |
 | `article-summary` | Mean ± std article CSV tables |
 | `condition-specific` | Beyond-Accuracy condition-macro / best / worst / range / std |
+| `spinal-level` | Beyond-Accuracy spinal-level macro / best / worst / range / std |
 | `validate-results` | Check harvested CSVs and summary tables |
 
 Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-completed`, `--only`, `--num-gpus` (1=sequential, 0=auto 2/4/8, or 2/4/8 parallel workers), `--save-checkpoints` (default off), `--data-root`, `--crops-root`. `--condition-specific-seeds` uses split seeds 42–46.
@@ -48,6 +49,7 @@ Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-complete
 | `results.py` | `pipeline_results.csv` schema |
 | `article_summary.py` | Per-condition mean ± std article tables |
 | `condition_specific.py` | Condition-macro / best / worst / range / std |
+| `spinal_level.py` | Per-level ACC/F1/OA/O-MAE/QWK/SER, macro-level mean / best / worst |
 | `nas_snapshot.py` | NAS-history OA only |
 | `harvest_results.py` | Rebuild summary CSVs from downloaded `repeat_*/training_metrics.csv` |
 | `pack_cloud.py` / `unpack_cloud.py` / `deploy_cloud.py` | Cloud zip (advanced) |

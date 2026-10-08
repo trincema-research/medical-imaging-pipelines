@@ -29,6 +29,13 @@ NAS tells you what worked in search; best_config_runs produces **auditable, comp
 | `condition_specific_paper_table.csv` | Paper-ready mean ± std for val/test headline metrics. |
 | `condition_specific_radar_*.csv` | Wide radar tables (SCS, LFN, RFN, LSS, RSS). |
 | `condition_specific_summary.json` | Run counts, incomplete groups, OA==accuracy, ranking notes. |
+| `spinal_level_runs.csv` | One row per run × split × spinal level (L1/L2 ... L5/S1). |
+| `spinal_level_means.csv` | Five-run mean ± std per level. |
+| `spinal_level_condition_summary.csv` | Macro-level mean, best/worst level, range, std per condition. |
+| `spinal_level_pipeline_summary.csv` | Condition-macro spinal profile per architecture × representation. |
+| `spinal_level_paper_table.csv` | Paper-ready val/test spinal tables. |
+| `spinal_level_radar_*.csv` / `spinal_level_heatmap_*.csv` | Plot-ready wide tables. |
+| `spinal_level_summary.json` | Run counts, incomplete groups, class-support warnings. |
 | `*/pipeline_run_summary.json` | Repeat count, config path, harvest metadata. |
 
 Under each **`nas_best_*/<condition>/repeat_XX/`**, git tracks **`training_history.json`** and **`run_config.json`** only (audit / reproducibility). Other repeat artifacts (`training_metrics.csv`, confusion matrices, checkpoints) stay **local/gitignored**.
@@ -49,10 +56,11 @@ Article tables (after `pipeline_results.csv` exist):
 ```bash
 python -m rsna2024_lumbar.best_config_runs article-summary --output-base rsna2024_lumbar/data/best_config_runs/results
 python -m rsna2024_lumbar.best_config_runs condition-specific --output-base rsna2024_lumbar/data/best_config_runs/results
+python -m rsna2024_lumbar.best_config_runs spinal-level --output-base rsna2024_lumbar/data/best_config_runs/results
 python -m rsna2024_lumbar.best_config_runs validate-results --output-base rsna2024_lumbar/data/best_config_runs/results
 ```
 
-Condition-specific tables are post-hoc on `pipeline_results` (same pattern as article-summary). Train with `--condition-specific-seeds` (42–46) for the Beyond-Accuracy protocol; existing harvested repeats keep their recorded `split_seed`. Incomplete 5-run groups are flagged and are not treated as complete.
+Condition-specific and spinal-level tables are post-hoc on `pipeline_results` (same pattern as article-summary). Spinal-level analysis stratifies the same 200 runs by L1/L2 ... L5/S1; macro-level mean is the equal-weight mean of the five levels (not the pooled overall). Train with `--condition-specific-seeds` (42–46) for the Beyond-Accuracy protocol; existing harvested repeats keep their recorded `split_seed`. Incomplete 5-run groups are flagged and are not treated as complete.
 
 Regenerate NAS OA snapshots:
 

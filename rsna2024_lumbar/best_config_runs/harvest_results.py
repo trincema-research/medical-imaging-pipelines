@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from rsna2024_lumbar.best_config_runs.condition_specific import write_condition_specific_outputs
+from rsna2024_lumbar.best_config_runs.spinal_level import write_spinal_level_outputs
 from rsna2024_lumbar.best_config_runs.config import list_best_config_files, load_best_config
 from rsna2024_lumbar.best_config_runs.paths import DEFAULT_BEST_CONFIG_DIR, RESULTS_DIR
 from rsna2024_lumbar.best_config_runs.results import row_from_training_metrics, write_pipeline_results_csv
@@ -109,6 +110,11 @@ def harvest_tree(
             print(f"Condition-specific: {paths['pipeline_summary']}")
         except ValueError as exc:
             print(f"Skip condition-specific: {exc}")
+        try:
+            spinal_paths = write_spinal_level_outputs(output_base, print_summary=False)
+            print(f"Spinal-level: {spinal_paths['pipeline_summary']}")
+        except ValueError as exc:
+            print(f"Skip spinal-level: {exc}")
     return combined
 
 

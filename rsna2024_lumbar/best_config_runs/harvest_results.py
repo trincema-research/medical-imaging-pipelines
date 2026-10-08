@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from rsna2024_lumbar.best_config_runs.condition_specific import write_condition_specific_outputs
 from rsna2024_lumbar.best_config_runs.config import list_best_config_files, load_best_config
 from rsna2024_lumbar.best_config_runs.paths import DEFAULT_BEST_CONFIG_DIR, RESULTS_DIR
 from rsna2024_lumbar.best_config_runs.results import row_from_training_metrics, write_pipeline_results_csv
@@ -103,6 +104,11 @@ def harvest_tree(
         combined_path = output_base / "pipeline_results_all_models.csv"
         write_pipeline_results_csv(combined, combined_path)
         print(f"Combined: {len(combined)} rows -> {combined_path}")
+        try:
+            paths = write_condition_specific_outputs(output_base)
+            print(f"Condition-specific: {paths['pipeline_summary']}")
+        except ValueError as exc:
+            print(f"Skip condition-specific: {exc}")
     return combined
 
 

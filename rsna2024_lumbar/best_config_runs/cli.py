@@ -17,7 +17,9 @@ from rsna2024_lumbar.best_config_runs.nas_snapshot import (
     snapshot_all_best_configs,
     write_nas_snapshot_csv,
 )
+from rsna2024_lumbar.best_config_runs.condition_specific import write_condition_specific_outputs
 from rsna2024_lumbar.best_config_runs.paths import (
+    CONDITION_SPECIFIC_SPLIT_SEEDS,
     DEFAULT_BEST_CONFIG_DIR,
     DEFAULT_REPEATS,
     RESULTS_DIR,
@@ -97,6 +99,11 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     run.add_argument("--epochs", type=int, default=50)
     run.add_argument("--repeats", type=int, default=DEFAULT_REPEATS)
     run.add_argument("--seeds", type=int, nargs="+", default=None)
+    run.add_argument(
+        "--condition-specific-seeds",
+        action="store_true",
+        help=f"Use split seeds {' '.join(str(s) for s in CONDITION_SPECIFIC_SPLIT_SEEDS)} (Beyond-Accuracy protocol).",
+    )
     run.add_argument("--data-root", type=Path, default=None)
     run.add_argument("--crops-root", type=Path, default=None)
     run.add_argument("--output-base", type=Path, default=RESULTS_DIR)
@@ -135,6 +142,11 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Limit to config stems (e.g. nas_best_vit_2d nas_best_efficientnet_2d).",
     )
     run_all.add_argument("--seeds", type=int, nargs="+", default=None)
+    run_all.add_argument(
+        "--condition-specific-seeds",
+        action="store_true",
+        help=f"Use split seeds {' '.join(str(s) for s in CONDITION_SPECIFIC_SPLIT_SEEDS)} (Beyond-Accuracy protocol).",
+    )
     _add_run_training_flags(run_all)
 
     worker = sub.add_parser(
@@ -199,6 +211,12 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Decimal places in mean ± std strings (default: 4).",
     )
 
+    cond = sub.add_parser(
+        "condition-specific",
+        help="Beyond-Accuracy condition-macro / best / worst / range / std tables.",
+    )
+    cond.add_argument("--output-base", type=Path, default=RESULTS_DIR)
+
     validate = sub.add_parser(
         "validate-results",
         help="Check pipeline CSVs, article tables, and repeat audit JSON under output-base.",
@@ -221,6 +239,27 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
 
     return p.parse_args(argv)
+
+
+def _cli_seeds(args: argparse.Namespace) -> list[int] | None:
+    if args.seeds:
+        return list(args.seeds)
+    if getattr(args, "condition_specific_seeds", False):
+        return list(CONDITION_SPECIFIC_SPLIT_SEEDS)
+    return None
+
+
+def _write_condition_specific(output_base: Path) -> None:
+    try:
+        paths = write_condition_specific_outputs(output_base)
+    except ValueError as exc:
+        print(f"Skip condition-specific: {exc}")
+        return
+    print(f"Wrote {paths['runs']}")
+    print(f"Wrote {paths['by_condition']}")
+    print(f"Wrote {paths['pipeline_summary']}")
+    print(f"Wrote {paths['paper_table']}")
+    print(f"Wrote {paths['summary_json']}")
 
 
 def cmd_list_configs(args: argparse.Namespace) -> int:
@@ -260,7 +299,7 @@ def cmd_run(args: argparse.Namespace) -> int:
         jobs = list_pipeline_jobs(
             args.config_dir,
             repeats=args.repeats,
-            seeds=args.seeds,
+            seeds=_cli_seeds(args),
             only=[args.best_config.stem],
             output_base=args.output_base,
             epochs=args.epochs,
@@ -281,7 +320,7 @@ def cmd_run(args: argparse.Namespace) -> int:
             finalize_all_model_summaries(
                 args.config_dir,
                 repeats=args.repeats,
-                seeds=args.seeds,
+                seeds=_cli_seeds(args),
                 only=[args.best_config.stem],
                 epochs=args.epochs,
                 output_base=args.output_base,
@@ -293,7 +332,7 @@ def cmd_run(args: argparse.Namespace) -> int:
         crops_root=args.crops_root,
         epochs=args.epochs,
         repeats=args.repeats,
-        seeds=args.seeds,
+        seeds=_cli_seeds(args),
         condition=args.condition,
         output_base=args.output_base,
         max_studies=args.max_studies,
@@ -324,7 +363,7 @@ def cmd_run_all(args: argparse.Namespace) -> int:
         jobs = list_pipeline_jobs(
             args.config_dir,
             repeats=args.repeats,
-            seeds=args.seeds,
+            seeds=_cli_seeds(args),
             only=args.only,
             output_base=args.output_base,
             epochs=args.epochs,
@@ -343,7 +382,7 @@ def cmd_run_all(args: argparse.Namespace) -> int:
             finalize_all_model_summaries(
                 args.config_dir,
                 repeats=args.repeats,
-                seeds=args.seeds,
+                seeds=_cli_seeds(args),
                 only=args.only,
                 epochs=args.epochs,
                 output_base=args.output_base,
@@ -354,6 +393,7 @@ def cmd_run_all(args: argparse.Namespace) -> int:
                     out = args.output_base / "pipeline_results_all_models.csv"
                     write_pipeline_results_csv(combined, out)
                     print(f"Wrote combined {out} ({len(combined)} rows)")
+                _write_condition_specific(args.output_base)
             return 0
 
     rc = 0
@@ -364,7 +404,7 @@ def cmd_run_all(args: argparse.Namespace) -> int:
             crops_root=args.crops_root,
             epochs=args.epochs,
             repeats=args.repeats,
-            seeds=args.seeds,
+            seeds=_cli_seeds(args),
             output_base=args.output_base,
             max_studies=args.max_studies,
             dry_run=args.dry_run,
@@ -380,6 +420,7 @@ def cmd_run_all(args: argparse.Namespace) -> int:
             out = args.output_base / "pipeline_results_all_models.csv"
             write_pipeline_results_csv(combined, out)
             print(f"Wrote combined {out} ({len(combined)} rows)")
+        _write_condition_specific(args.output_base)
     return rc
 
 
@@ -432,6 +473,10 @@ def main(argv: list[str] | None = None) -> None:
         )
         print(f"Wrote {wide}")
         print(f"Wrote {long}")
+        _write_condition_specific(args.output_base)
+        raise SystemExit(0)
+    if args.command == "condition-specific":
+        _write_condition_specific(args.output_base)
         raise SystemExit(0)
     if args.command == "validate-results":
         report = validate_results_tree(

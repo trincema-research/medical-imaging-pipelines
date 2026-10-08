@@ -15,6 +15,12 @@ from rsna2024_lumbar.best_config_runs.article_summary import (
     GROUP_KEYS,
     aggregate_pipeline_results,
 )
+from rsna2024_lumbar.best_config_runs.condition_specific import (
+    OUTPUT_PIPELINE_SUMMARY,
+    aggregate_by_condition,
+    build_runs_dataframe,
+    summarize_pipeline,
+)
 from rsna2024_lumbar.best_config_runs.paths import DEFAULT_REPEATS, DEFAULT_SPLIT_SEEDS, RESULTS_DIR
 from rsna2024_lumbar.best_config_runs.results import PIPELINE_RESULTS_COLUMNS
 from rsna2024_lumbar.preprocessing.constants import CONDITIONS
@@ -256,6 +262,14 @@ def validate_results_tree(
     else:
         report.warning("missing_article", f"Missing {wide_path.name}")
 
+    cond_path = output_base / OUTPUT_PIPELINE_SUMMARY
+    if cond_path.is_file():
+        report.issues.extend(
+            _validate_condition_specific(all_rows, cond_path, atol=atol).issues
+        )
+    else:
+        report.warning("missing_condition_specific", f"Missing {cond_path.name}")
+
     if check_audit_files:
         report.issues.extend(_validate_repeat_audit_files(output_base).issues)
 
@@ -313,6 +327,61 @@ def _validate_article_summary(
     long_path = wide_path.parent / "article_summary_metrics_long.csv"
     if not long_path.is_file():
         report.warning("missing_article_long", f"Missing {long_path.name}")
+    return report
+
+
+def _validate_condition_specific(
+    pipeline_df: pd.DataFrame,
+    summary_path: Path,
+    *,
+    atol: float,
+) -> ValidationReport:
+    report = ValidationReport()
+    file_df = pd.read_csv(summary_path)
+    if file_df.empty:
+        report.error("condition_specific_empty", f"Empty {summary_path.name}", path=str(summary_path))
+        return report
+    expected = summarize_pipeline(aggregate_by_condition(build_runs_dataframe(pipeline_df)))
+    if expected.empty:
+        return report
+    key_cols = ["architecture", "representation", "metric", "split"]
+    file_idx = file_df.set_index(key_cols)
+    exp_idx = expected.set_index(key_cols)
+    sample = expected[
+        (expected["metric"] == "oa_overall") & (expected["split"] == "validation")
+    ]
+    for _, row in sample.iterrows():
+        key = (row["architecture"], row["representation"], row["metric"], row["split"])
+        if key not in file_idx.index:
+            report.error(
+                "condition_specific_missing_group",
+                f"pipeline summary missing {key}",
+                path=str(summary_path),
+            )
+            continue
+        got = file_idx.loc[key]
+        if abs(float(got["condition_macro_mean"]) - float(row["condition_macro_mean"])) > atol:
+            report.error(
+                "condition_specific_macro_drift",
+                f"{key}: file={got['condition_macro_mean']} recomputed={row['condition_macro_mean']}",
+                path=str(summary_path),
+            )
+        if str(got["best_condition"]) != str(row["best_condition"]) or str(got["worst_condition"]) != str(
+            row["worst_condition"]
+        ):
+            report.error(
+                "condition_specific_best_worst",
+                f"{key}: best/worst file={got['best_condition']}/{got['worst_condition']} "
+                f"recomputed={row['best_condition']}/{row['worst_condition']}",
+                path=str(summary_path),
+            )
+        if str(got.get("status", "")) == "complete" and int(row.get("n_conditions", 0)) < 5:
+            report.error(
+                "condition_specific_incomplete_as_complete",
+                f"{key}: marked complete with n_conditions={row.get('n_conditions')}",
+                path=str(summary_path),
+            )
+    del exp_idx
     return report
 
 

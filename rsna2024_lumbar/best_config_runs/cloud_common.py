@@ -172,10 +172,10 @@ def cloud_run_text(
     gpu_flag = f" --num-gpus {num_gpus}"
     return "\n".join(
         [
-            f"# Best-config runs — {num_gpus}-GPU parallel cloud retrain (checkpoints off by default)",
+            f"# Best-config runs - {num_gpus}-GPU parallel cloud retrain (checkpoints off by default)",
             "",
             "# Simple (zip + lumbar_best_config_runs.py in same folder):",
-            "python lumbar_best_config_runs.py all --repeats {repeats} --epochs {epochs}{patience}{gpus} --skip-completed".format(
+            "python lumbar_best_config_runs.py all --repeats {repeats} --epochs {epochs}{patience}{gpus} --condition-specific-seeds --skip-completed".format(
                 repeats=repeats,
                 epochs=epochs,
                 patience=patience_flag,
@@ -188,14 +188,15 @@ def cloud_run_text(
             "# 2) Install + train (from extracted repo root, directory with pyproject.toml):",
             "python -m rsna2024_lumbar.best_config_runs.deploy_cloud \\",
             f"  --repo-root . --repeats {repeats} --epochs {epochs}{patience_flag}{gpu_flag} \\",
-            "  --skip-completed",
+            "  --condition-specific-seeds --skip-completed",
             "",
             "# Or unpack + deploy in one step:",
             "python -m rsna2024_lumbar.best_config_runs.deploy_cloud \\",
-            f"  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud --repeats {repeats} --epochs {epochs}{patience_flag}{gpu_flag} --skip-completed",
+            f"  --zip lumbar_best_config_runs_cloud.zip --dest ./perf_cloud --repeats {repeats} --epochs {epochs}{patience_flag}{gpu_flag} --condition-specific-seeds --skip-completed",
             "",
             f"Crops in zip: {'yes' if include_crops else 'no — need rsna2024_lumbar/data/processed/centered/'}",
-            "Outputs: rsna2024_lumbar/data/best_config_runs/results/pipeline_results_all_models.csv",
+            "Outputs: pipeline_results_all_models.csv + condition_specific_*.csv under results/",
+            "Split seeds (condition-specific protocol): 42 43 44 45 46",
             "",
         ]
     )

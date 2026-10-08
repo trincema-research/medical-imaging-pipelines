@@ -1,0 +1,961 @@
+architecture,representation,condition,condition_name,split,metric,mean,std,mean_pm_std,n_runs,expected_runs,status
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,accuracy_overall,0.8782722370941315,0.0010682053653727943,0.8783 ± 0.0011,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,precision_macro_overall,0.2927574123647105,0.000356068455124282,0.2928 ± 0.0004,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,f1_macro_overall,0.3117304513448851,0.0002018707394772963,0.3117 ± 0.0002,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,oa_overall,0.8782722370941315,0.0010682053653727943,0.8783 ± 0.0011,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,omae_overall,0.16936491499637413,0.001974964036576891,0.1694 ± 0.0020,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,ser_overall,0.04763715209050562,0.0010408952270642342,0.0476 ± 0.0010,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,accuracy_overall,0.8730040750188671,0.004462223194495161,0.8730 ± 0.0045,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,precision_macro_overall,0.2910013583396224,0.0014874077314983955,0.2910 ± 0.0015,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,f1_macro_overall,0.3107306062830309,0.0008473589747418499,0.3107 ± 0.0008,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,oa_overall,0.8730040750188671,0.004462223194495161,0.8730 ± 0.0045,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,omae_overall,0.17696966381820903,0.003197495204136739,0.1770 ± 0.0032,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,ser_overall,0.04997373883707612,0.0025729605734520736,0.0500 ± 0.0026,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,accuracy_overall,0.8806473930950283,0.0075613775684815416,0.8806 ± 0.0076,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,precision_macro_overall,0.29354913103167607,0.002520459189493827,0.2935 ± 0.0025,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,f1_macro_overall,0.3121742050946209,0.0014311360755257711,0.3122 ± 0.0014,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,oa_overall,0.8806473930950283,0.0075613775684815416,0.8806 ± 0.0076,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,omae_overall,0.16653162881177375,0.011821745138860246,0.1665 ± 0.0118,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,ser_overall,0.04717902190680194,0.00461795699269976,0.0472 ± 0.0046,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,accuracy_overall,0.7804206105035122,0.0023537767979477904,0.7804 ± 0.0024,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,precision_macro_overall,0.26014020350117073,0.0007845922659826058,0.2601 ± 0.0008,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,f1_macro_overall,0.2922227879823922,0.0004951721866624042,0.2922 ± 0.0005,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,oa_overall,0.7804206105035122,0.0023537767979477904,0.7804 ± 0.0024,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,omae_overall,0.2598111559140091,0.0021643978673524487,0.2598 ± 0.0022,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,ser_overall,0.0402317664175213,0.0007228779187544955,0.0402 ± 0.0007,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,accuracy_overall,0.7726436097114062,0.004901928649407727,0.7726 ± 0.0049,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,precision_macro_overall,0.25754786990380213,0.0016339762164692588,0.2575 ± 0.0016,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,f1_macro_overall,0.2905782330099923,0.001043452699355803,0.2906 ± 0.0010,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,oa_overall,0.7726436097114062,0.004901928649407727,0.7726 ± 0.0049,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,omae_overall,0.2678419606046724,0.005041537870522753,0.2678 ± 0.0050,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,ser_overall,0.04048557031607876,0.0019471888114780357,0.0405 ± 0.0019,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,accuracy_overall,0.7720012870012869,0.008220812019228703,0.7720 ± 0.0082,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,precision_macro_overall,0.25733376233376226,0.0027402706730762253,0.2573 ± 0.0027,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,f1_macro_overall,0.29043774311065756,0.0017440657675032321,0.2904 ± 0.0017,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,oa_overall,0.7720012870012869,0.008220812019228703,0.7720 ± 0.0082,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,omae_overall,0.268189924618496,0.007783514071973228,0.2682 ± 0.0078,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,ser_overall,0.040191211619783,0.0014595864783141026,0.0402 ± 0.0015,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,accuracy_overall,0.7847439642670715,0.0019581710707925063,0.7847 ± 0.0020,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,precision_macro_overall,0.2615813214223571,0.0006527236902641607,0.2616 ± 0.0007,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,f1_macro_overall,0.29313000157426444,0.00040968691611162984,0.2931 ± 0.0004,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,oa_overall,0.7847439642670715,0.0019581710707925063,0.7847 ± 0.0020,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,omae_overall,0.2530434649053245,0.0019415232932191897,0.2530 ± 0.0019,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,ser_overall,0.03778742917239602,0.00041166530560102487,0.0378 ± 0.0004,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,accuracy_overall,0.7772325639371644,0.010369784231829075,0.7772 ± 0.0104,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,precision_macro_overall,0.2590775213123881,0.0034565947439430316,0.2591 ± 0.0035,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,f1_macro_overall,0.2915414196730258,0.002186387778095727,0.2915 ± 0.0022,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,oa_overall,0.7772325639371644,0.010369784231829075,0.7772 ± 0.0104,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,omae_overall,0.26217165106995616,0.011758802883668222,0.2622 ± 0.0118,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,ser_overall,0.03940421500712055,0.002759830095985016,0.0394 ± 0.0028,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,accuracy_overall,0.7725372311086597,0.008962756158112472,0.7725 ± 0.0090,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,precision_macro_overall,0.2575124103695532,0.0029875853860374976,0.2575 ± 0.0030,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,f1_macro_overall,0.29055029927579684,0.0018964344469069852,0.2906 ± 0.0019,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,oa_overall,0.7725372311086597,0.008962756158112472,0.7725 ± 0.0090,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,omae_overall,0.26819360176503027,0.010119643634544415,0.2682 ± 0.0101,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,ser_overall,0.04073083287368998,0.0014636612319230589,0.0407 ± 0.0015,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,accuracy_overall,0.7256986505660554,0.003538167699941474,0.7257 ± 0.0035,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,precision_macro_overall,0.2418995501886851,0.001179389233313831,0.2419 ± 0.0012,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,f1_macro_overall,0.28034840170539266,0.0007920299624677024,0.2803 ± 0.0008,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,oa_overall,0.7256986505660554,0.003538167699941474,0.7257 ± 0.0035,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,omae_overall,0.36499244658537827,0.0036141958596762978,0.3650 ± 0.0036,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,ser_overall,0.09069109715143361,0.0013387178021609808,0.0907 ± 0.0013,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,accuracy_overall,0.7225440376941694,0.00807770817083095,0.7225 ± 0.0081,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,precision_macro_overall,0.24084801256472313,0.002692569390276974,0.2408 ± 0.0027,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,f1_macro_overall,0.2796353796784502,0.0018212479937404025,0.2796 ± 0.0018,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,oa_overall,0.7225440376941694,0.00807770817083095,0.7225 ± 0.0081,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,omae_overall,0.3647577836594518,0.006768763350698055,0.3648 ± 0.0068,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,ser_overall,0.0873018213536211,0.004675826069252129,0.0873 ± 0.0047,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,accuracy_overall,0.7222554120101986,0.01588664821518307,0.7223 ± 0.0159,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,precision_macro_overall,0.2407518040033995,0.005295549405061019,0.2408 ± 0.0053,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,f1_macro_overall,0.2795508167629811,0.0035959465229943558,0.2796 ± 0.0036,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,oa_overall,0.7222554120101986,0.01588664821518307,0.7223 ± 0.0159,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,omae_overall,0.37158499662127037,0.020700781189267197,0.3716 ± 0.0207,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ConvNeXt,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,ser_overall,0.09384040863146895,0.005766004069559348,0.0938 ± 0.0058,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,accuracy_overall,0.7066784470615685,0.02225477161233348,0.7067 ± 0.0223,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,precision_macro_overall,0.2851146587768669,0.06214656455831155,0.2851 ± 0.0621,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,recall_macro_overall,0.37184709142039446,0.0553935042876566,0.3718 ± 0.0554,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,f1_macro_overall,0.32033849030048733,0.05612103311583739,0.3203 ± 0.0561,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,oa_overall,0.7066784470615685,0.02225477161233348,0.7067 ± 0.0223,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,omae_overall,0.3854007357326307,0.04676792055632564,0.3854 ± 0.0468,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,qwk_overall,0.11056575508920688,0.1519093682074318,0.1106 ± 0.1519,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,ser_overall,0.09207918279419905,0.032558654322372586,0.0921 ± 0.0326,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,accuracy_overall,0.7057315412189473,0.024930378702767986,0.7057 ± 0.0249,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,precision_macro_overall,0.28498249793522873,0.060686764736334484,0.2850 ± 0.0607,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,recall_macro_overall,0.3692736391666416,0.05316283052953463,0.3693 ± 0.0532,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,f1_macro_overall,0.31891419249513864,0.05353105893302508,0.3189 ± 0.0535,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,oa_overall,0.7057315412189473,0.024930378702767986,0.7057 ± 0.0249,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,omae_overall,0.3847483490605749,0.041593470425851306,0.3847 ± 0.0416,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,qwk_overall,0.11064250858684092,0.15211541800797912,0.1106 ± 0.1521,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,ser_overall,0.09047989027952216,0.03399764649930456,0.0905 ± 0.0340,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,accuracy_overall,0.703393710636404,0.021272445759874956,0.7034 ± 0.0213,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,precision_macro_overall,0.2848492983600397,0.06246422340346948,0.2848 ± 0.0625,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,recall_macro_overall,0.3724704810790896,0.05887601115723218,0.3725 ± 0.0589,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,f1_macro_overall,0.3202607034601512,0.0568582982252497,0.3203 ± 0.0569,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,oa_overall,0.703393710636404,0.021272445759874956,0.7034 ± 0.0213,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,omae_overall,0.38771592164472723,0.038854176234303775,0.3877 ± 0.0389,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,qwk_overall,0.11869852534494604,0.16340858769828231,0.1187 ± 0.1634,5,5,complete
+ConvNeXt,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,ser_overall,0.09110963228113124,0.03207781849399316,0.0911 ± 0.0321,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,train,accuracy_overall,0.9342764469532172,0.012045188440579125,0.9343 ± 0.0120,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,train,precision_macro_overall,0.776910693659433,0.07073444633466953,0.7769 ± 0.0707,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,train,recall_macro_overall,0.7426809954596683,0.04402822512878342,0.7427 ± 0.0440,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,train,f1_macro_overall,0.7510611215146845,0.06395761170507858,0.7511 ± 0.0640,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,train,oa_overall,0.9342764469532172,0.012045188440579125,0.9343 ± 0.0120,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,train,omae_overall,0.07026831876281173,0.015377241620344267,0.0703 ± 0.0154,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,train,qwk_overall,0.831173795745117,0.030489624056691384,0.8312 ± 0.0305,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,train,ser_overall,0.0045447657160289,0.0033610478066049784,0.0045 ± 0.0034,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,validation,accuracy_overall,0.9205852398651813,0.004127148759677145,0.9206 ± 0.0041,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,validation,precision_macro_overall,0.7264868527946999,0.018253449399015638,0.7265 ± 0.0183,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,validation,recall_macro_overall,0.6976596137121804,0.012946993010190979,0.6977 ± 0.0129,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,validation,f1_macro_overall,0.7031171819822356,0.014730886233310056,0.7031 ± 0.0147,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,validation,oa_overall,0.9205852398651813,0.004127148759677145,0.9206 ± 0.0041,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,validation,omae_overall,0.08547985500911971,0.005492030575972802,0.0855 ± 0.0055,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,validation,qwk_overall,0.7984006596193376,0.012997406715281538,0.7984 ± 0.0130,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,validation,ser_overall,0.00606509487430088,0.005435186309641883,0.0061 ± 0.0054,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,test,accuracy_overall,0.9229878779368278,0.011590753624333625,0.9230 ± 0.0116,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,test,precision_macro_overall,0.7239707226437828,0.057988366553405744,0.7240 ± 0.0580,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,test,recall_macro_overall,0.699063504176789,0.022922059184911595,0.6991 ± 0.0229,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,test,f1_macro_overall,0.7026792269864228,0.04840025834353025,0.7027 ± 0.0484,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,test,oa_overall,0.9229878779368278,0.011590753624333625,0.9230 ± 0.0116,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,test,omae_overall,0.08289342129091357,0.014476585386988747,0.0829 ± 0.0145,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,test,qwk_overall,0.795857536843465,0.016853376406099723,0.7959 ± 0.0169,5,5,complete
+ConvNeXt,2D,SCS,Spinal Canal Stenosis,test,ser_overall,0.0058812992277413,0.0032450613979818368,0.0059 ± 0.0032,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,train,accuracy_overall,0.8647089926859565,0.009293315743396462,0.8647 ± 0.0093,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,train,precision_macro_overall,0.7594779103919196,0.019476373012738933,0.7595 ± 0.0195,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,train,recall_macro_overall,0.6654290395516197,0.06663919299080594,0.6654 ± 0.0666,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,train,f1_macro_overall,0.6966821719159733,0.05015035918388944,0.6967 ± 0.0502,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,train,oa_overall,0.8647089926859565,0.009293315743396462,0.8647 ± 0.0093,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,train,omae_overall,0.13804240635984982,0.01047808436038542,0.1380 ± 0.0105,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,train,qwk_overall,0.7082144318086915,0.04805009296212277,0.7082 ± 0.0481,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,train,ser_overall,0.0027513990458062,0.0013542601635140375,0.0028 ± 0.0014,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,validation,accuracy_overall,0.846846541456711,0.008014627981919634,0.8468 ± 0.0080,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,validation,precision_macro_overall,0.7318834015470131,0.04679572638875772,0.7319 ± 0.0468,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,validation,recall_macro_overall,0.6169562036257787,0.04765592540944232,0.6170 ± 0.0477,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,validation,f1_macro_overall,0.6508281842864732,0.03245071546934511,0.6508 ± 0.0325,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,validation,oa_overall,0.846846541456711,0.008014627981919634,0.8468 ± 0.0080,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,validation,omae_overall,0.15721621621621615,0.009227227556122746,0.1572 ± 0.0092,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,validation,qwk_overall,0.6633743380132031,0.017668613097169942,0.6634 ± 0.0177,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,validation,ser_overall,0.0040627576729271,0.0015912069426796288,0.0041 ± 0.0016,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,test,accuracy_overall,0.8492572164000736,0.005532819414133704,0.8493 ± 0.0055,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,test,precision_macro_overall,0.7223319048995834,0.03663604899125262,0.7223 ± 0.0366,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,test,recall_macro_overall,0.6188212479041384,0.05715638725760487,0.6188 ± 0.0572,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,test,f1_macro_overall,0.6500821071347446,0.04781236857711239,0.6501 ± 0.0478,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,test,oa_overall,0.8492572164000736,0.005532819414133704,0.8493 ± 0.0055,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,test,omae_overall,0.1539924618496047,0.006767344958820873,0.1540 ± 0.0068,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,test,qwk_overall,0.6733443225436038,0.04377787786376274,0.6733 ± 0.0438,5,5,complete
+ConvNeXt,2D,LFN,Left Neural Foraminal Narrowing,test,ser_overall,0.0032496782496781998,0.0015485853347630447,0.0032 ± 0.0015,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,train,accuracy_overall,0.8757507787456366,0.005711033057553902,0.8758 ± 0.0057,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,train,precision_macro_overall,0.7813565740284902,0.029218123980936025,0.7814 ± 0.0292,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,train,recall_macro_overall,0.7036986029340578,0.05072930477263697,0.7037 ± 0.0507,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,train,f1_macro_overall,0.7319115589212097,0.025512517209413842,0.7319 ± 0.0255,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,train,oa_overall,0.8757507787456366,0.005711033057553902,0.8758 ± 0.0057,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,train,omae_overall,0.12730609829557965,0.005692832671961241,0.1273 ± 0.0057,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,train,qwk_overall,0.7273413734711819,0.030868854960756947,0.7273 ± 0.0309,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,train,ser_overall,0.00305687704121618,0.0007916641204107795,0.0031 ± 0.0008,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,validation,accuracy_overall,0.8556415467698761,0.007863327075290987,0.8556 ± 0.0079,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,validation,precision_macro_overall,0.7358429577456007,0.03436797592641739,0.7358 ± 0.0344,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,validation,recall_macro_overall,0.6655575377670794,0.04859472781197391,0.6656 ± 0.0486,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,validation,f1_macro_overall,0.6903965140229278,0.025339363025364766,0.6904 ± 0.0253,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,validation,oa_overall,0.8556415467698761,0.007863327075290987,0.8556 ± 0.0079,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,validation,omae_overall,0.1482833428378222,0.007516434425969352,0.1483 ± 0.0075,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,validation,qwk_overall,0.6904849406944933,0.025356301620978055,0.6905 ± 0.0254,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,validation,ser_overall,0.00392488960769828,0.0012948271014273916,0.0039 ± 0.0013,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,test,accuracy_overall,0.8468238646810077,0.007156833160797068,0.8468 ± 0.0072,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,test,precision_macro_overall,0.710187843270966,0.025809533124420986,0.7102 ± 0.0258,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,test,recall_macro_overall,0.6366776334032364,0.0483719146962737,0.6367 ± 0.0484,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,test,f1_macro_overall,0.6625106773803344,0.026507287926824035,0.6625 ± 0.0265,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,test,oa_overall,0.8468238646810077,0.007156833160797068,0.8468 ± 0.0072,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,test,omae_overall,0.1569645155359441,0.006094597742911689,0.1570 ± 0.0061,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,test,qwk_overall,0.6765552889958458,0.031094650135920544,0.6766 ± 0.0311,5,5,complete
+ConvNeXt,2D,RFN,Right Neural Foraminal Narrowing,test,ser_overall,0.0037883802169516,0.001315404895809252,0.0038 ± 0.0013,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,train,accuracy_overall,0.8668980808181947,0.021707050577840704,0.8669 ± 0.0217,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,train,precision_macro_overall,0.8067324631633663,0.03814194759050783,0.8067 ± 0.0381,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,train,recall_macro_overall,0.7430539719546874,0.051495635069055086,0.7431 ± 0.0515,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,train,f1_macro_overall,0.7697387964318327,0.04732850592070654,0.7697 ± 0.0473,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,train,oa_overall,0.8668980808181947,0.021707050577840704,0.8669 ± 0.0217,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,train,omae_overall,0.13717708147128915,0.023570139807605944,0.1372 ± 0.0236,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,train,qwk_overall,0.8120178343243826,0.03810126452959911,0.8120 ± 0.0381,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,train,ser_overall,0.0040751622894839605,0.002101296931547512,0.0041 ± 0.0021,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,validation,accuracy_overall,0.8440964941149314,0.00970650192074981,0.8441 ± 0.0097,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,validation,precision_macro_overall,0.7624108544682551,0.01955852401884365,0.7624 ± 0.0196,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,validation,recall_macro_overall,0.7076004495994546,0.02660050368401047,0.7076 ± 0.0266,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,validation,f1_macro_overall,0.7296749457301513,0.0191407054364985,0.7297 ± 0.0191,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,validation,oa_overall,0.8440964941149314,0.00970650192074981,0.8441 ± 0.0097,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,validation,omae_overall,0.16091018637331192,0.011113345403283546,0.1609 ± 0.0111,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,validation,qwk_overall,0.7751940849899371,0.01681919613140578,0.7752 ± 0.0168,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,validation,ser_overall,0.0050066804882432205,0.002605735528251595,0.0050 ± 0.0026,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,test,accuracy_overall,0.8390425753369428,0.01039998550991618,0.8390 ± 0.0104,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,test,precision_macro_overall,0.7578627426977712,0.013448632250958627,0.7579 ± 0.0134,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,test,recall_macro_overall,0.7007136423678934,0.009411492642698756,0.7007 ± 0.0094,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,test,f1_macro_overall,0.7240287220291047,0.00939106025391061,0.7240 ± 0.0094,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,test,oa_overall,0.8390425753369428,0.01039998550991618,0.8390 ± 0.0104,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,test,omae_overall,0.16601028764866405,0.009288858499990175,0.1660 ± 0.0093,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,test,qwk_overall,0.775005314084402,0.011452795201339072,0.7750 ± 0.0115,5,5,complete
+ConvNeXt,2D,LSS,Left Subarticular Stenosis,test,ser_overall,0.00505286298560682,0.002265932837071256,0.0051 ± 0.0023,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,train,accuracy_overall,0.8357278211499928,0.007852206634278977,0.8357 ± 0.0079,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,train,precision_macro_overall,0.7489489940980767,0.015462151522275263,0.7489 ± 0.0155,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,train,recall_macro_overall,0.6794667896112159,0.03669405125332301,0.6795 ± 0.0367,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,train,f1_macro_overall,0.7049735155467336,0.01789925876005559,0.7050 ± 0.0179,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,train,oa_overall,0.8357278211499928,0.007852206634278977,0.8357 ± 0.0079,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,train,omae_overall,0.17068667462936585,0.009149237418275951,0.1707 ± 0.0091,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,train,qwk_overall,0.7637869182187356,0.02591993494123941,0.7638 ± 0.0259,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,train,ser_overall,0.00641449577935866,0.0018994191051719877,0.0064 ± 0.0019,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,validation,accuracy_overall,0.8287668693322491,0.0053296870624173626,0.8288 ± 0.0053,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,validation,precision_macro_overall,0.7359465948620925,0.026683275833830948,0.7359 ± 0.0267,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,validation,recall_macro_overall,0.6754482379453178,0.03749797450656905,0.6754 ± 0.0375,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,validation,f1_macro_overall,0.6967271030149333,0.02132413813704398,0.6967 ± 0.0213,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,validation,oa_overall,0.8287668693322491,0.0053296870624173626,0.8288 ± 0.0053,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,validation,omae_overall,0.17793149525313828,0.0025892852638555873,0.1779 ± 0.0026,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,validation,qwk_overall,0.75260709845366,0.014957158580228641,0.7526 ± 0.0150,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,validation,ser_overall,0.00669836458538748,0.0034616390018549193,0.0067 ± 0.0035,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,test,accuracy_overall,0.8204112153694421,0.006780066483114396,0.8204 ± 0.0068,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,test,precision_macro_overall,0.7246433011754261,0.02661670459047043,0.7246 ± 0.0266,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,test,recall_macro_overall,0.6645143841214125,0.03547484093497417,0.6645 ± 0.0355,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,test,f1_macro_overall,0.6869778379673558,0.02371050256574917,0.6870 ± 0.0237,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,test,oa_overall,0.8204112153694421,0.006780066483114396,0.8204 ± 0.0068,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,test,omae_overall,0.18761087261152215,0.0073998529889049485,0.1876 ± 0.0074,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,test,qwk_overall,0.7414031409983788,0.020720069677681936,0.7414 ± 0.0207,5,5,complete
+ConvNeXt,2D,RSS,Right Subarticular Stenosis,test,ser_overall,0.00802208798096428,0.0019233968448356211,0.0080 ± 0.0019,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,accuracy_overall,0.8782722370941315,0.0010682053653727943,0.8783 ± 0.0011,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,precision_macro_overall,0.2927574123647105,0.000356068455124282,0.2928 ± 0.0004,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,f1_macro_overall,0.3117304513448851,0.0002018707394772963,0.3117 ± 0.0002,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,oa_overall,0.8782722370941315,0.0010682053653727943,0.8783 ± 0.0011,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,omae_overall,0.16936491499637413,0.001974964036576891,0.1694 ± 0.0020,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,ser_overall,0.04763715209050562,0.0010408952270642342,0.0476 ± 0.0010,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,accuracy_overall,0.8730040750188671,0.004462223194495161,0.8730 ± 0.0045,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,precision_macro_overall,0.2910013583396224,0.0014874077314983955,0.2910 ± 0.0015,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,f1_macro_overall,0.3107306062830309,0.0008473589747418499,0.3107 ± 0.0008,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,oa_overall,0.8730040750188671,0.004462223194495161,0.8730 ± 0.0045,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,omae_overall,0.17696966381820903,0.003197495204136739,0.1770 ± 0.0032,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,ser_overall,0.04997373883707612,0.0025729605734520736,0.0500 ± 0.0026,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,accuracy_overall,0.8806473930950283,0.0075613775684815416,0.8806 ± 0.0076,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,precision_macro_overall,0.29354913103167607,0.002520459189493827,0.2935 ± 0.0025,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,f1_macro_overall,0.3121742050946209,0.0014311360755257711,0.3122 ± 0.0014,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,oa_overall,0.8806473930950283,0.0075613775684815416,0.8806 ± 0.0076,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,omae_overall,0.16653162881177375,0.011821745138860246,0.1665 ± 0.0118,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,ser_overall,0.04717902190680194,0.00461795699269976,0.0472 ± 0.0046,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,accuracy_overall,0.7913983097105508,0.026596656110232045,0.7914 ± 0.0266,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,precision_macro_overall,0.3874262418941782,0.17720126163605432,0.3874 ± 0.1772,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,recall_macro_overall,0.3767922415139884,0.09545298198302234,0.3768 ± 0.0955,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,f1_macro_overall,0.35246665318761405,0.13008028769584215,0.3525 ± 0.1301,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,oa_overall,0.7913983097105508,0.026596656110232045,0.7914 ± 0.0266,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,omae_overall,0.24150541242507612,0.042196310186274795,0.2415 ± 0.0422,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,qwk_overall,0.12616864089436064,0.2710039951556247,0.1262 ± 0.2710,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,ser_overall,0.03290372213562699,0.015672212153060517,0.0329 ± 0.0157,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,accuracy_overall,0.7836271186440678,0.020243285881268613,0.7836 ± 0.0202,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,precision_macro_overall,0.4047916328218847,0.15687985211558864,0.4048 ± 0.1569,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,recall_macro_overall,0.36349468025499465,0.06292173341008477,0.3635 ± 0.0629,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,f1_macro_overall,0.3366361103422263,0.09047919168996688,0.3366 ± 0.0905,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,oa_overall,0.7836271186440678,0.020243285881268613,0.7836 ± 0.0202,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,omae_overall,0.25007924874026566,0.03485668459256346,0.2501 ± 0.0349,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,qwk_overall,0.11135002746616596,0.2369634836661293,0.1114 ± 0.2370,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,ser_overall,0.03370636738433344,0.01479573763901367,0.0337 ± 0.0148,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,accuracy_overall,0.7830796102224673,0.026191838306169647,0.7831 ± 0.0262,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,precision_macro_overall,0.3748986171407837,0.16918026494902716,0.3749 ± 0.1692,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,recall_macro_overall,0.36883409535701317,0.07821952872004513,0.3688 ± 0.0782,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,f1_macro_overall,0.3426696048917364,0.11172839618490642,0.3427 ± 0.1117,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,oa_overall,0.7830796102224673,0.026191838306169647,0.7831 ± 0.0262,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,omae_overall,0.250489979775694,0.040251351644483076,0.2505 ± 0.0403,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,qwk_overall,0.11377630578205153,0.24992996163917722,0.1138 ± 0.2499,5,5,complete
+EfficientNet,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,ser_overall,0.033569589998161384,0.014674763321467851,0.0336 ± 0.0147,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,accuracy_overall,0.7847439642670715,0.0019581710707925063,0.7847 ± 0.0020,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,precision_macro_overall,0.2615813214223571,0.0006527236902641607,0.2616 ± 0.0007,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,f1_macro_overall,0.29313000157426444,0.00040968691611162984,0.2931 ± 0.0004,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,oa_overall,0.7847439642670715,0.0019581710707925063,0.7847 ± 0.0020,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,omae_overall,0.2530434649053245,0.0019415232932191897,0.2530 ± 0.0019,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,ser_overall,0.03778742917239602,0.00041166530560102487,0.0378 ± 0.0004,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,accuracy_overall,0.7772325639371644,0.010369784231829075,0.7772 ± 0.0104,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,precision_macro_overall,0.2590775213123881,0.0034565947439430316,0.2591 ± 0.0035,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,f1_macro_overall,0.2915414196730258,0.002186387778095727,0.2915 ± 0.0022,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,oa_overall,0.7772325639371644,0.010369784231829075,0.7772 ± 0.0104,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,omae_overall,0.26217165106995616,0.011758802883668222,0.2622 ± 0.0118,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,ser_overall,0.03940421500712055,0.002759830095985016,0.0394 ± 0.0028,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,accuracy_overall,0.7725372311086597,0.008962756158112472,0.7725 ± 0.0090,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,precision_macro_overall,0.2575124103695532,0.0029875853860374976,0.2575 ± 0.0030,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,f1_macro_overall,0.29055029927579684,0.0018964344469069852,0.2906 ± 0.0019,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,oa_overall,0.7725372311086597,0.008962756158112472,0.7725 ± 0.0090,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,omae_overall,0.26819360176503027,0.010119643634544415,0.2682 ± 0.0101,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+EfficientNet,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,ser_overall,0.04073083287368998,0.0014636612319230589,0.0407 ± 0.0015,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,accuracy_overall,0.7482304811620547,0.019936207264481372,0.7482 ± 0.0199,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,precision_macro_overall,0.4828366637327635,0.16859993503173082,0.4828 ± 0.1686,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,recall_macro_overall,0.42488012257779195,0.07414020788178853,0.4249 ± 0.0741,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,f1_macro_overall,0.4217832469634958,0.10830953973633381,0.4218 ± 0.1083,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,oa_overall,0.7482304811620547,0.019936207264481372,0.7482 ± 0.0199,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,omae_overall,0.31140347923730555,0.04096062282895648,0.3114 ± 0.0410,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,qwk_overall,0.299961559815315,0.2229602762094907,0.3000 ± 0.2230,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,ser_overall,0.059633960399360184,0.02147833413804727,0.0596 ± 0.0215,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,accuracy_overall,0.7488579068315679,0.021597583840321333,0.7489 ± 0.0216,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,precision_macro_overall,0.4854725612119532,0.1658883738186327,0.4855 ± 0.1659,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,recall_macro_overall,0.4372813764515609,0.07998011040407191,0.4373 ± 0.0800,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,f1_macro_overall,0.43410217151636754,0.11088333174362142,0.4341 ± 0.1109,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,oa_overall,0.7488579068315679,0.021597583840321333,0.7489 ± 0.0216,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,omae_overall,0.3061054338306313,0.040049002540156774,0.3061 ± 0.0400,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,qwk_overall,0.32532623531762334,0.22464746725166929,0.3253 ± 0.2246,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,ser_overall,0.05496334066219925,0.02010553036336004,0.0550 ± 0.0201,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,accuracy_overall,0.7456978982451378,0.02502826999548435,0.7457 ± 0.0250,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,precision_macro_overall,0.48658773325040156,0.18131144372485422,0.4866 ± 0.1813,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,recall_macro_overall,0.43295276930732307,0.08606532210731911,0.4330 ± 0.0861,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,f1_macro_overall,0.43012020164938336,0.11734394177442542,0.4301 ± 0.1173,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,oa_overall,0.7456978982451378,0.02502826999548435,0.7457 ± 0.0250,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,omae_overall,0.31555627621519144,0.044105738940018166,0.3156 ± 0.0441,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,qwk_overall,0.3056634137164267,0.22268996037530303,0.3057 ± 0.2227,5,5,complete
+EfficientNet,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,ser_overall,0.06125417446032912,0.020581359810279667,0.0613 ± 0.0206,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,accuracy_overall,0.7973072686238607,0.006917033136261829,0.7973 ± 0.0069,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,precision_macro_overall,0.6741674285263127,0.029414937698748717,0.6742 ± 0.0294,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,recall_macro_overall,0.6017325147911152,0.050188366786146285,0.6017 ± 0.0502,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,f1_macro_overall,0.6171604736671841,0.03291269931743795,0.6172 ± 0.0329,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,oa_overall,0.7973072686238607,0.006917033136261829,0.7973 ± 0.0069,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,omae_overall,0.21926612595174905,0.006519208190064698,0.2193 ± 0.0065,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,qwk_overall,0.6710071505466496,0.0335743427232403,0.6710 ± 0.0336,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,ser_overall,0.01657339457560974,0.003171804723244696,0.0166 ± 0.0032,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,accuracy_overall,0.7954872526591835,0.008289024464202722,0.7955 ± 0.0083,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,precision_macro_overall,0.6826626671497285,0.04522958320323268,0.6827 ± 0.0452,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,recall_macro_overall,0.6155096714673507,0.04527643261793195,0.6155 ± 0.0453,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,f1_macro_overall,0.6287983586666435,0.023439396382885294,0.6288 ± 0.0234,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,oa_overall,0.7954872526591835,0.008289024464202722,0.7955 ± 0.0083,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,omae_overall,0.22331903936540876,0.009632252438782936,0.2233 ± 0.0096,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,qwk_overall,0.6614562807259016,0.036781021963885316,0.6615 ± 0.0368,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,ser_overall,0.01880629202459224,0.003244314703221997,0.0188 ± 0.0032,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,accuracy_overall,0.7842903850928946,0.0075112267591516775,0.7843 ± 0.0075,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,precision_macro_overall,0.65772409035003,0.039568471863631195,0.6577 ± 0.0396,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,recall_macro_overall,0.5920552820348485,0.05293867014713814,0.5921 ± 0.0529,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,f1_macro_overall,0.600590302263457,0.03315266144518479,0.6006 ± 0.0332,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,oa_overall,0.7842903850928946,0.0075112267591516775,0.7843 ± 0.0075,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,omae_overall,0.23335468931001263,0.012163632254557107,0.2334 ± 0.0122,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,qwk_overall,0.6579209696961392,0.03631470315050568,0.6579 ± 0.0363,5,5,complete
+EfficientNet,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,ser_overall,0.01764507440290724,0.00737214523947831,0.0176 ± 0.0074,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,train,accuracy_overall,0.9299718150136499,0.010533060078041756,0.9300 ± 0.0105,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,train,precision_macro_overall,0.7553964943858616,0.05735285617467083,0.7554 ± 0.0574,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,train,recall_macro_overall,0.7122477981372748,0.04472738497947766,0.7122 ± 0.0447,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,train,f1_macro_overall,0.7248747482094411,0.04465900624909352,0.7249 ± 0.0447,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,train,oa_overall,0.9299718150136499,0.010533060078041756,0.9300 ± 0.0105,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,train,omae_overall,0.07595666729281086,0.012574208155523205,0.0760 ± 0.0126,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,train,qwk_overall,0.8126011965376918,0.03429827318021363,0.8126 ± 0.0343,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,train,ser_overall,0.0059284823064608,0.0021498448987716926,0.0059 ± 0.0021,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,validation,accuracy_overall,0.9110768953435857,0.014726993326629544,0.9111 ± 0.0147,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,validation,precision_macro_overall,0.6881819459025289,0.052171468481918136,0.6882 ± 0.0522,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,validation,recall_macro_overall,0.6528245393469445,0.027843605609562797,0.6528 ± 0.0278,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,validation,f1_macro_overall,0.6636129209130129,0.03298765515041167,0.6636 ± 0.0330,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,validation,oa_overall,0.9110768953435857,0.014726993326629544,0.9111 ± 0.0147,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,validation,omae_overall,0.09706445494835463,0.014495965948125451,0.0971 ± 0.0145,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,validation,qwk_overall,0.7660330428955356,0.025107343571598197,0.7660 ± 0.0251,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,validation,ser_overall,0.0081413502919404,0.0012912004711152095,0.0081 ± 0.0013,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,test,accuracy_overall,0.9205212955522141,0.009368298898435662,0.9205 ± 0.0094,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,test,precision_macro_overall,0.7027062634064518,0.05460591511122468,0.7027 ± 0.0546,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,test,recall_macro_overall,0.6674726199856916,0.05097129351225694,0.6675 ± 0.0510,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,test,f1_macro_overall,0.6771756862663412,0.049975625500310254,0.6772 ± 0.0500,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,test,oa_overall,0.9205212955522141,0.009368298898435662,0.9205 ± 0.0094,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,test,omae_overall,0.0876221546242921,0.01380559157379667,0.0876 ± 0.0138,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,test,qwk_overall,0.7753480673495842,0.04014224200062742,0.7753 ± 0.0401,5,5,complete
+EfficientNet,2D,SCS,Spinal Canal Stenosis,test,ser_overall,0.008143450176506039,0.004606193207598959,0.0081 ± 0.0046,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,train,accuracy_overall,0.8712793448110379,0.027093463702160474,0.8713 ± 0.0271,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,train,precision_macro_overall,0.7306861554166418,0.07218305492180448,0.7307 ± 0.0722,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,train,recall_macro_overall,0.7659994147783041,0.05441309661825673,0.7660 ± 0.0544,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,train,f1_macro_overall,0.7408146809041176,0.06945777818165957,0.7408 ± 0.0695,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,train,oa_overall,0.8712793448110379,0.027093463702160474,0.8713 ± 0.0271,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,train,omae_overall,0.13286291769668496,0.02977356273514671,0.1329 ± 0.0298,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,train,qwk_overall,0.7572313715124226,0.049115414854282086,0.7572 ± 0.0491,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,train,ser_overall,0.004142262507722859,0.002861614314733357,0.0041 ± 0.0029,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,validation,accuracy_overall,0.834249656436097,0.00788546172107389,0.8342 ± 0.0079,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,validation,precision_macro_overall,0.6669273230972743,0.02887903661969305,0.6669 ± 0.0289,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,validation,recall_macro_overall,0.6748843850146827,0.01920320765703572,0.6749 ± 0.0192,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,validation,f1_macro_overall,0.6652146185107954,0.021907466431241047,0.6652 ± 0.0219,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,validation,oa_overall,0.834249656436097,0.00788546172107389,0.8342 ± 0.0079,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,validation,omae_overall,0.17089738891433806,0.008490871285877371,0.1709 ± 0.0085,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,validation,qwk_overall,0.6792441984740731,0.009368533504011105,0.6792 ± 0.0094,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,validation,ser_overall,0.00514704535043516,0.001563599881659484,0.0051 ± 0.0016,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,test,accuracy_overall,0.8266666666666665,0.007521645846310396,0.8267 ± 0.0075,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,test,precision_macro_overall,0.6518446101216645,0.033471477585153155,0.6518 ± 0.0335,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,test,recall_macro_overall,0.6643373722345773,0.02512884140293046,0.6643 ± 0.0251,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,test,f1_macro_overall,0.6513720051424937,0.0286672354754455,0.6514 ± 0.0287,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,test,oa_overall,0.8266666666666665,0.007521645846310396,0.8267 ± 0.0075,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,test,omae_overall,0.17914782129067838,0.008986542663371195,0.1791 ± 0.0090,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,test,qwk_overall,0.6654696836451474,0.010602430828132494,0.6655 ± 0.0106,5,5,complete
+EfficientNet,2D,LFN,Left Neural Foraminal Narrowing,test,ser_overall,0.005814487957345059,0.003076926657168462,0.0058 ± 0.0031,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,train,accuracy_overall,0.8897068872347862,0.03231706554719945,0.8897 ± 0.0323,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,train,precision_macro_overall,0.7904951828844883,0.06722383084390042,0.7905 ± 0.0672,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,train,recall_macro_overall,0.7441015758949796,0.12095198125999607,0.7441 ± 0.1210,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,train,f1_macro_overall,0.7506095277881817,0.1125237064116087,0.7506 ± 0.1125,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,train,oa_overall,0.8897068872347862,0.03231706554719945,0.8897 ± 0.0323,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,train,omae_overall,0.11233100275780719,0.03297415275814576,0.1123 ± 0.0330,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,train,qwk_overall,0.7657197581740053,0.08672956216922628,0.7657 ± 0.0867,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,train,ser_overall,0.00203788999259346,0.0008039075995900373,0.0020 ± 0.0008,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,validation,accuracy_overall,0.8388466723381978,0.01170738301986639,0.8388 ± 0.0117,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,validation,precision_macro_overall,0.697201878231838,0.014788215012728072,0.6972 ± 0.0148,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,validation,recall_macro_overall,0.6357077649218871,0.05721107361767447,0.6357 ± 0.0572,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,validation,f1_macro_overall,0.6523363746655357,0.04826262561596141,0.6523 ± 0.0483,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,validation,oa_overall,0.8388466723381978,0.01170738301986639,0.8388 ± 0.0117,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,validation,omae_overall,0.1652161071483105,0.011974600426363157,0.1652 ± 0.0120,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,validation,qwk_overall,0.6568436335026115,0.021948021685404315,0.6568 ± 0.0219,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,validation,ser_overall,0.00406277948650826,0.0009593084213963699,0.0041 ± 0.0010,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,test,accuracy_overall,0.8290853097995955,0.006479792538346293,0.8291 ± 0.0065,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,test,precision_macro_overall,0.6973013637800736,0.0198171505850631,0.6973 ± 0.0198,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,test,recall_macro_overall,0.6302502589316067,0.048442525346135086,0.6303 ± 0.0484,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,test,f1_macro_overall,0.651255789126525,0.04253845073945962,0.6513 ± 0.0425,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,test,oa_overall,0.8290853097995955,0.006479792538346293,0.8291 ± 0.0065,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,test,omae_overall,0.1752445302445302,0.007021444268066201,0.1752 ± 0.0070,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,test,qwk_overall,0.6413280337631349,0.03127168479655983,0.6413 ± 0.0313,5,5,complete
+EfficientNet,2D,RFN,Right Neural Foraminal Narrowing,test,ser_overall,0.00432984004412572,0.0007680652201673513,0.0043 ± 0.0008,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,train,accuracy_overall,0.8623929863256125,0.023410288586421277,0.8624 ± 0.0234,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,train,precision_macro_overall,0.7687966509482077,0.053343079908454195,0.7688 ± 0.0533,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,train,recall_macro_overall,0.7698700063392269,0.0337877541563279,0.7699 ± 0.0338,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,train,f1_macro_overall,0.7631216963261707,0.048922804547956764,0.7631 ± 0.0489,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,train,oa_overall,0.8623929863256125,0.023410288586421277,0.8624 ± 0.0234,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,train,omae_overall,0.14333418416032864,0.02567802814167773,0.1433 ± 0.0257,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,train,qwk_overall,0.8202925032808158,0.025508676302216822,0.8203 ± 0.0255,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,train,ser_overall,0.00572717048594106,0.0027593387083472997,0.0057 ± 0.0028,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,validation,accuracy_overall,0.822651194933899,0.012620457241625345,0.8227 ± 0.0126,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,validation,precision_macro_overall,0.6910361751102091,0.01712155731203488,0.6910 ± 0.0171,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,validation,recall_macro_overall,0.7083570142799231,0.007094866136512196,0.7084 ± 0.0071,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,validation,f1_macro_overall,0.6904434112271843,0.01826344279548326,0.6904 ± 0.0183,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,validation,oa_overall,0.822651194933899,0.012620457241625345,0.8227 ± 0.0126,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,validation,omae_overall,0.18738724194869932,0.016520119916903307,0.1874 ± 0.0165,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,validation,qwk_overall,0.7610644832286043,0.020017023112389603,0.7611 ± 0.0200,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,validation,ser_overall,0.010038436882598359,0.004597493888332745,0.0100 ± 0.0046,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,test,accuracy_overall,0.8139949426310213,0.01641527521771135,0.8140 ± 0.0164,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,test,precision_macro_overall,0.6825627886982631,0.025373510784667243,0.6826 ± 0.0254,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,test,recall_macro_overall,0.6916746824749084,0.017294085726488214,0.6917 ± 0.0173,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,test,f1_macro_overall,0.6806292579791429,0.020936961460530798,0.6806 ± 0.0209,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,test,oa_overall,0.8139949426310213,0.01641527521771135,0.8140 ± 0.0164,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,test,omae_overall,0.1942910216412966,0.017945375619210745,0.1943 ± 0.0179,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,test,qwk_overall,0.7606059795736266,0.012516365894672128,0.7606 ± 0.0125,5,5,complete
+EfficientNet,2D,LSS,Left Subarticular Stenosis,test,ser_overall,0.008285964272318059,0.002181691331776984,0.0083 ± 0.0022,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,train,accuracy_overall,0.8518127722876248,0.035390603488112876,0.8518 ± 0.0354,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,train,precision_macro_overall,0.748998540031942,0.06001039938503332,0.7490 ± 0.0600,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,train,recall_macro_overall,0.7465982743835752,0.06603147232216151,0.7466 ± 0.0660,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,train,f1_macro_overall,0.7425338636731589,0.062438823449606724,0.7425 ± 0.0624,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,train,oa_overall,0.8518127722876248,0.035390603488112876,0.8518 ± 0.0354,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,train,omae_overall,0.1554919764600109,0.03749779449846906,0.1555 ± 0.0375,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,train,qwk_overall,0.8008203541583011,0.05071995164946651,0.8008 ± 0.0507,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,train,ser_overall,0.0073047487476357005,0.0027596206147198154,0.0073 ± 0.0028,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,validation,accuracy_overall,0.8101082752596518,0.007946802362347977,0.8101 ± 0.0079,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,validation,precision_macro_overall,0.6815498129614748,0.022887918023417046,0.6815 ± 0.0229,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,validation,recall_macro_overall,0.675715166965053,0.014179507241234176,0.6757 ± 0.0142,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,validation,f1_macro_overall,0.6740145444761491,0.01673297058142216,0.6740 ± 0.0167,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,validation,oa_overall,0.8101082752596518,0.007946802362347977,0.8101 ± 0.0079,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,validation,omae_overall,0.20278153143823413,0.00877091006909757,0.2028 ± 0.0088,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,validation,qwk_overall,0.7276256566459068,0.010370316540388776,0.7276 ± 0.0104,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,validation,ser_overall,0.01288980669788604,0.0016921665951575686,0.0129 ± 0.0017,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,test,accuracy_overall,0.8025978901256314,0.009095373600899306,0.8026 ± 0.0091,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,test,precision_macro_overall,0.6692341760789605,0.022246116504563637,0.6692 ± 0.0222,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,test,recall_macro_overall,0.660585870368209,0.023633304831211732,0.6606 ± 0.0236,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,test,f1_macro_overall,0.6600582103428109,0.023123239061528793,0.6601 ± 0.0231,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,test,oa_overall,0.8025978901256314,0.009095373600899306,0.8026 ± 0.0091,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,test,omae_overall,0.2113345455322194,0.011895542858977185,0.2113 ± 0.0119,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,test,qwk_overall,0.7197230610363335,0.019580425915991403,0.7197 ± 0.0196,5,5,complete
+EfficientNet,2D,RSS,Right Subarticular Stenosis,test,ser_overall,0.013932435657850878,0.004473188320070195,0.0139 ± 0.0045,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,accuracy_overall,0.9371535445655509,0.033158436460891505,0.9372 ± 0.0332,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,precision_macro_overall,0.8013391699827052,0.10234634345871246,0.8013 ± 0.1023,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,recall_macro_overall,0.724626889676075,0.1718803712393821,0.7246 ± 0.1719,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,f1_macro_overall,0.7496473483579601,0.15049724997539266,0.7496 ± 0.1505,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,oa_overall,0.9371535445655509,0.033158436460891505,0.9372 ± 0.0332,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,omae_overall,0.07084562669311015,0.03985062236259916,0.0708 ± 0.0399,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,qwk_overall,0.7873736529976674,0.14746894258531865,0.7874 ± 0.1475,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,ser_overall,0.007999171258661019,0.0068117112532894925,0.0080 ± 0.0068,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,accuracy_overall,0.897417694640272,0.003171242452099246,0.8974 ± 0.0032,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,precision_macro_overall,0.6787534150796124,0.03630918090554007,0.6788 ± 0.0363,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,recall_macro_overall,0.597666627406118,0.057953373041558356,0.5977 ± 0.0580,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,f1_macro_overall,0.6257542629098249,0.04052036636021231,0.6258 ± 0.0405,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,oa_overall,0.897417694640272,0.003171242452099246,0.8974 ± 0.0032,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,omae_overall,0.11873542042833818,0.006402309231552647,0.1187 ± 0.0064,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,qwk_overall,0.6489759894867023,0.057725791112597076,0.6490 ± 0.0577,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,ser_overall,0.01615311506861008,0.004514331995033807,0.0162 ± 0.0045,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,accuracy_overall,0.8997058924357562,0.001810195435063104,0.8997 ± 0.0018,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,precision_macro_overall,0.6613189020508269,0.03904795612027546,0.6613 ± 0.0390,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,recall_macro_overall,0.5983853144296526,0.07467151202299313,0.5984 ± 0.0747,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,f1_macro_overall,0.6141673080163008,0.05934519441596483,0.6142 ± 0.0593,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,oa_overall,0.8997058924357562,0.001810195435063104,0.8997 ± 0.0018,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,omae_overall,0.11685274468369211,0.0053943799924878666,0.1169 ± 0.0054,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,qwk_overall,0.6402206770605267,0.09050566288033277,0.6402 ± 0.0905,5,5,complete
+MaxViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,ser_overall,0.016558637119448404,0.004601353870522792,0.0166 ± 0.0046,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,accuracy_overall,0.8950975215180191,0.042233718060166424,0.8951 ± 0.0422,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,precision_macro_overall,0.8090797815474018,0.09392094881470586,0.8091 ± 0.0939,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,recall_macro_overall,0.7139842053296341,0.11858294439568418,0.7140 ± 0.1186,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,f1_macro_overall,0.7478396774853862,0.11480991057190951,0.7478 ± 0.1148,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,oa_overall,0.8950975215180191,0.042233718060166424,0.8951 ± 0.0422,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,omae_overall,0.11049185566175945,0.04492604242366028,0.1105 ± 0.0449,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,qwk_overall,0.7503843719170165,0.11513479787350273,0.7504 ± 0.1151,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,ser_overall,0.00558937717977866,0.0033224492054291007,0.0056 ± 0.0033,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,accuracy_overall,0.8200444342647731,0.007502659818483942,0.8200 ± 0.0075,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,precision_macro_overall,0.6522533268205003,0.04972613395038585,0.6523 ± 0.0497,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,recall_macro_overall,0.5620278107841011,0.054471012683065576,0.5620 ± 0.0545,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,f1_macro_overall,0.5906404362820109,0.05984028295585962,0.5906 ± 0.0598,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,oa_overall,0.8200444342647731,0.007502659818483942,0.8200 ± 0.0075,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,omae_overall,0.19038387540082452,0.008713071632246449,0.1904 ± 0.0087,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,qwk_overall,0.5605462859387618,0.053495080943472835,0.5605 ± 0.0535,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,ser_overall,0.01042830966559776,0.0025708856219036867,0.0104 ± 0.0026,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,accuracy_overall,0.812312925170068,0.001096446351649198,0.8123 ± 0.0011,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,precision_macro_overall,0.604452826853276,0.03581799616196346,0.6045 ± 0.0358,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,recall_macro_overall,0.5398514570834011,0.039841591584870134,0.5399 ± 0.0398,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,f1_macro_overall,0.5600225657071565,0.04168956877929838,0.5600 ± 0.0417,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,oa_overall,0.812312925170068,0.001096446351649198,0.8123 ± 0.0011,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,omae_overall,0.19959643316786171,0.0033997784442353638,0.1996 ± 0.0034,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,qwk_overall,0.5426448870396777,0.040101159426119595,0.5426 ± 0.0401,5,5,complete
+MaxViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,ser_overall,0.01190935833792974,0.0028581813765209247,0.0119 ± 0.0029,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,accuracy_overall,0.880590667601847,0.03263340963218217,0.8806 ± 0.0326,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,precision_macro_overall,0.7755304128536646,0.04225515937375202,0.7755 ± 0.0423,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,recall_macro_overall,0.6937246026320999,0.11861489693771961,0.6937 ± 0.1186,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,f1_macro_overall,0.7139421630645053,0.1013658058434397,0.7139 ± 0.1014,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,oa_overall,0.880590667601847,0.03263340963218217,0.8806 ± 0.0326,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,omae_overall,0.12374754468925778,0.03422070855115764,0.1237 ± 0.0342,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,qwk_overall,0.7217870930536263,0.10296576674592209,0.7218 ± 0.1030,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,ser_overall,0.0043382122911049,0.002281785858788437,0.0043 ± 0.0023,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,accuracy_overall,0.8203037883957981,0.010922305615050004,0.8203 ± 0.0109,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,precision_macro_overall,0.6626495751931251,0.028695934319623296,0.6626 ± 0.0287,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,recall_macro_overall,0.5963274666597252,0.04480888835266165,0.5963 ± 0.0448,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,f1_macro_overall,0.6116928685767988,0.029824429901560683,0.6117 ± 0.0298,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,oa_overall,0.8203037883957981,0.010922305615050004,0.8203 ± 0.0109,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,omae_overall,0.1868670991988183,0.009876764621848963,0.1869 ± 0.0099,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,qwk_overall,0.6010052250820999,0.039650891212697555,0.6010 ± 0.0397,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,ser_overall,0.0071708875946163405,0.0032169016378998804,0.0072 ± 0.0032,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,accuracy_overall,0.8124627688913403,0.007164993532770516,0.8125 ± 0.0072,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,precision_macro_overall,0.65009929386215,0.05896835499648664,0.6501 ± 0.0590,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,recall_macro_overall,0.5670204918217707,0.030315146665063183,0.5670 ± 0.0303,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,f1_macro_overall,0.5826800626836468,0.02009548339811622,0.5827 ± 0.0201,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,oa_overall,0.8124627688913403,0.007164993532770516,0.8125 ± 0.0072,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,omae_overall,0.19484004412575837,0.008707789238759105,0.1948 ± 0.0087,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,qwk_overall,0.5829645443906653,0.017841594790180205,0.5830 ± 0.0178,5,5,complete
+MaxViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,ser_overall,0.007302813017098679,0.004461627954072475,0.0073 ± 0.0045,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,accuracy_overall,0.8242178147506813,0.040246634783410194,0.8242 ± 0.0402,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,precision_macro_overall,0.7071895682670897,0.07124757740163323,0.7072 ± 0.0712,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,recall_macro_overall,0.6726062943104162,0.09303508920325616,0.6726 ± 0.0930,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,f1_macro_overall,0.6831647415851416,0.0876916695582082,0.6832 ± 0.0877,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,oa_overall,0.8242178147506813,0.040246634783410194,0.8242 ± 0.0402,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,omae_overall,0.19455161398310694,0.05015277040086158,0.1946 ± 0.0502,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,qwk_overall,0.710536655345641,0.09110788531772107,0.7105 ± 0.0911,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,ser_overall,0.01876942873378816,0.010087274904939589,0.0188 ± 0.0101,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,accuracy_overall,0.784803080946628,0.010819658455844917,0.7848 ± 0.0108,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,precision_macro_overall,0.6331383626531248,0.01241054971143804,0.6331 ± 0.0124,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,recall_macro_overall,0.6152430604846845,0.028065572024255605,0.6152 ± 0.0281,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,f1_macro_overall,0.6165627826467126,0.023715585155972874,0.6166 ± 0.0237,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,oa_overall,0.784803080946628,0.010819658455844917,0.7848 ± 0.0108,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,omae_overall,0.2408470675424143,0.016378738955634502,0.2408 ± 0.0164,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,qwk_overall,0.6416838584369768,0.03564173324981194,0.6417 ± 0.0356,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,ser_overall,0.0256501484890422,0.008962203088253103,0.0257 ± 0.0090,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,accuracy_overall,0.7674007933886788,0.004963174496377276,0.7674 ± 0.0050,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,precision_macro_overall,0.6062961046257654,0.01672913990081982,0.6063 ± 0.0167,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,recall_macro_overall,0.5911076160773092,0.039701309076496744,0.5911 ± 0.0397,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,f1_macro_overall,0.5935349627571256,0.032343973134822686,0.5935 ± 0.0323,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,oa_overall,0.7674007933886788,0.004963174496377276,0.7674 ± 0.0050,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,omae_overall,0.2634515794905685,0.00407002195133825,0.2635 ± 0.0041,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,qwk_overall,0.6092833774808406,0.028914525466402292,0.6093 ± 0.0289,5,5,complete
+MaxViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,ser_overall,0.03085237287924746,0.003558781521347542,0.0309 ± 0.0036,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,accuracy_overall,0.88826672523744,0.04179426910855059,0.8883 ± 0.0418,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,precision_macro_overall,0.8257494063643165,0.08037204830830466,0.8257 ± 0.0804,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,recall_macro_overall,0.7882217902532049,0.06750185861656248,0.7882 ± 0.0675,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,f1_macro_overall,0.8037244133609963,0.07306184528703695,0.8037 ± 0.0731,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,oa_overall,0.88826672523744,0.04179426910855059,0.8883 ± 0.0418,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,omae_overall,0.11560461195162164,0.045973347534585644,0.1156 ± 0.0460,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,qwk_overall,0.8479966959474489,0.06326228768902864,0.8480 ± 0.0633,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,ser_overall,0.0038713371890616204,0.004343404850257474,0.0039 ± 0.0043,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,accuracy_overall,0.7857947816781357,0.005728318952062637,0.7858 ± 0.0057,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,precision_macro_overall,0.6637864063605092,0.01511187802979865,0.6638 ± 0.0151,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,recall_macro_overall,0.6172778520287825,0.021603596004602536,0.6173 ± 0.0216,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,f1_macro_overall,0.6335617316878113,0.019086694559645696,0.6336 ± 0.0191,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,oa_overall,0.7857947816781357,0.005728318952062637,0.7858 ± 0.0057,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,omae_overall,0.23274446583885214,0.005450511456196054,0.2327 ± 0.0055,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,qwk_overall,0.6484452321081645,0.015544354971674052,0.6484 ± 0.0155,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,ser_overall,0.018539247516987815,0.005096255357679288,0.0185 ± 0.0051,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,accuracy_overall,0.7759085514871451,0.008018088894468348,0.7759 ± 0.0080,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,precision_macro_overall,0.6412850886615872,0.018874198929053426,0.6413 ± 0.0189,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,recall_macro_overall,0.5899517955371691,0.020289657281908093,0.5900 ± 0.0203,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,f1_macro_overall,0.6064381911926143,0.01535575886622332,0.6064 ± 0.0154,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,oa_overall,0.7759085514871451,0.008018088894468348,0.7759 ± 0.0080,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,omae_overall,0.2431396684023753,0.00793762885786781,0.2431 ± 0.0079,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,qwk_overall,0.6369780100434808,0.01666902942630694,0.6370 ± 0.0167,5,5,complete
+MaxViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,ser_overall,0.01904821988952036,0.004837311068709571,0.0190 ± 0.0048,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,train,accuracy_overall,0.9338947747129712,0.015012445449791707,0.9339 ± 0.0150,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,train,precision_macro_overall,0.8059591827395977,0.04811981841278628,0.8060 ± 0.0481,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,train,recall_macro_overall,0.6952429340669973,0.09163237617991636,0.6952 ± 0.0916,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,train,f1_macro_overall,0.7335963999517856,0.07849440047600764,0.7336 ± 0.0785,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,train,oa_overall,0.9338947747129712,0.015012445449791707,0.9339 ± 0.0150,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,train,omae_overall,0.07209712663786856,0.018419418053609374,0.0721 ± 0.0184,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,train,qwk_overall,0.7984381048656989,0.08098234694720562,0.7984 ± 0.0810,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,train,ser_overall,0.005991901350839761,0.003502231333863757,0.0060 ± 0.0035,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,validation,accuracy_overall,0.9178111765144695,0.008541669923951114,0.9178 ± 0.0085,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,validation,precision_macro_overall,0.735066655073027,0.035565582644200996,0.7351 ± 0.0356,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,validation,recall_macro_overall,0.647796567405314,0.06788914782502826,0.6478 ± 0.0679,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,validation,f1_macro_overall,0.673738326126596,0.0429188917280906,0.6737 ± 0.0429,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,validation,oa_overall,0.9178111765144695,0.008541669923951114,0.9178 ± 0.0085,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,validation,omae_overall,0.09074381285164305,0.010423739567694568,0.0907 ± 0.0104,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,validation,qwk_overall,0.7548972321135677,0.0685126882157915,0.7549 ± 0.0685,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,validation,ser_overall,0.00855498936611252,0.004336056181379739,0.0086 ± 0.0043,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,test,accuracy_overall,0.9234841033771646,0.00559023086090915,0.9235 ± 0.0056,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,test,precision_macro_overall,0.7423191063772121,0.00887150650869277,0.7423 ± 0.0089,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,test,recall_macro_overall,0.656672357509421,0.0716029268448511,0.6567 ± 0.0716,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,test,f1_macro_overall,0.683333463838241,0.04944462151261495,0.6833 ± 0.0494,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,test,oa_overall,0.9234841033771646,0.00559023086090915,0.9235 ± 0.0056,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,test,omae_overall,0.08408944422934819,0.008284366288191757,0.0841 ± 0.0083,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,test,qwk_overall,0.7629340242256027,0.06350914640527974,0.7629 ± 0.0635,5,5,complete
+MaxViT,2D,SCS,Spinal Canal Stenosis,test,ser_overall,0.00757354760651278,0.0027937343559918918,0.0076 ± 0.0028,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,train,accuracy_overall,0.8562770648856638,0.015679740914197233,0.8563 ± 0.0157,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,train,precision_macro_overall,0.7196530754852442,0.051105897217269144,0.7197 ± 0.0511,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,train,recall_macro_overall,0.6822369447879001,0.062034992003081046,0.6822 ± 0.0620,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,train,f1_macro_overall,0.6873091269901913,0.04386227721902777,0.6873 ± 0.0439,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,train,oa_overall,0.8562770648856638,0.015679740914197233,0.8563 ± 0.0157,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,train,omae_overall,0.1466486245156956,0.017469730672677434,0.1466 ± 0.0175,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,train,qwk_overall,0.7118734140128502,0.04424730453641147,0.7119 ± 0.0442,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,train,ser_overall,0.0029256894013593602,0.002005270594343466,0.0029 ± 0.0020,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,validation,accuracy_overall,0.8327590471827759,0.010227479494958128,0.8328 ± 0.0102,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,validation,precision_macro_overall,0.6738222830496847,0.05541636121097514,0.6738 ± 0.0554,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,validation,recall_macro_overall,0.6369235669152346,0.050738281062961715,0.6369 ± 0.0507,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,validation,f1_macro_overall,0.6390121837353302,0.03407750205500883,0.6390 ± 0.0341,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,validation,oa_overall,0.8327590471827759,0.010227479494958128,0.8328 ± 0.0102,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,validation,omae_overall,0.1714402198808978,0.01163946890708095,0.1714 ± 0.0116,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,validation,qwk_overall,0.666412966270508,0.03588138471270182,0.6664 ± 0.0359,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,validation,ser_overall,0.004199267063673799,0.0021098364671861933,0.0042 ± 0.0021,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,test,accuracy_overall,0.8267926089354661,0.006071106144428915,0.8268 ± 0.0061,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,test,precision_macro_overall,0.64803640199884,0.04131830390013831,0.6480 ± 0.0413,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,test,recall_macro_overall,0.6273705354275362,0.04803336760144504,0.6274 ± 0.0480,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,test,f1_macro_overall,0.6240977921274139,0.024084976525297626,0.6241 ± 0.0241,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,test,oa_overall,0.8267926089354661,0.006071106144428915,0.8268 ± 0.0061,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,test,omae_overall,0.17834620334620335,0.0064408757017460965,0.1783 ± 0.0064,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,test,qwk_overall,0.6556918051084327,0.036738384179304195,0.6557 ± 0.0367,5,5,complete
+MaxViT,2D,LFN,Left Neural Foraminal Narrowing,test,ser_overall,0.0051388122816694,0.0016893470864863115,0.0051 ± 0.0017,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,train,accuracy_overall,0.8670229903037899,0.02079417435163622,0.8670 ± 0.0208,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,train,precision_macro_overall,0.760952064603332,0.04531046276497221,0.7610 ± 0.0453,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,train,recall_macro_overall,0.6527445923875784,0.0912488819754691,0.6527 ± 0.0912,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,train,f1_macro_overall,0.6882081566384255,0.0780797534740863,0.6882 ± 0.0781,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,train,oa_overall,0.8670229903037899,0.02079417435163622,0.8670 ± 0.0208,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,train,omae_overall,0.1363829781084614,0.022029648736969703,0.1364 ± 0.0220,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,train,qwk_overall,0.6927760389904505,0.0730697918336497,0.6928 ± 0.0731,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,train,ser_overall,0.00340596841225132,0.0013203847835720768,0.0034 ± 0.0013,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,validation,accuracy_overall,0.8345163866737717,0.00573316153403188,0.8345 ± 0.0057,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,validation,precision_macro_overall,0.6712290072988367,0.023510591920834416,0.6712 ± 0.0235,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,validation,recall_macro_overall,0.6169103587839351,0.047642262286449265,0.6169 ± 0.0476,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,validation,f1_macro_overall,0.635695435132406,0.03412362822830207,0.6357 ± 0.0341,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,validation,oa_overall,0.8345163866737717,0.00573316153403188,0.8345 ± 0.0057,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,validation,omae_overall,0.17035719739109564,0.006010919397456863,0.1704 ± 0.0060,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,validation,qwk_overall,0.6435029479039196,0.027434516646149258,0.6435 ± 0.0274,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,validation,ser_overall,0.0048735840648673,0.0016811099259504002,0.0049 ± 0.0017,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,test,accuracy_overall,0.8330125022982164,0.012897599413672248,0.8330 ± 0.0129,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,test,precision_macro_overall,0.6823869944194938,0.036845841514608964,0.6824 ± 0.0368,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,test,recall_macro_overall,0.5988693182456184,0.05037548538316157,0.5989 ± 0.0504,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,test,f1_macro_overall,0.6266727212227722,0.040523831836868,0.6267 ± 0.0405,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,test,oa_overall,0.8330125022982164,0.012897599413672248,0.8330 ± 0.0129,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,test,omae_overall,0.17280933995219708,0.013071117115092649,0.1728 ± 0.0131,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,test,qwk_overall,0.6293665754555258,0.03417917937164357,0.6294 ± 0.0342,5,5,complete
+MaxViT,2D,RFN,Right Neural Foraminal Narrowing,test,ser_overall,0.005821842250413639,0.0014237543554525129,0.0058 ± 0.0014,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,train,accuracy_overall,0.8450252826600877,0.018102619622655594,0.8450 ± 0.0181,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,train,precision_macro_overall,0.7582755158881758,0.015067379899837294,0.7583 ± 0.0151,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,train,recall_macro_overall,0.7173824404402923,0.05448615991517931,0.7174 ± 0.0545,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,train,f1_macro_overall,0.728614239487454,0.03493227285588809,0.7286 ± 0.0349,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,train,oa_overall,0.8450252826600877,0.018102619622655594,0.8450 ± 0.0181,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,train,omae_overall,0.1597445666910792,0.02051877142414298,0.1597 ± 0.0205,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,train,qwk_overall,0.7886255200717877,0.04649422802889902,0.7886 ± 0.0465,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,train,ser_overall,0.00476984935116688,0.0024542415305940147,0.0048 ± 0.0025,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,validation,accuracy_overall,0.8195994649677705,0.00956129584276818,0.8196 ± 0.0096,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,validation,precision_macro_overall,0.6997682895598808,0.03139725608025418,0.6998 ± 0.0314,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,validation,recall_macro_overall,0.681965936140481,0.01940935782347332,0.6820 ± 0.0194,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,validation,f1_macro_overall,0.6837612103248296,0.007206778525784986,0.6838 ± 0.0072,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,validation,oa_overall,0.8195994649677705,0.00956129584276818,0.8196 ± 0.0096,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,validation,omae_overall,0.1899929884442615,0.009680281120888201,0.1900 ± 0.0097,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,validation,qwk_overall,0.7436738666574382,0.026062094791028775,0.7437 ± 0.0261,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,validation,ser_overall,0.00959245341203194,0.002174032623816689,0.0096 ± 0.0022,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,test,accuracy_overall,0.8170274671576628,0.021532368794060917,0.8170 ± 0.0215,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,test,precision_macro_overall,0.7012252949594943,0.029781534587638686,0.7012 ± 0.0298,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,test,recall_macro_overall,0.6785352339946588,0.027819333345907027,0.6785 ± 0.0278,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,test,f1_macro_overall,0.6840804602966324,0.021524103168188428,0.6841 ± 0.0215,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,test,oa_overall,0.8170274671576628,0.021532368794060917,0.8170 ± 0.0215,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,test,omae_overall,0.19201584952472647,0.020700338848816394,0.1920 ± 0.0207,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,test,qwk_overall,0.7492067885730004,0.021660939489817566,0.7492 ± 0.0217,5,5,complete
+MaxViT,2D,LSS,Left Subarticular Stenosis,test,ser_overall,0.00904331668238926,0.0012097567387475737,0.0090 ± 0.0012,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,train,accuracy_overall,0.8625524762423702,0.028952356198075135,0.8626 ± 0.0290,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,train,precision_macro_overall,0.7915205890880987,0.04408721360087523,0.7915 ± 0.0441,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,train,recall_macro_overall,0.7370917883925127,0.07308937441206949,0.7371 ± 0.0731,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,train,f1_macro_overall,0.7578920394549521,0.061371171285999934,0.7579 ± 0.0614,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,train,oa_overall,0.8625524762423702,0.028952356198075135,0.8626 ± 0.0290,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,train,omae_overall,0.14211297215229718,0.03142721017429708,0.1421 ± 0.0314,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,train,qwk_overall,0.8087583547767743,0.05289347509345678,0.8088 ± 0.0529,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,train,ser_overall,0.0046654483946673,0.0026295702915875093,0.0047 ± 0.0026,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,validation,accuracy_overall,0.8185093127821839,0.004149480043170562,0.8185 ± 0.0041,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,validation,precision_macro_overall,0.7109111924896655,0.020100052344315417,0.7109 ± 0.0201,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,validation,recall_macro_overall,0.6618091147602128,0.03353552462641502,0.6618 ± 0.0335,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,validation,f1_macro_overall,0.6805038950503137,0.02005783564592376,0.6805 ± 0.0201,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,validation,oa_overall,0.8185093127821839,0.004149480043170562,0.8185 ± 0.0041,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,validation,omae_overall,0.19024392492075246,0.004390929087363859,0.1902 ± 0.0044,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,validation,qwk_overall,0.73446398999651,0.02208162536982314,0.7345 ± 0.0221,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,validation,ser_overall,0.008753237702936359,0.002829522659808009,0.0088 ± 0.0028,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,test,accuracy_overall,0.8099852445558033,0.006512649011317951,0.8100 ± 0.0065,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,test,precision_macro_overall,0.697175615020278,0.004482960733181925,0.6972 ± 0.0045,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,test,recall_macro_overall,0.6515276642222696,0.04715410955417948,0.6515 ± 0.0472,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,test,f1_macro_overall,0.6668161830371978,0.02941661689722374,0.6668 ± 0.0294,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,test,oa_overall,0.8099852445558033,0.006512649011317951,0.8100 ± 0.0065,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,test,omae_overall,0.19921819641242183,0.00919428659196657,0.1992 ± 0.0092,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,test,qwk_overall,0.7282975151422374,0.03308608009898271,0.7283 ± 0.0331,5,5,complete
+MaxViT,2D,RSS,Right Subarticular Stenosis,test,ser_overall,0.009203440968225122,0.003442518931073154,0.0092 ± 0.0034,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,accuracy_overall,0.8813695947207577,0.002465860412999627,0.8814 ± 0.0025,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,precision_macro_overall,0.5741926368576374,0.02444437165094554,0.5742 ± 0.0244,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,recall_macro_overall,0.41056978582425474,0.02172496182357833,0.4106 ± 0.0217,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,f1_macro_overall,0.4297525994690652,0.023997618663050866,0.4298 ± 0.0240,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,oa_overall,0.8813695947207577,0.002465860412999627,0.8814 ± 0.0025,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,omae_overall,0.16097126356921176,0.004244981266425874,0.1610 ± 0.0042,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,qwk_overall,0.2758626344357625,0.05327244423159096,0.2759 ± 0.0533,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,train,ser_overall,0.0423408582899695,0.002258683352976123,0.0423 ± 0.0023,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,accuracy_overall,0.876537799823079,0.008125278434614804,0.8765 ± 0.0081,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,precision_macro_overall,0.555846033881395,0.04665491225070131,0.5558 ± 0.0467,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,recall_macro_overall,0.4120773044813563,0.03042513874733258,0.4121 ± 0.0304,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,f1_macro_overall,0.43023459568921824,0.038049894611281325,0.4302 ± 0.0380,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,oa_overall,0.876537799823079,0.008125278434614804,0.8765 ± 0.0081,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,omae_overall,0.16723883739747206,0.012385896739929703,0.1672 ± 0.0124,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,qwk_overall,0.29157618134289637,0.07835827260754899,0.2916 ± 0.0784,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,validation,ser_overall,0.04377663722055116,0.005160791309350971,0.0438 ± 0.0052,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,accuracy_overall,0.8813274066007135,0.008787461376666124,0.8813 ± 0.0088,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,precision_macro_overall,0.5207202613370929,0.08722444514364008,0.5207 ± 0.0872,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,recall_macro_overall,0.4040576727821093,0.03127967278033892,0.4041 ± 0.0313,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,f1_macro_overall,0.4174805393675136,0.03746500898925447,0.4175 ± 0.0375,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,oa_overall,0.8813274066007135,0.008787461376666124,0.8813 ± 0.0088,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,omae_overall,0.16164608527575025,0.016004490186892623,0.1616 ± 0.0160,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,qwk_overall,0.26394466949925277,0.10402816242071308,0.2639 ± 0.1040,5,5,complete
+ViT,2.5D-to-3D,SCS,Spinal Canal Stenosis,test,ser_overall,0.04297349187646396,0.007974958151251241,0.0430 ± 0.0080,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,accuracy_overall,0.7801890410646422,0.002679103192368527,0.7802 ± 0.0027,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,precision_macro_overall,0.3356049826542199,0.07633864023242748,0.3356 ± 0.0763,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,recall_macro_overall,0.33418039737328104,0.0012077968277148094,0.3342 ± 0.0012,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,f1_macro_overall,0.2946088453261933,0.0027718506903405826,0.2946 ± 0.0028,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,oa_overall,0.7801890410646422,0.002679103192368527,0.7802 ± 0.0027,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,omae_overall,0.25981103016356716,0.002427186716525879,0.2598 ± 0.0024,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,qwk_overall,0.004355724373099159,0.0048749493007484304,0.0044 ± 0.0049,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,train,ser_overall,0.04000007122820924,0.0006717233463509541,0.0400 ± 0.0007,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,accuracy_overall,0.7729147961520842,0.005829269123046237,0.7729 ± 0.0058,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,precision_macro_overall,0.3969070430368351,0.09952696412485158,0.3969 ± 0.0995,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,recall_macro_overall,0.33510216415286637,0.001728983851354916,0.3351 ± 0.0017,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,f1_macro_overall,0.29490479283515647,0.0038847805673576418,0.2949 ± 0.0039,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,oa_overall,0.7729147961520842,0.005829269123046237,0.7729 ± 0.0058,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,omae_overall,0.2672995877233165,0.005876518144773175,0.2673 ± 0.0059,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,qwk_overall,0.006326593452632539,0.004439244822035418,0.0063 ± 0.0044,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,validation,ser_overall,0.0402143838754008,0.0022244309260845197,0.0402 ± 0.0022,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,accuracy_overall,0.7710507446221732,0.00724928144135956,0.7711 ± 0.0072,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,precision_macro_overall,0.3751969504942875,0.175333218757815,0.3752 ± 0.1753,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,recall_macro_overall,0.33492260381274075,0.0025099268977063468,0.3349 ± 0.0025,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,f1_macro_overall,0.29485001224910634,0.0068205039037285186,0.2949 ± 0.0068,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,oa_overall,0.7710507446221732,0.00724928144135956,0.7711 ± 0.0072,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,omae_overall,0.2685980878838021,0.007322181081998438,0.2686 ± 0.0073,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,qwk_overall,0.006975087559369821,0.006566095309685761,0.0070 ± 0.0066,5,5,complete
+ViT,2.5D-to-3D,LFN,Left Neural Foraminal Narrowing,test,ser_overall,0.03964883250597532,0.001248170715200244,0.0396 ± 0.0012,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,accuracy_overall,0.7843947463233086,0.0015865530918987689,0.7844 ± 0.0016,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,precision_macro_overall,0.4233583386837034,0.023226282586912075,0.4234 ± 0.0232,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,recall_macro_overall,0.34107592649886537,0.008251129688632255,0.3411 ± 0.0083,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,f1_macro_overall,0.31124958732387165,0.01731329765596027,0.3112 ± 0.0173,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,oa_overall,0.7843947463233086,0.0015865530918987689,0.7844 ± 0.0016,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,omae_overall,0.2527228286232983,0.0018738063362384431,0.2527 ± 0.0019,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,qwk_overall,0.025737329769869782,0.030444481308145678,0.0257 ± 0.0304,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,train,ser_overall,0.037117574946606904,0.0018811745664969576,0.0371 ± 0.0019,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,accuracy_overall,0.7787213315009925,0.009378993308336539,0.7787 ± 0.0094,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,precision_macro_overall,0.3906552368831682,0.07770540162856361,0.3907 ± 0.0777,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,recall_macro_overall,0.3436727079429923,0.00864510409539368,0.3437 ± 0.0086,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,f1_macro_overall,0.3147860229320526,0.017436152689839734,0.3148 ± 0.0174,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,oa_overall,0.7787213315009925,0.009378993308336539,0.7787 ± 0.0094,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,omae_overall,0.25933199958865816,0.01182828773452187,0.2593 ± 0.0118,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,qwk_overall,0.03783518378040798,0.032170651887301685,0.0378 ± 0.0322,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,validation,ser_overall,0.03805333108965066,0.0034787719419746713,0.0381 ± 0.0035,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,accuracy_overall,0.7661822026107741,0.00670168830273213,0.7662 ± 0.0067,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,precision_macro_overall,0.36403246302215875,0.043373515559755174,0.3640 ± 0.0434,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,recall_macro_overall,0.3368585272809187,0.003984175793545367,0.3369 ± 0.0040,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,f1_macro_overall,0.3036787447776064,0.011769828084378887,0.3037 ± 0.0118,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,oa_overall,0.7661822026107741,0.00670168830273213,0.7662 ± 0.0067,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,omae_overall,0.2735990071704357,0.0081441230204058,0.2736 ± 0.0081,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,qwk_overall,0.016195565843196598,0.019213824629569026,0.0162 ± 0.0192,5,5,complete
+ViT,2.5D-to-3D,RFN,Right Neural Foraminal Narrowing,test,ser_overall,0.039781209781209734,0.0022608083482055733,0.0398 ± 0.0023,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,accuracy_overall,0.7523405682319495,0.015796455731032864,0.7523 ± 0.0158,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,precision_macro_overall,0.6185857535308492,0.07401094558592392,0.6186 ± 0.0740,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,recall_macro_overall,0.45905945642980567,0.03278579690031074,0.4591 ± 0.0328,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,f1_macro_overall,0.4732154941881698,0.045998238410009454,0.4732 ± 0.0460,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,oa_overall,0.7523405682319495,0.015796455731032864,0.7523 ± 0.0158,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,omae_overall,0.2998728698931768,0.027964833229127562,0.2999 ± 0.0280,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,qwk_overall,0.3966894837783924,0.061435191914241634,0.3967 ± 0.0614,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,train,ser_overall,0.0522134381251262,0.01348584123573899,0.0522 ± 0.0135,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,accuracy_overall,0.7508099476045043,0.014038764926856283,0.7508 ± 0.0140,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,precision_macro_overall,0.5785609078597147,0.04234006693242397,0.5786 ± 0.0423,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,recall_macro_overall,0.4743292993814393,0.03270812255990105,0.4743 ± 0.0327,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,f1_macro_overall,0.48304076958498116,0.03923944292299158,0.4830 ± 0.0392,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,oa_overall,0.7508099476045043,0.014038764926856283,0.7508 ± 0.0140,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,omae_overall,0.29378904693654473,0.02620918872948985,0.2938 ± 0.0262,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,qwk_overall,0.44043442188374327,0.061093503404919876,0.4404 ± 0.0611,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,validation,ser_overall,0.04459899454104892,0.012886490331670027,0.0446 ± 0.0129,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,accuracy_overall,0.7410930005989533,0.013316082600843557,0.7411 ± 0.0133,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,precision_macro_overall,0.5904061148059825,0.05733776011260677,0.5904 ± 0.0573,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,recall_macro_overall,0.4655349240615953,0.035668428581785434,0.4655 ± 0.0357,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,f1_macro_overall,0.4780480303735451,0.03830884360366456,0.4780 ± 0.0383,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,oa_overall,0.7410930005989533,0.013316082600843557,0.7411 ± 0.0133,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,omae_overall,0.3089713078456377,0.023326647155001698,0.3090 ± 0.0233,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,qwk_overall,0.4148326788266191,0.0625495607149927,0.4148 ± 0.0625,5,5,complete
+ViT,2.5D-to-3D,LSS,Left Subarticular Stenosis,test,ser_overall,0.05006430844459105,0.012787590440174829,0.0501 ± 0.0128,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,accuracy_overall,0.7383570150010097,0.01347826055160642,0.7384 ± 0.0135,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,precision_macro_overall,0.5598323514488456,0.03999011124734862,0.5598 ± 0.0400,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,recall_macro_overall,0.44554851023872233,0.04493035694618893,0.4455 ± 0.0449,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,f1_macro_overall,0.4545116213117294,0.04551917122129008,0.4545 ± 0.0455,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,oa_overall,0.7383570150010097,0.01347826055160642,0.7384 ± 0.0135,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,omae_overall,0.32293061932714756,0.017383279329714424,0.3229 ± 0.0174,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,qwk_overall,0.3436318647122502,0.09662614665303496,0.3436 ± 0.0966,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,train,ser_overall,0.06128763432815716,0.007864434980589956,0.0613 ± 0.0079,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,accuracy_overall,0.7303947411412277,0.021471794541629303,0.7304 ± 0.0215,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,precision_macro_overall,0.5456776628576773,0.03248355292337896,0.5457 ± 0.0325,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,recall_macro_overall,0.4552709648842785,0.02920080111814359,0.4553 ± 0.0292,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,f1_macro_overall,0.46691790441167225,0.02149355731238332,0.4669 ± 0.0215,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,oa_overall,0.7303947411412277,0.021471794541629303,0.7304 ± 0.0215,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,omae_overall,0.3257379485245884,0.030542797883953685,0.3257 ± 0.0305,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,qwk_overall,0.3776454634781782,0.04543547001639276,0.3776 ± 0.0454,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,validation,ser_overall,0.05613268966581614,0.00920211352859315,0.0561 ± 0.0092,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,accuracy_overall,0.7293419384472765,0.019366260536267332,0.7293 ± 0.0194,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,precision_macro_overall,0.5542260297839186,0.06357864076653945,0.5542 ± 0.0636,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,recall_macro_overall,0.46248671195831587,0.04589047105430525,0.4625 ± 0.0459,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,f1_macro_overall,0.4764648722998436,0.04869998512650473,0.4765 ± 0.0487,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,oa_overall,0.7293419384472765,0.019366260536267332,0.7293 ± 0.0194,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,omae_overall,0.32758809659911636,0.022278108969016944,0.3276 ± 0.0223,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,qwk_overall,0.37497272742419485,0.08772791041598466,0.3750 ± 0.0877,5,5,complete
+ViT,2.5D-to-3D,RSS,Right Subarticular Stenosis,test,ser_overall,0.05693003504639295,0.004952277094512204,0.0569 ± 0.0050,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,train,accuracy_overall,0.930481303028474,0.008972408720486774,0.9305 ± 0.0090,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,train,precision_macro_overall,0.7743465887807606,0.03152314126704394,0.7743 ± 0.0315,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,train,recall_macro_overall,0.705217816269844,0.057984568264217766,0.7052 ± 0.0580,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,train,f1_macro_overall,0.7329121374326762,0.04668199276818177,0.7329 ± 0.0467,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,train,oa_overall,0.930481303028474,0.008972408720486774,0.9305 ± 0.0090,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,train,omae_overall,0.07634903630492358,0.010902282001355937,0.0763 ± 0.0109,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,train,qwk_overall,0.7953469035440758,0.04163657833289502,0.7953 ± 0.0416,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,train,ser_overall,0.0068303393333975,0.002126367288189491,0.0068 ± 0.0021,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,validation,accuracy_overall,0.9200210474707694,0.005944908664264764,0.9200 ± 0.0059,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,validation,precision_macro_overall,0.7295895463650901,0.03981547478975408,0.7296 ± 0.0398,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,validation,recall_macro_overall,0.676151388914966,0.025339567235263302,0.6762 ± 0.0253,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,validation,f1_macro_overall,0.6967809787232939,0.014233427979807017,0.6968 ± 0.0142,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,validation,oa_overall,0.9200210474707694,0.005944908664264764,0.9200 ± 0.0059,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,validation,omae_overall,0.08587061729297271,0.005330909942109295,0.0859 ± 0.0053,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,validation,qwk_overall,0.7882554214531023,0.021092116490319526,0.7883 ± 0.0211,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,validation,ser_overall,0.00589166476374198,0.001445704239318022,0.0059 ± 0.0014,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,test,accuracy_overall,0.9196867792648387,0.005681565211622927,0.9197 ± 0.0057,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,test,precision_macro_overall,0.7076776514045415,0.032165588789383345,0.7077 ± 0.0322,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,test,recall_macro_overall,0.6634189457056048,0.031049358304611727,0.6634 ± 0.0310,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,test,f1_macro_overall,0.6817133127509163,0.02396485207807109,0.6817 ± 0.0240,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,test,oa_overall,0.9196867792648387,0.005681565211622927,0.9197 ± 0.0057,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,test,omae_overall,0.08761182874149445,0.008363106696050697,0.0876 ± 0.0084,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,test,qwk_overall,0.7686778244038222,0.032843065406775736,0.7687 ± 0.0328,5,5,complete
+ViT,2D,SCS,Spinal Canal Stenosis,test,ser_overall,0.00729860800633318,0.0028466156969007748,0.0073 ± 0.0028,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,train,accuracy_overall,0.7804206105035122,0.0023537767979477904,0.7804 ± 0.0024,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,train,precision_macro_overall,0.26014020350117073,0.0007845922659826058,0.2601 ± 0.0008,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,train,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,train,f1_macro_overall,0.2922227879823922,0.0004951721866624042,0.2922 ± 0.0005,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,train,oa_overall,0.7804206105035122,0.0023537767979477904,0.7804 ± 0.0024,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,train,omae_overall,0.2598111559140091,0.0021643978673524487,0.2598 ± 0.0022,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,train,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,train,ser_overall,0.0402317664175213,0.0007228779187544955,0.0402 ± 0.0007,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,validation,accuracy_overall,0.7726436097114062,0.004901928649407727,0.7726 ± 0.0049,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,validation,precision_macro_overall,0.25754786990380213,0.0016339762164692588,0.2575 ± 0.0016,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,validation,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,validation,f1_macro_overall,0.2905782330099923,0.001043452699355803,0.2906 ± 0.0010,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,validation,oa_overall,0.7726436097114062,0.004901928649407727,0.7726 ± 0.0049,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,validation,omae_overall,0.2678419606046724,0.005041537870522753,0.2678 ± 0.0050,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,validation,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,validation,ser_overall,0.04048557031607876,0.0019471888114780357,0.0405 ± 0.0019,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,test,accuracy_overall,0.7720012870012869,0.008220812019228703,0.7720 ± 0.0082,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,test,precision_macro_overall,0.25733376233376226,0.0027402706730762253,0.2573 ± 0.0027,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,test,recall_macro_overall,0.3333333333333333,0.0,0.3333 ± 0.0000,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,test,f1_macro_overall,0.29043774311065756,0.0017440657675032321,0.2904 ± 0.0017,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,test,oa_overall,0.7720012870012869,0.008220812019228703,0.7720 ± 0.0082,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,test,omae_overall,0.268189924618496,0.007783514071973228,0.2682 ± 0.0078,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,test,qwk_overall,0.0,0.0,0.0000 ± 0.0000,5,5,complete
+ViT,2D,LFN,Left Neural Foraminal Narrowing,test,ser_overall,0.040191211619783,0.0014595864783141026,0.0402 ± 0.0015,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,train,accuracy_overall,0.8472714727091029,0.035457668736416974,0.8473 ± 0.0355,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,train,precision_macro_overall,0.6480044212155458,0.21676772185857987,0.6480 ± 0.2168,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,train,recall_macro_overall,0.5835708569683402,0.14475489060046487,0.5836 ± 0.1448,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,train,f1_macro_overall,0.6039562016899527,0.17627090342728516,0.6040 ± 0.1763,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,train,oa_overall,0.8472714727091029,0.035457668736416974,0.8473 ± 0.0355,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,train,omae_overall,0.16276206385917474,0.0507890599377301,0.1628 ± 0.0508,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,train,qwk_overall,0.5534160205161733,0.31051805365796814,0.5534 ± 0.3105,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,train,ser_overall,0.010033536568277619,0.01568004967433576,0.0100 ± 0.0157,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,validation,accuracy_overall,0.8286786018117738,0.03544731046730963,0.8287 ± 0.0354,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,validation,precision_macro_overall,0.6020391587926849,0.19533384647815452,0.6020 ± 0.1953,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,validation,recall_macro_overall,0.5550044938115962,0.13101069236457452,0.5550 ± 0.1310,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,validation,f1_macro_overall,0.5683355313789706,0.1611528106948483,0.5683 ± 0.1612,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,validation,oa_overall,0.8286786018117738,0.03544731046730963,0.8287 ± 0.0354,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,validation,omae_overall,0.1818912686467166,0.0506416247327128,0.1819 ± 0.0506,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,validation,qwk_overall,0.5258889883481227,0.2969205072541244,0.5259 ± 0.2969,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,validation,ser_overall,0.010569870458490258,0.015377873569814649,0.0106 ± 0.0154,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,test,accuracy_overall,0.8245642581356867,0.02739696044930669,0.8246 ± 0.0274,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,test,precision_macro_overall,0.6102779347684673,0.1992953767760933,0.6103 ± 0.1993,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,test,recall_macro_overall,0.5400543554562809,0.12098225875765851,0.5401 ± 0.1210,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,test,f1_macro_overall,0.556269586971492,0.15241550688570882,0.5563 ± 0.1524,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,test,oa_overall,0.8245642581356867,0.02739696044930669,0.8246 ± 0.0274,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,test,omae_overall,0.1867071152785438,0.04381725073669152,0.1867 ± 0.0438,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,test,qwk_overall,0.5130077411729447,0.28834153888533404,0.5130 ± 0.2883,5,5,complete
+ViT,2D,RFN,Right Neural Foraminal Narrowing,test,ser_overall,0.011271373414230521,0.016628904994947107,0.0113 ± 0.0166,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,train,accuracy_overall,0.8473135675420407,0.007701343690692518,0.8473 ± 0.0077,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,train,precision_macro_overall,0.7603175470478939,0.01513812791701652,0.7603 ± 0.0151,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,train,recall_macro_overall,0.7228621497716567,0.034942087520067514,0.7229 ± 0.0349,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,train,f1_macro_overall,0.738097327043844,0.017671890895533286,0.7381 ± 0.0177,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,train,oa_overall,0.8473135675420407,0.007701343690692518,0.8473 ± 0.0077,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,train,omae_overall,0.15717320376345262,0.007412966611233857,0.1572 ± 0.0074,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,train,qwk_overall,0.7902169307960762,0.01588019798555859,0.7902 ± 0.0159,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,train,ser_overall,0.0044867713054933,0.0009876312206850916,0.0045 ± 0.0010,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,validation,accuracy_overall,0.8294449724015133,0.012592014661677222,0.8294 ± 0.0126,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,validation,precision_macro_overall,0.7235099070896431,0.021194663899311614,0.7235 ± 0.0212,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,validation,recall_macro_overall,0.7069327057569862,0.0272363307344346,0.7069 ± 0.0272,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,validation,f1_macro_overall,0.712793876446714,0.014126753255962693,0.7128 ± 0.0141,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,validation,oa_overall,0.8294449724015133,0.012592014661677222,0.8294 ± 0.0126,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,validation,omae_overall,0.17660757353075174,0.013564343567981012,0.1766 ± 0.0136,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,validation,qwk_overall,0.7630989141842945,0.016294944903417766,0.7631 ± 0.0163,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,validation,ser_overall,0.00605254593226492,0.0012454657859899282,0.0061 ± 0.0012,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,test,accuracy_overall,0.8187331183312525,0.016669967102621766,0.8187 ± 0.0167,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,test,precision_macro_overall,0.7158526146807604,0.02134067304599389,0.7159 ± 0.0213,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,test,recall_macro_overall,0.6928125407662299,0.02974632261928433,0.6928 ± 0.0297,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,test,f1_macro_overall,0.7015073860917055,0.01882290136375369,0.7015 ± 0.0188,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,test,oa_overall,0.8187331183312525,0.016669967102621766,0.8187 ± 0.0167,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,test,omae_overall,0.1874989404756166,0.014791713740401849,0.1875 ± 0.0148,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,test,qwk_overall,0.7547046568588799,0.013406198511708907,0.7547 ± 0.0134,5,5,complete
+ViT,2D,LSS,Left Subarticular Stenosis,test,ser_overall,0.00623205880686906,0.002136638074060908,0.0062 ± 0.0021,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,train,accuracy_overall,0.8286201712749038,0.009429784963293008,0.8286 ± 0.0094,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,train,precision_macro_overall,0.7210698343255761,0.014242503234648018,0.7211 ± 0.0142,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,train,recall_macro_overall,0.6726102707047235,0.03686680084405499,0.6726 ± 0.0369,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,train,f1_macro_overall,0.6921254363568099,0.02710251335599924,0.6921 ± 0.0271,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,train,oa_overall,0.8286201712749038,0.009429784963293008,0.8286 ± 0.0094,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,train,omae_overall,0.17804795951166558,0.010761519204942718,0.1780 ± 0.0108,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,train,qwk_overall,0.7556219749189754,0.026885523548778302,0.7556 ± 0.0269,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,train,ser_overall,0.00666813078656942,0.0016372848169712133,0.0067 ± 0.0016,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,validation,accuracy_overall,0.8241937892948596,0.005963545578147037,0.8242 ± 0.0060,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,validation,precision_macro_overall,0.7243890027527777,0.02253335886976987,0.7244 ± 0.0225,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,validation,recall_macro_overall,0.6770956118858572,0.019528005376446417,0.6771 ± 0.0195,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,validation,f1_macro_overall,0.6974210348913935,0.018481440119346926,0.6974 ± 0.0185,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,validation,oa_overall,0.8241937892948596,0.005963545578147037,0.8242 ± 0.0060,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,validation,omae_overall,0.18381074144857362,0.005706432096014052,0.1838 ± 0.0057,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,validation,qwk_overall,0.7430678916108118,0.016169062098518542,0.7431 ± 0.0162,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,validation,ser_overall,0.00800453074343344,0.0019212521681830947,0.0080 ± 0.0019,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,test,accuracy_overall,0.8125002247591115,0.006269736407736275,0.8125 ± 0.0063,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,test,precision_macro_overall,0.7041730817318947,0.012129401432026439,0.7042 ± 0.0121,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,test,recall_macro_overall,0.6613838307590129,0.021058895848568352,0.6614 ± 0.0211,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,test,f1_macro_overall,0.6789915767501709,0.012584529697003449,0.6790 ± 0.0126,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,test,oa_overall,0.8125002247591115,0.006269736407736275,0.8125 ± 0.0063,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,test,omae_overall,0.19610578090294456,0.005801655770463537,0.1961 ± 0.0058,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,test,qwk_overall,0.73205948374315,0.012927941366448807,0.7321 ± 0.0129,5,5,complete
+ViT,2D,RSS,Right Subarticular Stenosis,test,ser_overall,0.00860600566205612,0.0017485489386227181,0.0086 ± 0.0017,5,5,complete

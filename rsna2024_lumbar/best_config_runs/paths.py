@@ -20,6 +20,8 @@ LEGACY_PERF_PIPELINE_ENV_VAR = "RSNA2024_PERF_PIPELINE_METRICS"
 LEGACY_ORDINAL_ENV_VAR = "RSNA2024_ORDINAL_METRICS"
 DEFAULT_REPEATS = 5
 DEFAULT_SPLIT_SEEDS = (42, 142, 242, 342, 442)
+# Beyond-Accuracy condition-specific protocol (independent of NAS / best_config_runs seeds).
+CONDITION_SPECIFIC_SPLIT_SEEDS = (42, 43, 44, 45, 46)
 
 
 def model_results_dir(config_stem: str, *, output_base: Path | None = None) -> Path:

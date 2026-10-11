@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import cm
-from matplotlib.colors import Normalize
+from matplotlib.colors import LinearSegmentedColormap, Normalize
 
 from rsna2024_lumbar.best_config_runs.paths import RESULTS_DIR
 from rsna2024_lumbar.visualizations import SPINAL_LEVEL_FIGURES_DIR
@@ -40,6 +40,21 @@ ARCH_COLORS: dict[str, str] = {
 }
 WORST_COLOR = "#EF4444"
 BEST_COLOR = "#16A34A"
+# Cream → orange → maroon, matching the manuscript Macro-F1 heatmap palette.
+MACRO_F1_CMAP = LinearSegmentedColormap.from_list(
+    "macro_f1_oranges",
+    (
+        "#FFF7EC",
+        "#FEE8C8",
+        "#FDD49E",
+        "#FDBB84",
+        "#FC8D59",
+        "#EF6548",
+        "#D7301F",
+        "#B30000",
+        "#7F0000",
+    ),
+)
 
 DEFAULT_MEANS = RESULTS_DIR / "protocol_spinal_level" / "spinal_level_means.csv"
 
@@ -403,6 +418,12 @@ def plot_anatomical_multi_metric_overlay(agg: pd.DataFrame, output_dir: Path) ->
     return _save_figure(fig, output_dir, "anatomically_grounded_multi_metric_overlay")
 
 
+def _heatmap_text_color(value: float, vmin: float, vmax: float) -> str:
+    span = vmax - vmin
+    t = (value - vmin) / span if span else 0.0
+    return "#FFFFFF" if t >= 0.68 else "#111827"
+
+
 def plot_macro_f1_heatmaps(df: pd.DataFrame, output_dir: Path) -> dict[str, Path]:
     _style()
     vmin = float(df["f1_mean"].min())
@@ -412,7 +433,7 @@ def plot_macro_f1_heatmaps(df: pd.DataFrame, output_dir: Path) -> dict[str, Path
         "2D": "spinal_level_macro_f1_heatmap_2d",
         "2.5D-to-3D": "spinal_level_macro_f1_heatmap_25d_to_3d",
     }
-    cmap = plt.get_cmap("YlGn")
+    cmap = MACRO_F1_CMAP
     norm = Normalize(vmin=vmin, vmax=vmax)
     fig, axes = plt.subplots(1, 2, figsize=(12.4, 4.6))
     last_im = None
@@ -426,7 +447,15 @@ def plot_macro_f1_heatmaps(df: pd.DataFrame, output_dir: Path) -> dict[str, Path
         for i in range(len(ARCH_ORDER)):
             for j in range(len(LEVEL_ORDER)):
                 value = float(pivot.iloc[i, j])
-                ax.text(j, i, f"{value:.3f}", ha="center", va="center", fontsize=8, color="#111827")
+                ax.text(
+                    j,
+                    i,
+                    f"{value:.3f}",
+                    ha="center",
+                    va="center",
+                    fontsize=8,
+                    color=_heatmap_text_color(value, vmin, vmax),
+                )
         ax.set_xticks(range(len(LEVEL_ORDER)))
         ax.set_xticklabels([LEVEL_LABELS[k] for k in LEVEL_ORDER])
         ax.set_yticks(range(len(ARCH_ORDER)))
@@ -439,7 +468,16 @@ def plot_macro_f1_heatmaps(df: pd.DataFrame, output_dir: Path) -> dict[str, Path
         sax.imshow(pivot.to_numpy(dtype=float), cmap=cmap, norm=norm, aspect="auto")
         for i in range(len(ARCH_ORDER)):
             for j in range(len(LEVEL_ORDER)):
-                sax.text(j, i, f"{float(pivot.iloc[i, j]):.3f}", ha="center", va="center", fontsize=8)
+                value = float(pivot.iloc[i, j])
+                sax.text(
+                    j,
+                    i,
+                    f"{value:.3f}",
+                    ha="center",
+                    va="center",
+                    fontsize=8,
+                    color=_heatmap_text_color(value, vmin, vmax),
+                )
         sax.set_xticks(range(len(LEVEL_ORDER)))
         sax.set_xticklabels([LEVEL_LABELS[k] for k in LEVEL_ORDER])
         sax.set_yticks(range(len(ARCH_ORDER)))
@@ -448,13 +486,13 @@ def plot_macro_f1_heatmaps(df: pd.DataFrame, output_dir: Path) -> dict[str, Path
         sax.set_ylabel("Architecture")
         sax.set_title(f"Spinal-Level Macro-F1 Heatmap ({rep})")
         cbar_s = single.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=sax, fraction=0.046)
-        cbar_s.set_label("Macro-F1")
+        cbar_s.set_label("Macro-F1 (higher is better)")
         single.tight_layout()
         png, pdf = _save_figure(single, output_dir, stems[rep])
         paths[f"{rep}_png"] = png
         paths[f"{rep}_pdf"] = pdf
     cbar_ax = fig.add_axes((0.93, 0.18, 0.015, 0.64))
-    fig.colorbar(last_im, cax=cbar_ax).set_label("Macro-F1")
+    fig.colorbar(last_im, cax=cbar_ax).set_label("Macro-F1 (higher is better)")
     fig.subplots_adjust(left=0.07, right=0.91, wspace=0.28, top=0.86, bottom=0.16)
     combined_png, combined_pdf = _save_figure(fig, output_dir, "spinal_level_macro_f1_profiles")
     paths["combined_png"] = combined_png

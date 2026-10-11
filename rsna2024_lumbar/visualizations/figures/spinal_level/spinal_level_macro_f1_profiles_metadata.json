@@ -19,8 +19,8 @@
     "L4/L5",
     "L5/S1"
   ],
-  "timestamp": "2026-10-11T08:00:58.857849+00:00",
-  "git_commit": "6f31d5926b70e3795eb70692b88e23dd0d751630",
+  "timestamp": "2026-10-11T08:11:49.006492+00:00",
+  "git_commit": "948c8238027c62127ba8e63dc70b79a7731d3d33",
   "script_name": "plot_spinal_level_results.py",
   "n_rows": 40,
   "vmin_f1": 0.24297305724847576,

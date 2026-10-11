@@ -7,6 +7,7 @@ from pathlib import Path
 
 from rsna2024_lumbar.best_config_runs.paths import RESULTS_DIR
 from rsna2024_lumbar.visualizations import (
+    CONDITION_SPECIFIC_FIGURES_DIR,
     ORDINAL_FIGURES_DIR,
     PATIENT_LEVEL_FIGURES_DIR,
     SPINAL_LEVEL_FIGURES_DIR,
@@ -23,6 +24,10 @@ from rsna2024_lumbar.visualizations.plot_spinal_level_results import (
 from rsna2024_lumbar.visualizations.plot_ordinal_severity_results import (
     DEFAULT_MEANS as ORDINAL_DEFAULT_MEANS,
     generate_ordinal_severity_figures,
+)
+from rsna2024_lumbar.visualizations.plot_condition_specific_results import (
+    DEFAULT_MEANS as CONDITION_DEFAULT_MEANS,
+    generate_condition_specific_figures,
 )
 
 
@@ -95,6 +100,24 @@ def main(argv: list[str] | None = None) -> int:
     )
     ordinal.add_argument("--split", default="validation")
 
+    condition = sub.add_parser(
+        "condition-specific",
+        help="Condition-specific reliability profiles, bottleneck, and uniformity figures.",
+    )
+    condition.add_argument(
+        "--means",
+        type=Path,
+        default=CONDITION_DEFAULT_MEANS,
+        help="condition_specific_by_condition.csv (or condspec_condition_means.csv).",
+    )
+    condition.add_argument(
+        "--output-dir",
+        type=Path,
+        default=CONDITION_SPECIFIC_FIGURES_DIR,
+        help="Directory for PNG/PDF/CSV/JSON outputs.",
+    )
+    condition.add_argument("--split", default="validation")
+
     args = parser.parse_args(argv)
 
     if args.command == "patient-level":
@@ -114,6 +137,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "ordinal":
         generate_ordinal_severity_figures(
+            means_path=args.means,
+            output_dir=args.output_dir,
+            split=args.split,
+        )
+        return 0
+    if args.command == "condition-specific":
+        generate_condition_specific_figures(
             means_path=args.means,
             output_dir=args.output_dir,
             split=args.split,

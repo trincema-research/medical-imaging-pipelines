@@ -74,3 +74,25 @@ Outputs under [`figures/ordinal/`](figures/ordinal/):
 | Severe ordinal error burden | [severe_ordinal_error_burden.png](figures/ordinal/severe_ordinal_error_burden.png) | [pdf](figures/ordinal/severe_ordinal_error_burden.pdf) |
 | Condition-level audit table | [ordinal_plot_source_condition_level.csv](figures/ordinal/ordinal_plot_source_condition_level.csv) | |
 | Architecture-mean audit table | [ordinal_plot_source_architecture_means.csv](figures/ordinal/ordinal_plot_source_architecture_means.csv) | |
+
+## Condition-specific (validation)
+
+```bash
+python -m rsna2024_lumbar.visualizations condition-specific
+# same:
+python -m rsna2024_lumbar.visualizations.plot_condition_specific_results
+```
+
+Reads `protocol_condition_specific/condition_specific_by_condition.csv`, keeps the 40 architecture × representation × condition rows, and records incomplete 4-run groups without fabricating the missing repeats.
+
+Outputs under [`figures/condition_specific/`](figures/condition_specific/):
+
+| Figure | PNG | PDF |
+|--------|-----|-----|
+| Reliability profiles | [condition_specific_reliability_profiles.png](figures/condition_specific/condition_specific_reliability_profiles.png) | [pdf](figures/condition_specific/condition_specific_reliability_profiles.pdf) |
+| Reliability radar | [condition_specific_reliability_radar.png](figures/condition_specific/condition_specific_reliability_radar.png) | [pdf](figures/condition_specific/condition_specific_reliability_radar.pdf) |
+| Bottleneck analysis | [condition_specific_bottleneck_analysis.png](figures/condition_specific/condition_specific_bottleneck_analysis.png) | [pdf](figures/condition_specific/condition_specific_bottleneck_analysis.pdf) |
+| Bottleneck vs uniformity | [condition_specific_bottleneck_uniformity.png](figures/condition_specific/condition_specific_bottleneck_uniformity.png) | [pdf](figures/condition_specific/condition_specific_bottleneck_uniformity.pdf) |
+| Macro-F1 heatmap | [condition_specific_macro_f1_heatmap.png](figures/condition_specific/condition_specific_macro_f1_heatmap.png) | [pdf](figures/condition_specific/condition_specific_macro_f1_heatmap.pdf) |
+| Condition-level audit table | [condition_specific_plot_source.csv](figures/condition_specific/condition_specific_plot_source.csv) | |
+| Bottleneck / uniformity table | [condition_specific_bottleneck_uniformity_source.csv](figures/condition_specific/condition_specific_bottleneck_uniformity_source.csv) | |

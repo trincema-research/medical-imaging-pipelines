@@ -34,6 +34,7 @@ python -m rsna2024_lumbar.nas.deploy --family efficientnet --num-gpus 8 --all-co
 python -m rsna2024_lumbar.best_config_runs run-all --repeats 5 --epochs 50  # post-NAS retrain + CSV metrics
 python -m rsna2024_lumbar.visualizations patient-level  # publication figures from harvested CSVs
 python -m rsna2024_lumbar.visualizations spinal-level   # spinal-level bottleneck / profile / heatmap figures
+python -m rsna2024_lumbar.visualizations ordinal        # ordinal QWK vs O-MAE / heatmaps / SER figures
 # figure links: rsna2024_lumbar/visualizations/README.md
 ```
 

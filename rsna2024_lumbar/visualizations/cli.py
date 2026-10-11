@@ -6,7 +6,11 @@ import argparse
 from pathlib import Path
 
 from rsna2024_lumbar.best_config_runs.paths import RESULTS_DIR
-from rsna2024_lumbar.visualizations import PATIENT_LEVEL_FIGURES_DIR, SPINAL_LEVEL_FIGURES_DIR
+from rsna2024_lumbar.visualizations import (
+    ORDINAL_FIGURES_DIR,
+    PATIENT_LEVEL_FIGURES_DIR,
+    SPINAL_LEVEL_FIGURES_DIR,
+)
 from rsna2024_lumbar.visualizations.plot_patient_level_results import (
     DEFAULT_REPEAT,
     DEFAULT_SUMMARY,
@@ -15,6 +19,10 @@ from rsna2024_lumbar.visualizations.plot_patient_level_results import (
 from rsna2024_lumbar.visualizations.plot_spinal_level_results import (
     DEFAULT_MEANS,
     generate_spinal_level_figures,
+)
+from rsna2024_lumbar.visualizations.plot_ordinal_severity_results import (
+    DEFAULT_MEANS as ORDINAL_DEFAULT_MEANS,
+    generate_ordinal_severity_figures,
 )
 
 
@@ -69,6 +77,24 @@ def main(argv: list[str] | None = None) -> int:
     )
     spinal.add_argument("--split", default="validation")
 
+    ordinal = sub.add_parser(
+        "ordinal",
+        help="Ordinal severity QWK vs O-MAE, metric heatmaps, 2D vs 2.5D, and SER burden figures.",
+    )
+    ordinal.add_argument(
+        "--means",
+        type=Path,
+        default=ORDINAL_DEFAULT_MEANS,
+        help="condition_specific_by_condition.csv (or ordinal_condition_means.csv).",
+    )
+    ordinal.add_argument(
+        "--output-dir",
+        type=Path,
+        default=ORDINAL_FIGURES_DIR,
+        help="Directory for PNG/PDF/CSV/JSON outputs.",
+    )
+    ordinal.add_argument("--split", default="validation")
+
     args = parser.parse_args(argv)
 
     if args.command == "patient-level":
@@ -81,6 +107,13 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.command == "spinal-level":
         generate_spinal_level_figures(
+            means_path=args.means,
+            output_dir=args.output_dir,
+            split=args.split,
+        )
+        return 0
+    if args.command == "ordinal":
+        generate_ordinal_severity_figures(
             means_path=args.means,
             output_dir=args.output_dir,
             split=args.split,

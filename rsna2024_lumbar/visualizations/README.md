@@ -53,3 +53,24 @@ Outputs under [`figures/spinal_level/`](figures/spinal_level/):
 | Combined heatmaps | [spinal_level_macro_f1_profiles.png](figures/spinal_level/spinal_level_macro_f1_profiles.png) | [pdf](figures/spinal_level/spinal_level_macro_f1_profiles.pdf) |
 | 40-row audit table | [spinal_level_plot_source.csv](figures/spinal_level/spinal_level_plot_source.csv) | |
 | Bottleneck / overlay tables | [spinal_level_bottleneck_source.csv](figures/spinal_level/spinal_level_bottleneck_source.csv) · [spinal_level_anatomical_overlay_source.csv](figures/spinal_level/spinal_level_anatomical_overlay_source.csv) | |
+
+## Ordinal severity (validation)
+
+```bash
+python -m rsna2024_lumbar.visualizations ordinal
+# same:
+python -m rsna2024_lumbar.visualizations.plot_ordinal_severity_results
+```
+
+Reads `condition_specific_by_condition.csv` (or a wide `ordinal_condition_means.csv`), keeps the 40 architecture × representation × condition rows, and stops if the schema is incomplete.
+
+Outputs under [`figures/ordinal/`](figures/ordinal/):
+
+| Figure | PNG | PDF |
+|--------|-----|-----|
+| QWK vs O-MAE trade-off | [ordinal_qwk_vs_omae_tradeoff.png](figures/ordinal/ordinal_qwk_vs_omae_tradeoff.png) | [pdf](figures/ordinal/ordinal_qwk_vs_omae_tradeoff.pdf) |
+| Ordinal metric heatmaps | [ordinal_metric_heatmaps.png](figures/ordinal/ordinal_metric_heatmaps.png) | [pdf](figures/ordinal/ordinal_metric_heatmaps.pdf) |
+| 2D vs 2.5D gain / degradation | [ordinal_2d_vs_25d_gain_degradation.png](figures/ordinal/ordinal_2d_vs_25d_gain_degradation.png) | [pdf](figures/ordinal/ordinal_2d_vs_25d_gain_degradation.pdf) |
+| Severe ordinal error burden | [severe_ordinal_error_burden.png](figures/ordinal/severe_ordinal_error_burden.png) | [pdf](figures/ordinal/severe_ordinal_error_burden.pdf) |
+| Condition-level audit table | [ordinal_plot_source_condition_level.csv](figures/ordinal/ordinal_plot_source_condition_level.csv) | |
+| Architecture-mean audit table | [ordinal_plot_source_architecture_means.csv](figures/ordinal/ordinal_plot_source_architecture_means.csv) | |

@@ -17,10 +17,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "scikit-learn>=1.3"]
+dev = ["pytest>=8.0", "scikit-learn>=1.3", "matplotlib>=3.8"]
 kaggle = ["kaggle>=1.6"]
 nas = ["torch>=2.1", "torchvision>=0.16"]
 best_config_runs = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
+visualizations = ["matplotlib>=3.8"]
 perf_pipeline = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
 ordinal = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
 
@@ -45,6 +46,7 @@ rsna2024-perf-pipeline-pack = "rsna2024_lumbar.best_config_runs.pack_cloud:main"
 rsna2024-perf-pipeline-unpack = "rsna2024_lumbar.best_config_runs.unpack_cloud:main"
 rsna2024-perf-pipeline-deploy = "rsna2024_lumbar.best_config_runs.deploy_cloud:main"
 rsna2024-ordinal = "rsna2024_lumbar.best_config_runs.cli:main"
+rsna2024-visualizations = "rsna2024_lumbar.visualizations.cli:main"
 
 [tool.setuptools.package-data]
 "rsna2024_lumbar.nas" = ["configs/*.json"]

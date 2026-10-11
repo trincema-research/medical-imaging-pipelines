@@ -1,0 +1,34 @@
+{
+  "source_file": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\best_config_runs\\results\\protocol_patient_level\\patient_level_summary.csv",
+  "source_repeat_file": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\best_config_runs\\results\\protocol_patient_level\\patient_level_repeat_summary.csv",
+  "split": "validation",
+  "generated_from_real_results": true,
+  "architectures": [
+    "ViT",
+    "MaxViT",
+    "ConvNeXt",
+    "EfficientNet"
+  ],
+  "representations": [
+    "2D",
+    "2.5D-to-3D"
+  ],
+  "timestamp": "2026-10-11T07:13:06.644803+00:00",
+  "git_commit": "8300839a0b322308ee16f0c2db80e2ab812a34c5",
+  "script_name": "plot_patient_level_results.py",
+  "n_configurations": 8,
+  "run_counts": {
+    "ConvNeXt 2.5D-to-3D": 5,
+    "ConvNeXt 2D": 5,
+    "EfficientNet 2.5D-to-3D": 5,
+    "EfficientNet 2D": 5,
+    "MaxViT 2.5D-to-3D": 5,
+    "MaxViT 2D": 5,
+    "ViT 2.5D-to-3D": 5,
+    "ViT 2D": 5
+  },
+  "repeat_count_warnings": [
+    "ConvNeXt 2.5D-to-3D: harvested n_repeats=5 (guide expected 4). Using harvested count.",
+    "EfficientNet 2.5D-to-3D: harvested n_repeats=5 (guide expected 4). Using harvested count."
+  ]
+}

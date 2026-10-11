@@ -6,6 +6,7 @@
 …  training/          later
 ⚙  nas/               NAS grids · GPU launch · cloud pack/deploy (8 families)
 ✔  best_config_runs/     retrain NAS best configs · severity metrics · cloud zip
+✔  visualizations/    publication figures from harvested CSVs
 ⬇  data/              raw/ · processed/ · nas_compact/ · best_config_runs/results/
 ☰  traces/            download.log · unzip.log · validate.log · pipeline.log
 ✔  tests/             pytest + synthetic mini-dump
@@ -107,6 +108,17 @@ python -m rsna2024_lumbar.best_config_runs nas-snapshot-all
 Cloud (single GPU): pack with `best_config_runs.pack_cloud`, or copy **`lumbar_best_config_runs.py`** next to the zip and run `python lumbar_best_config_runs.py all --repeats 5`.
 
 Depth: [best_config_runs/README.md](best_config_runs/README.md) · results: [data/best_config_runs/README.md](data/best_config_runs/README.md).
+
+## ✔ Visualizations
+
+Publication figures from harvested CSVs (not from manuscript numbers). Same level as `data/`.
+
+```bash
+pip install -e ".[visualizations,dev]"
+python -m rsna2024_lumbar.visualizations patient-level
+```
+
+Writes PNG/PDF under [visualizations/figures/patient_level/](visualizations/figures/patient_level/). Depth: [visualizations/README.md](visualizations/README.md).
 
 ## ✔ Tests
 

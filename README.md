@@ -32,6 +32,7 @@ python -m rsna2024_lumbar.nas.launch --family efficientnet --num-gpus 8 --spawn 
 python -m rsna2024_lumbar.nas.pack --profile efficientnet_deploy --legacy-root /path/to/lumbar  # deploy zip
 python -m rsna2024_lumbar.nas.deploy --family efficientnet --num-gpus 8 --all-conditions  # cloud one-shot
 python -m rsna2024_lumbar.best_config_runs run-all --repeats 5 --epochs 50  # post-NAS retrain + CSV metrics
+python -m rsna2024_lumbar.visualizations patient-level  # publication figures from harvested CSVs
 ```
 
 **Cloud NAS:** pack includes code, label CSVs, optional `data/processed/centered/` PNGs, and a copied `vit_nas_lumbar.py` bundle. Unzip on the GPU box and run `nas.deploy` (see [rsna2024_lumbar/nas/README.md](rsna2024_lumbar/nas/README.md)).

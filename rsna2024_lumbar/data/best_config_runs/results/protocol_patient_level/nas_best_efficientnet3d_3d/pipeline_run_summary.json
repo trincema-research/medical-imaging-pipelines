@@ -1,0 +1,7 @@
+{
+  "best_config": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\nas_compact\\best_configs\\nas_best_efficientnet3d_3d.json",
+  "model_label": "EfficientNet 3D",
+  "repeats": 5,
+  "run_count": 24,
+  "harvested_from": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\best_config_runs\\results\\protocol_patient_level"
+}

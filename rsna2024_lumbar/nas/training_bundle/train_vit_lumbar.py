@@ -465,6 +465,78 @@ def train_one_epoch(
     return running_loss / max(seen, 1), running_acc / max(seen, 1)
 
 
+def _study_ids_to_numpy(study_ids: Any) -> np.ndarray:
+    if hasattr(study_ids, "detach"):
+        study_ids = study_ids.detach().cpu().numpy()
+    return np.asarray(study_ids).reshape(-1)
+
+
+def _softmax_rows(logits: np.ndarray) -> np.ndarray:
+    z = logits - np.max(logits, axis=-1, keepdims=True)
+    exp = np.exp(z)
+    return exp / np.clip(np.sum(exp, axis=-1, keepdims=True), 1e-12, None)
+
+
+def save_split_predictions(
+    logits: np.ndarray,
+    targets: np.ndarray,
+    study_ids: np.ndarray,
+    output_dir: Path,
+    *,
+    split: str,
+    condition: str,
+    epoch: int,
+) -> Path:
+    """One row per patient x spinal level with a valid label (overwrites prior best)."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    split_name = {"train": "train", "val": "validation", "test": "test"}.get(split, split)
+    study_ids = np.asarray(study_ids).reshape(-1)
+    rows: List[Dict[str, Any]] = []
+    n = int(logits.shape[0])
+    num_levels = int(logits.shape[1]) if n else 0
+    for i in range(n):
+        patient_id = int(study_ids[i])
+        for level_idx in range(num_levels):
+            y_true = int(targets[i, level_idx])
+            if y_true == IGNORE_LABEL:
+                continue
+            y_pred = int(logits[i, level_idx].argmax())
+            level_key = LUMBAR_LEVELS[level_idx]
+            probs = _softmax_rows(logits[i, level_idx].reshape(1, -1))[0]
+            rows.append(
+                {
+                    "patient_id": patient_id,
+                    "condition": condition,
+                    "spinal_level": LUMBAR_LEVEL_DISPLAY.get(level_key, level_key),
+                    "split": split_name,
+                    "y_true": y_true,
+                    "y_pred": y_pred,
+                    "p_class_0": float(probs[0]) if probs.size > 0 else "",
+                    "p_class_1": float(probs[1]) if probs.size > 1 else "",
+                    "p_class_2": float(probs[2]) if probs.size > 2 else "",
+                    "epoch": epoch,
+                }
+            )
+    path = output_dir / f"predictions_{split}.csv"
+    fieldnames = [
+        "patient_id",
+        "condition",
+        "spinal_level",
+        "split",
+        "y_true",
+        "y_pred",
+        "p_class_0",
+        "p_class_1",
+        "p_class_2",
+        "epoch",
+    ]
+    with path.open("w", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+    return path
+
+
 @torch.no_grad()
 def evaluate(
     model: nn.Module,
@@ -475,17 +547,18 @@ def evaluate(
     show_batch_progress: bool = False,
     batch_progress_desc: str = "Eval batches",
     log_interval: int = 0,
-) -> Tuple[float, float, np.ndarray, np.ndarray]:
+) -> Tuple[float, float, np.ndarray, np.ndarray, np.ndarray]:
     model.eval()
     running_loss = 0.0
     running_acc = 0.0
     seen = 0
     all_logits = []
     all_targets = []
+    all_study_ids = []
     loop_start = time.time()
     num_batches = len(loader)
 
-    for batch_idx, (images, targets, _study_ids) in enumerate(
+    for batch_idx, (images, targets, study_ids) in enumerate(
         iter_with_progress(loader, enabled=show_batch_progress, desc=batch_progress_desc),
         start=1,
     ):
@@ -500,6 +573,7 @@ def evaluate(
         seen += batch_size
         all_logits.append(outputs.cpu().numpy())
         all_targets.append(targets.cpu().numpy())
+        all_study_ids.append(_study_ids_to_numpy(study_ids))
 
         if log_interval > 0 and (batch_idx % log_interval == 0 or batch_idx == num_batches):
             elapsed = time.time() - loop_start
@@ -513,7 +587,10 @@ def evaluate(
 
     logits = np.concatenate(all_logits, axis=0) if all_logits else np.empty((0, 5, 3))
     targets_np = np.concatenate(all_targets, axis=0) if all_targets else np.empty((0, 5))
-    return running_loss / max(seen, 1), running_acc / max(seen, 1), logits, targets_np
+    study_ids_np = (
+        np.concatenate(all_study_ids, axis=0) if all_study_ids else np.empty((0,), dtype=np.int64)
+    )
+    return running_loss / max(seen, 1), running_acc / max(seen, 1), logits, targets_np, study_ids_np
 
 
 def save_checkpoint(
@@ -1100,7 +1177,7 @@ def main(argv: List[str] | None = None) -> None:
             batch_progress_desc=f"Epoch {epoch}/{args.epochs} train",
             log_interval=args.log_interval,
         )
-        val_loss, val_acc, val_logits, val_targets = evaluate(
+        val_loss, val_acc, val_logits, val_targets, val_study_ids = evaluate(
             model,
             val_loader,
             criterion,
@@ -1109,7 +1186,7 @@ def main(argv: List[str] | None = None) -> None:
             batch_progress_desc=f"Epoch {epoch}/{args.epochs} val",
             log_interval=args.log_interval,
         )
-        test_loss, test_acc, test_logits, test_targets = evaluate(
+        test_loss, test_acc, test_logits, test_targets, test_study_ids = evaluate(
             model,
             test_loader,
             criterion,
@@ -1122,14 +1199,21 @@ def main(argv: List[str] | None = None) -> None:
         model.eval()
         train_logits_list = []
         train_targets_list = []
+        train_study_list = []
         with torch.no_grad():
-            for images, targets, _ in train_loader:
+            for images, targets, study_ids in train_loader:
                 images = images.to(device, non_blocking=True)
                 outputs = model(images)
                 train_logits_list.append(outputs.cpu().numpy())
                 train_targets_list.append(targets.numpy())
+                train_study_list.append(_study_ids_to_numpy(study_ids))
         train_logits = np.concatenate(train_logits_list, axis=0)
         train_targets = np.concatenate(train_targets_list, axis=0)
+        train_study_ids = (
+            np.concatenate(train_study_list, axis=0)
+            if train_study_list
+            else np.empty((0,), dtype=np.int64)
+        )
         train_metrics = compute_multi_head_metrics(train_logits, train_targets)
         val_metrics = compute_multi_head_metrics(val_logits, val_targets)
         test_metrics = compute_multi_head_metrics(test_logits, test_targets)
@@ -1225,6 +1309,34 @@ def main(argv: List[str] | None = None) -> None:
                 val_acc=val_acc,
                 condition=args.condition,
             )
+            if args.log_pipeline_metrics or _pipeline_severity_metrics_enabled():
+                save_split_predictions(
+                    train_logits,
+                    train_targets,
+                    train_study_ids,
+                    output_dir,
+                    split="train",
+                    condition=args.condition,
+                    epoch=epoch,
+                )
+                save_split_predictions(
+                    val_logits,
+                    val_targets,
+                    val_study_ids,
+                    output_dir,
+                    split="val",
+                    condition=args.condition,
+                    epoch=epoch,
+                )
+                save_split_predictions(
+                    test_logits,
+                    test_targets,
+                    test_study_ids,
+                    output_dir,
+                    split="test",
+                    condition=args.condition,
+                    epoch=epoch,
+                )
             print(
                 f"  -> Updated val confusion matrices (best val_acc={val_acc:.4f}, epoch {epoch})",
                 flush=True,

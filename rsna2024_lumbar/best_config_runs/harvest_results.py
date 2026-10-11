@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from rsna2024_lumbar.best_config_runs.condition_specific import write_condition_specific_outputs
+from rsna2024_lumbar.best_config_runs.patient_level import write_patient_level_outputs
 from rsna2024_lumbar.best_config_runs.spinal_level import write_spinal_level_outputs
 from rsna2024_lumbar.best_config_runs.config import list_best_config_files, load_best_config
 from rsna2024_lumbar.best_config_runs.paths import DEFAULT_BEST_CONFIG_DIR, RESULTS_DIR
@@ -31,6 +32,7 @@ def harvest_model_dir(
         condition = repeat_dir.parent.name
         repeat_index = int(repeat_dir.name.replace("repeat_", ""))
         manifest_path = repeat_dir / "pipeline_run_manifest.json"
+        run_config_path = repeat_dir / "run_config.json"
         family = ""
         archive_layout = ""
         split_seed = ""
@@ -42,6 +44,16 @@ def harvest_model_dir(
             trial_id = manifest.get("nas_trial_id", "")
             hp = manifest.get("hyperparameters") or {}
             archive_layout = hp.get("input_layout", "")
+        if run_config_path.is_file() and (
+            not family or not archive_layout or split_seed in ("", None)
+        ):
+            run_config = json.loads(run_config_path.read_text(encoding="utf-8"))
+            if not family:
+                family = str(run_config.get("model_type") or "")
+            if not archive_layout:
+                archive_layout = str(run_config.get("input_layout") or "")
+            if split_seed in ("", None):
+                split_seed = run_config.get("split_seed", run_config.get("seed", ""))
         meta = {
             "model_config": config_stem,
             "model_label": model_label,
@@ -115,6 +127,11 @@ def harvest_tree(
             print(f"Spinal-level: {spinal_paths['pipeline_summary']}")
         except ValueError as exc:
             print(f"Skip spinal-level: {exc}")
+        try:
+            patient_paths = write_patient_level_outputs(output_base, print_summary=False)
+            print(f"Patient-level: {patient_paths['summary']}")
+        except ValueError as exc:
+            print(f"Skip patient-level: {exc}")
     return combined
 
 

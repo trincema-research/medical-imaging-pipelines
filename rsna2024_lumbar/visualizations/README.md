@@ -31,3 +31,24 @@ Outputs under `figures/patient_level/`:
 | `*_metadata.json` | Source paths, git commit, run counts |
 
 Override paths with `--summary`, `--repeat-summary`, and `--output-dir`.
+
+## Spinal-level (validation)
+
+```bash
+python -m rsna2024_lumbar.visualizations spinal-level
+# same:
+python -m rsna2024_lumbar.visualizations.plot_spinal_level_results
+```
+
+Reads `protocol_spinal_level/spinal_level_means.csv`, averages the five conditions into 40 architecture × representation × level rows, and stops if the schema is incomplete.
+
+Outputs under `figures/spinal_level/`:
+
+| File | Figure |
+|------|--------|
+| `best_worst_spinal_level_bottleneck.png` / `.pdf` | Best vs worst Macro-F1 by level |
+| `spinal_level_profile_plots.png` / `.pdf` | Macro-F1 and QWK profiles |
+| `anatomically_grounded_multi_metric_overlay.png` / `.pdf` | Mean F1 / QWK / O-MAE / SER by level |
+| `spinal_level_macro_f1_heatmap_2d.png` / `..._25d_to_3d.png` | Shared-scale Macro-F1 heatmaps |
+| `spinal_level_plot_source.csv` | 40-row audit table |
+| `spinal_level_bottleneck_source.csv` / `spinal_level_anatomical_overlay_source.csv` | Derived tables |

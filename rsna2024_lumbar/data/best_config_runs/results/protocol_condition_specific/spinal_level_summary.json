@@ -1,0 +1,48 @@
+{
+  "n_runs_expected": 200,
+  "n_runs_found": 198,
+  "architectures": [
+    "ConvNeXt",
+    "EfficientNet",
+    "MaxViT",
+    "ViT"
+  ],
+  "representations": [
+    "2.5D-to-3D",
+    "2D"
+  ],
+  "conditions": [
+    "SCS",
+    "LFN",
+    "RFN",
+    "LSS",
+    "RSS"
+  ],
+  "spinal_levels": [
+    "L1/L2",
+    "L2/L3",
+    "L3/L4",
+    "L4/L5",
+    "L5/S1"
+  ],
+  "incomplete_groups": [
+    {
+      "architecture": "ConvNeXt",
+      "representation": "2.5D-to-3D",
+      "condition": "RFN",
+      "n_repeats": 4,
+      "expected_repeats": 5
+    },
+    {
+      "architecture": "EfficientNet",
+      "representation": "2.5D-to-3D",
+      "condition": "RSS",
+      "n_repeats": 4,
+      "expected_repeats": 5
+    }
+  ],
+  "oa_equals_accuracy": true,
+  "oa_equals_accuracy_checked_rows": 2970,
+  "missing_class_warnings": [],
+  "ranking_notes": "ConvNeXt 2D validation Macro-F1: macro-level 0.6028, best L4/L5, worst L1/L2, range 0.1668. EfficientNet 2D validation Macro-F1: macro-level 0.5671, best L4/L5, worst L1/L2, range 0.2981. MaxViT 2.5D-to-3D validation Macro-F1: macro-level 0.5027, best L4/L5, worst L1/L2, range 0.1741. MaxViT 2D validation Macro-F1: macro-level 0.5691, best L4/L5, worst L1/L2, range 0.2736. ViT 2.5D-to-3D validation Macro-F1: macro-level 0.3465, best L4/L5, worst L5/S1, range 0.1068. ViT 2D validation Macro-F1: macro-level 0.5511, best L4/L5, worst L1/L2, range 0.1357."
+}

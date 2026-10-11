@@ -18,6 +18,7 @@ from rsna2024_lumbar.best_config_runs.nas_snapshot import (
     write_nas_snapshot_csv,
 )
 from rsna2024_lumbar.best_config_runs.condition_specific import write_condition_specific_outputs
+from rsna2024_lumbar.best_config_runs.patient_level import write_patient_level_outputs
 from rsna2024_lumbar.best_config_runs.spinal_level import write_spinal_level_outputs
 from rsna2024_lumbar.best_config_runs.paths import (
     CONDITION_SPECIFIC_SPLIT_SEEDS,
@@ -224,6 +225,12 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     spinal.add_argument("--output-base", type=Path, default=RESULTS_DIR)
 
+    patient = sub.add_parser(
+        "patient-level",
+        help="Beyond-Accuracy patient exact-rate / O-MAE / error-profile tables.",
+    )
+    patient.add_argument("--output-base", type=Path, default=RESULTS_DIR)
+
     validate = sub.add_parser(
         "validate-results",
         help="Check pipeline CSVs, article tables, and repeat audit JSON under output-base.",
@@ -279,6 +286,19 @@ def _write_spinal_level(output_base: Path) -> None:
     print(f"Wrote {paths['means']}")
     print(f"Wrote {paths['condition_summary']}")
     print(f"Wrote {paths['pipeline_summary']}")
+    print(f"Wrote {paths['paper_table']}")
+    print(f"Wrote {paths['summary_json']}")
+
+
+def _write_patient_level(output_base: Path) -> None:
+    try:
+        paths = write_patient_level_outputs(output_base)
+    except ValueError as exc:
+        print(f"Skip patient-level: {exc}")
+        return
+    print(f"Wrote {paths['runs']}")
+    print(f"Wrote {paths['repeat_summary']}")
+    print(f"Wrote {paths['summary']}")
     print(f"Wrote {paths['paper_table']}")
     print(f"Wrote {paths['summary_json']}")
 
@@ -416,6 +436,7 @@ def cmd_run_all(args: argparse.Namespace) -> int:
                     print(f"Wrote combined {out} ({len(combined)} rows)")
                 _write_condition_specific(args.output_base)
                 _write_spinal_level(args.output_base)
+                _write_patient_level(args.output_base)
             return 0
 
     rc = 0
@@ -444,6 +465,7 @@ def cmd_run_all(args: argparse.Namespace) -> int:
             print(f"Wrote combined {out} ({len(combined)} rows)")
         _write_condition_specific(args.output_base)
         _write_spinal_level(args.output_base)
+        _write_patient_level(args.output_base)
     return rc
 
 
@@ -498,12 +520,16 @@ def main(argv: list[str] | None = None) -> None:
         print(f"Wrote {long}")
         _write_condition_specific(args.output_base)
         _write_spinal_level(args.output_base)
+        _write_patient_level(args.output_base)
         raise SystemExit(0)
     if args.command == "condition-specific":
         _write_condition_specific(args.output_base)
         raise SystemExit(0)
     if args.command == "spinal-level":
         _write_spinal_level(args.output_base)
+        raise SystemExit(0)
+    if args.command == "patient-level":
+        _write_patient_level(args.output_base)
         raise SystemExit(0)
     if args.command == "validate-results":
         report = validate_results_tree(

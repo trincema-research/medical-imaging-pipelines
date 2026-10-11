@@ -27,4 +27,24 @@ Dense CSVs stay under `data/processed/dense_coordinates/` (gitignored). Do not c
 
 Backbones: `convnext_tiny` (smoke), `convnext_base` and `efficientnet_v2_l` (1st place), `efficientnet_v2_s`.
 
-Depth: [docs/landmark_coordinates.md](../docs/landmark_coordinates.md).
+## Cloud pack / NAS
+
+32 trials per condition (4 backbones × 2 sizes × 2 batches × 2 lrs). Same 1/2/4/8 GPU shards as severity NAS (`k = ceil(N/G)`, `CUDA_VISIBLE_DEVICES`). `--all-conditions` is sequential-by-condition.
+
+```bash
+# zip code + labels (small). Add --include-images to pack train_images/ (~30 GB DICOMs).
+python -m rsna2024_lumbar.landmarks pack --output lumbar_landmarks_cloud.zip
+python -m rsna2024_lumbar.landmarks pack --include-images --output lumbar_landmarks_cloud.zip
+
+# on the GPU box (stdlib unzip, no pip yet)
+python unzip_lumbar_landmarks_cloud.py --zip lumbar_landmarks_cloud.zip --dest ./landmarks_cloud
+cd landmarks_cloud
+pip install -e ".[landmarks]"
+
+# print plan / 8-GPU search / one-shot install+run
+python -m rsna2024_lumbar.landmarks nas --list
+python -m rsna2024_lumbar.landmarks nas --num-gpus 8 --all-conditions --spawn --wait --skip-completed
+python -m rsna2024_lumbar.landmarks deploy --num-gpus 8 --all-conditions --skip-completed
+```
+
+Do not commit the zip, DICOMs, or NAS histories. Depth: [docs/landmark_coordinates.md](../docs/landmark_coordinates.md).

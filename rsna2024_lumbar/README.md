@@ -52,9 +52,13 @@ Kaggle marks one `(x, y)` per `(study, condition, level)`. `densify` projects th
 pip install -e ".[landmarks,dev]"
 python -m rsna2024_lumbar.landmarks densify --max-studies 2 --progress
 python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --backbone convnext_tiny --image-size 64 --epochs 2 --max-studies 4
+
+# cloud: zip scripts (+ optional train_images/), unzip on the box, 1/2/4/8-GPU NAS
+python -m rsna2024_lumbar.landmarks pack --include-images
+python -m rsna2024_lumbar.landmarks nas --num-gpus 8 --all-conditions --spawn --wait
 ```
 
-Dense CSVs stay in `data/processed/dense_coordinates/` (gitignored). Depth: [landmarks/README.md](landmarks/README.md) · [docs/landmark_coordinates.md](docs/landmark_coordinates.md).
+Dense CSVs stay in `data/processed/dense_coordinates/` (gitignored). Do not commit the cloud zip. Depth: [landmarks/README.md](landmarks/README.md) · [docs/landmark_coordinates.md](docs/landmark_coordinates.md).
 
 ## ⚙ NAS
 

@@ -54,6 +54,7 @@ SCS only. Other condition columns in `train.csv` are empty. Catalog requires all
 | `test_nas_gpus.py` | `--num-gpus` only 1/2/4/8; auto-snap; 144/384/2304 shards cover every trial once; launch dry-run; pack zip has no PNG cache |
 | `test_landmark_densify.py` | axial neighbours keep projected `(x, y)`; densify writes CSV; 70/15/15 study split is disjoint |
 | `test_landmark_models.py` | ConvNeXt-Tiny 2D head shapes `(B,5,2)`; skip if no torch |
+| `test_landmark_nas.py` | 32-trial landmark grid; 1/2/4/8 shards cover 1–32; pack zip has scripts + labels, no DICOMs unless asked; stdlib unzip |
 
 ## ▾ Pass / fail at a glance
 

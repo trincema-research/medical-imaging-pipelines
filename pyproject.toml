@@ -49,9 +49,14 @@ rsna2024-perf-pipeline-deploy = "rsna2024_lumbar.best_config_runs.deploy_cloud:m
 rsna2024-ordinal = "rsna2024_lumbar.best_config_runs.cli:main"
 rsna2024-visualizations = "rsna2024_lumbar.visualizations.cli:main"
 rsna2024-landmarks = "rsna2024_lumbar.landmarks.cli:main"
+rsna2024-landmarks-nas = "rsna2024_lumbar.landmarks.launch:main"
+rsna2024-landmarks-pack = "rsna2024_lumbar.landmarks.pack:main"
+rsna2024-landmarks-unzip = "rsna2024_lumbar.landmarks.unzip:main"
+rsna2024-landmarks-deploy = "rsna2024_lumbar.landmarks.deploy:main"
 
 [tool.setuptools.package-data]
 "rsna2024_lumbar.nas" = ["configs/*.json"]
+"rsna2024_lumbar.landmarks" = ["configs/*.json"]
 
 [tool.setuptools.packages.find]
 include = ["common*", "rsna2024_lumbar*"]

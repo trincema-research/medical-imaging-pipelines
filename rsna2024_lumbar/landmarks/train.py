@@ -85,6 +85,7 @@ def train_condition(
     max_studies: int | None = None,
 ) -> dict:
     torch, _DataLoader, _Dataset = _require_torch()
+    print(f"listing {condition} samples under {data_root}", flush=True)
     samples = list_condition_samples(data_root, condition)
     if max_studies is not None:
         keep = sorted({s.study_id for s in samples})[: int(max_studies)]
@@ -102,11 +103,21 @@ def train_condition(
     ckpt = output_dir / f"{condition}_{backbone}.pt"
     train_loader = _make_loader(parts["train"], image_size, batch_size, True)
     val_loader = _make_loader(parts["val"] or parts["train"], image_size, batch_size, False)
+    print(
+        f"split 70/15/15  train={len(parts['train'])} val={len(parts['val'])} "
+        f"holdout={len(parts['holdout'])}  device={device}  backbone={backbone}",
+        flush=True,
+    )
     for epoch in range(1, int(epochs) + 1):
         train_m = _run_epoch(model, train_loader, train=True, optimizer=optimizer, device=device)
         val_m = _run_epoch(model, val_loader, train=False, device=device)
         row = {"epoch": epoch, "train": train_m, "val": val_m}
         history.append(row)
+        print(
+            f"epoch {epoch}/{epochs}  train l1={train_m['l1']:.4f} mae_px={train_m['mae_px']:.1f} pck5={train_m['pck5']:.3f}  "
+            f"val l1={val_m['l1']:.4f} mae_px={val_m['mae_px']:.1f} pck5={val_m['pck5']:.3f}",
+            flush=True,
+        )
         if val_m["l1"] < best_val:
             best_val = val_m["l1"]
             torch.save(

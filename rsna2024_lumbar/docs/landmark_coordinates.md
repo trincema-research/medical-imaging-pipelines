@@ -63,3 +63,20 @@ python -m rsna2024_lumbar.landmarks infer --checkpoint path/to.pt --output-csv p
 ```
 
 Holdout studies and the unlabeled Kaggle test set are the later target for `infer`. Geometry-filled train slices are the cheap dense supervision for a second training round (`source=projected`).
+
+---
+
+## 5. Cloud zip and GPU NAS
+
+Landmark training reads **DICOMs** (`train_images/`), not the PNG crop cache. Pack the scripts + label CSVs, and optionally the full image dump:
+
+```bash
+python -m rsna2024_lumbar.landmarks pack                         # code + labels
+python -m rsna2024_lumbar.landmarks pack --include-images        # + train_images/ (ZIP_STORED for .dcm)
+python unzip_lumbar_landmarks_cloud.py --zip lumbar_landmarks_cloud.zip --dest ./landmarks_cloud
+python -m rsna2024_lumbar.landmarks deploy --num-gpus 8 --all-conditions --skip-completed
+```
+
+Search grid (`landmarks/configs/landmark_nas_search_space.json`): ConvNeXt-Tiny / Base + EfficientNetV2-S / L × `{256, 512}` × batch `{4, 8}` × lr `{1e-4, 3e-4}` = **32 trials × 5 conditions**. Shard with the same formula as severity NAS: \(k=\lceil N/G\rceil\), one process per GPU, `CUDA_VISIBLE_DEVICES=g`. Eight GPUs → 4 trials each. `--all-conditions --spawn --wait` reuses the GPU set once per condition (sequential-by-condition, not 5× concurrent).
+
+Do not commit `lumbar_landmarks_cloud.zip`, DICOMs, or `data/processed/dense_coordinates/nas/`.

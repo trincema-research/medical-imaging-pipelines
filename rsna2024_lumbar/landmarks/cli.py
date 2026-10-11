@@ -1,8 +1,10 @@
-"""CLI: python -m rsna2024_lumbar.landmarks {densify,train,infer}"""
+"""CLI: python -m rsna2024_lumbar.landmarks {densify,train,infer,nas,pack,unzip,deploy}"""
 
 from __future__ import annotations
 
 import argparse
+import importlib
+import sys
 from pathlib import Path
 
 from rsna2024_lumbar.landmarks.constants import (
@@ -20,7 +22,10 @@ DEFAULT_RUNS = HERE / "data" / "processed" / DENSE_COORDINATES_DIRNAME / "runs"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Complete lumbar (x, y) coordinates for every series slice.")
+    p = argparse.ArgumentParser(
+        description="Complete lumbar (x, y) coordinates for every series slice.",
+        epilog="Cloud: nas | pack | unzip | deploy (see those modules for flags).",
+    )
     sub = p.add_subparsers(dest="command", required=True)
 
     densify = sub.add_parser("densify", help="Project each labeled mark onto every slice in its series.")
@@ -52,7 +57,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return p.parse_args(argv)
 
 
+CLOUD_COMMANDS = {
+    "nas": "rsna2024_lumbar.landmarks.launch",
+    "pack": "rsna2024_lumbar.landmarks.pack",
+    "unzip": "rsna2024_lumbar.landmarks.unzip",
+    "deploy": "rsna2024_lumbar.landmarks.deploy",
+}
+
+
 def main(argv: list[str] | None = None) -> int:
+    args_list = list(sys.argv[1:] if argv is None else argv)
+    if args_list and args_list[0] in CLOUD_COMMANDS:
+        return int(importlib.import_module(CLOUD_COMMANDS[args_list[0]]).main(args_list[1:]))
     args = parse_args(argv)
     if args.command == "densify":
         result = densify_coordinates(

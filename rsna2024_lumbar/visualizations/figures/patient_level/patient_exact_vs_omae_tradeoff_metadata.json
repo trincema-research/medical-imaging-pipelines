@@ -13,8 +13,8 @@
     "2D",
     "2.5D-to-3D"
   ],
-  "timestamp": "2026-10-11T07:13:06.708804+00:00",
-  "git_commit": "8300839a0b322308ee16f0c2db80e2ab812a34c5",
+  "timestamp": "2026-10-11T07:40:20.738188+00:00",
+  "git_commit": "d31a9b5dac41323ba5f801baab67f1531df75ff8",
   "script_name": "plot_patient_level_results.py",
   "n_configurations": 8,
   "run_counts": {

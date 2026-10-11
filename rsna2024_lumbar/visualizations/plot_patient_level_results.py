@@ -407,19 +407,21 @@ def plot_exact_vs_omae_tradeoff(validation: pd.DataFrame, output_dir: Path) -> t
     x_max = float(validation["exact_mean"].max() + validation["exact_std"].max()) + 0.015
     y_min = float(validation["omae_mean"].min() - validation["omae_std"].max()) - 0.01
     y_max = float(validation["omae_mean"].max() + validation["omae_std"].max()) + 0.015
-    ax.axhspan(y_min, np.mean([y_min, y_max]), xmin=0.55, color="#DCFCE7", alpha=0.45, zorder=0)
+    shade_top = float(np.mean([y_min, y_max]))
+    ax.axhspan(y_min, shade_top, xmin=0.55, color="#DCFCE7", alpha=0.45, zorder=0)
     ax.text(
         x_max - 0.002,
-        y_min + 0.008,
+        shade_top - 0.004,
         "Ideal direction:\nhigher exactness, lower O-MAE",
         ha="right",
-        va="bottom",
+        va="top",
         fontsize=8,
         color="#166534",
+        zorder=1,
     )
     offsets = {
         ("ViT", "2D"): (-78, 10),
-        ("MaxViT", "2D"): (10, -14),
+        ("MaxViT", "2D"): (8, -22),
         ("ConvNeXt", "2D"): (10, 8),
         ("EfficientNet", "2D"): (10, 10),
         ("ViT", "2.5D-to-3D"): (10, 8),
@@ -427,7 +429,8 @@ def plot_exact_vs_omae_tradeoff(validation: pd.DataFrame, output_dir: Path) -> t
         ("ConvNeXt", "2.5D-to-3D"): (10, 8),
         ("EfficientNet", "2.5D-to-3D"): (10, -12),
     }
-    for _, row in validation.iterrows():
+
+    def _plot_row(row: pd.Series, *, zorder: int) -> None:
         arch = str(row["arch"])
         rep = str(row["rep"])
         ax.errorbar(
@@ -443,7 +446,7 @@ def plot_exact_vs_omae_tradeoff(validation: pd.DataFrame, output_dir: Path) -> t
             markersize=8,
             markeredgecolor="white",
             markeredgewidth=0.6,
-            zorder=3,
+            zorder=zorder,
         )
         ax.annotate(
             f"{arch} ({rep})",
@@ -451,7 +454,14 @@ def plot_exact_vs_omae_tradeoff(validation: pd.DataFrame, output_dir: Path) -> t
             textcoords="offset points",
             xytext=offsets.get((arch, rep), (8, 8)),
             fontsize=8,
+            zorder=zorder + 1,
         )
+
+    on_top = (validation["arch"] == "MaxViT") & (validation["rep"] == "2D")
+    for _, row in validation.loc[~on_top].iterrows():
+        _plot_row(row, zorder=3)
+    for _, row in validation.loc[on_top].iterrows():
+        _plot_row(row, zorder=6)
     ax.set_xlim(x_min, x_max)
     ax.set_ylim(y_min, y_max)
     ax.set_xlabel("Patient Exact (higher is better)")

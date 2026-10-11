@@ -119,7 +119,7 @@ python -m rsna2024_lumbar.visualizations patient-level
 python -m rsna2024_lumbar.visualizations spinal-level
 ```
 
-Writes PNG/PDF under [visualizations/figures/](visualizations/figures/). Depth: [visualizations/README.md](visualizations/README.md).
+Writes PNG/PDF under [visualizations/figures/](visualizations/figures/). Depth and figure links: [visualizations/README.md](visualizations/README.md).
 
 ## ✔ Tests
 

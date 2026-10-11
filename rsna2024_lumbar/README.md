@@ -2,6 +2,7 @@
 
 ```
 ⚙  preprocessing/     crop DICOMs → PNG cache
+⚙  landmarks/         densify (x, y) on every slice · 2D ConvNeXt / EfficientNetV2
 …  models/            later
 …  training/          later
 ⚙  nas/               NAS grids · GPU launch · cloud pack/deploy (8 families)
@@ -42,6 +43,22 @@ python -m rsna2024_lumbar.preprocessing \
 ```
 
 `--data-root` is any Kaggle-shaped folder (`train.csv` + `train_images/`). Default output is `data/processed/<policy>/`. Policies: `centered` (64×64), `extend50` (96×64). Incomplete studies (missing a level/DICOM) are skipped.
+
+## ⚙ Landmark coordinates (all slices)
+
+Kaggle marks one `(x, y)` per `(study, condition, level)`. `densify` projects that LPS point onto every other slice in the series (axial “copy up and down”). Optional 2D regression matches the RSNA 2024 1st-place split: ConvNeXt-Base / EfficientNetV2-L, level-separated `(x/W, y/H)` heads, L1, 70/15/15 by `study_id`.
+
+```bash
+pip install -e ".[landmarks,dev]"
+python -m rsna2024_lumbar.landmarks densify --max-studies 2 --progress
+python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --backbone convnext_tiny --image-size 64 --epochs 2 --max-studies 4
+
+# cloud: zip scripts (+ optional train_images/), unzip on the box, 1/2/4/8-GPU NAS
+python -m rsna2024_lumbar.landmarks pack --include-images
+python -m rsna2024_lumbar.landmarks nas --num-gpus 8 --all-conditions --spawn --wait
+```
+
+Dense CSVs stay in `data/processed/dense_coordinates/` (gitignored). Do not commit the cloud zip. Depth: [landmarks/README.md](landmarks/README.md) · [docs/landmark_coordinates.md](docs/landmark_coordinates.md).
 
 ## ⚙ NAS
 

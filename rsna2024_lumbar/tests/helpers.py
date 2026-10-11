@@ -21,7 +21,17 @@ SLICE = 128
 DOT_XY = (64.0, 64.0)
 
 
-def write_gray_dicom(path: Path, pixels: np.ndarray, *, instance_number: int) -> None:
+def write_gray_dicom(
+    path: Path,
+    pixels: np.ndarray,
+    *,
+    instance_number: int,
+    ipp: tuple[float, float, float] | None = None,
+    iop: tuple[float, ...] | None = None,
+    pixel_spacing: tuple[float, float] | None = None,
+    slice_thickness: float | None = None,
+    series_description: str | None = None,
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     pixels = np.asarray(pixels, dtype=np.uint16)
     meta = FileMetaDataset()
@@ -42,6 +52,16 @@ def write_gray_dicom(path: Path, pixels: np.ndarray, *, instance_number: int) ->
     ds.HighBit = 15
     ds.PixelRepresentation = 0
     ds.InstanceNumber = int(instance_number)
+    if ipp is not None:
+        ds.ImagePositionPatient = [float(v) for v in ipp]
+    if iop is not None:
+        ds.ImageOrientationPatient = [float(v) for v in iop]
+    if pixel_spacing is not None:
+        ds.PixelSpacing = [float(v) for v in pixel_spacing]
+    if slice_thickness is not None:
+        ds.SliceThickness = float(slice_thickness)
+    if series_description is not None:
+        ds.SeriesDescription = series_description
     ds.PixelData = pixels.tobytes()
     ds.save_as(str(path), enforce_file_format=True)
 

@@ -7,8 +7,10 @@ FIGURES_DIR = Path(__file__).resolve().parent / "figures"
 PATIENT_LEVEL_FIGURES_DIR = FIGURES_DIR / "patient_level"
 SPINAL_LEVEL_FIGURES_DIR = FIGURES_DIR / "spinal_level"
 ORDINAL_FIGURES_DIR = FIGURES_DIR / "ordinal"
+CONDITION_SPECIFIC_FIGURES_DIR = FIGURES_DIR / "condition_specific"
 
 __all__ = [
+    "CONDITION_SPECIFIC_FIGURES_DIR",
     "FIGURES_DIR",
     "ORDINAL_FIGURES_DIR",
     "PATIENT_LEVEL_FIGURES_DIR",

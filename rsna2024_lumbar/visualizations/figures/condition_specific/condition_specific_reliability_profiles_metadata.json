@@ -1,0 +1,42 @@
+{
+  "source_file": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\best_config_runs\\results\\protocol_condition_specific\\condition_specific_by_condition.csv",
+  "generated_from_real_results": true,
+  "split": "validation",
+  "metric": "Macro-F1",
+  "architectures": [
+    "ViT",
+    "MaxViT",
+    "ConvNeXt",
+    "EfficientNet"
+  ],
+  "representations": [
+    "2D",
+    "2.5D-to-3D"
+  ],
+  "conditions": [
+    "SCS",
+    "LFN",
+    "RFN",
+    "LSS",
+    "RSS"
+  ],
+  "timestamp": "2026-10-11T09:21:20.100122+00:00",
+  "git_commit": "e8d1675996ca9a0b67b2210e6d919c03f91bad0b",
+  "script_name": "plot_condition_specific_results.py",
+  "n_rows": 40,
+  "incomplete_groups": [
+    {
+      "arch": "ConvNeXt",
+      "rep": "2.5D-to-3D",
+      "condition": "RFN",
+      "n_runs": 4
+    },
+    {
+      "arch": "EfficientNet",
+      "rep": "2.5D-to-3D",
+      "condition": "RSS",
+      "n_runs": 4
+    }
+  ],
+  "n_runs_min": 4
+}

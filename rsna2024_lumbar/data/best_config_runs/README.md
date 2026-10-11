@@ -36,15 +36,36 @@ NAS tells you what worked in search; best_config_runs produces **auditable, comp
 | `spinal_level_paper_table.csv` | Paper-ready val/test spinal tables. |
 | `spinal_level_radar_*.csv` / `spinal_level_heatmap_*.csv` | Plot-ready wide tables. |
 | `spinal_level_summary.json` | Run counts, incomplete groups, class-support warnings. |
+| `patient_level_runs.csv` | One row per architecture × representation × repeat × split × patient_id. |
+| `patient_level_repeat_summary.csv` | Equal-weight patient macros and error-profile rates per repeat. |
+| `patient_level_summary.csv` | Mean ± std across 5 repeats (paper source). |
+| `patient_level_paper_table.csv` | Paper-ready val/test patient table. |
+| `patient_error_profile_*.csv` / `patient_*_distribution_*.csv` | Plot-ready stacked-bar and boxplot tables. |
+| `patient_level_summary.json` | Incomplete groups, leakage warnings, PLOA not implemented. |
 | `*/pipeline_run_summary.json` | Repeat count, config path, harvest metadata. |
 
-Under each **`nas_best_*/<condition>/repeat_XX/`**, git tracks **`training_history.json`** and **`run_config.json`** only (audit / reproducibility). Other repeat artifacts (`training_metrics.csv`, confusion matrices, checkpoints) stay **local/gitignored**.
+Under each **`nas_best_*/<condition>/repeat_XX/`**, git tracks **`training_history.json`** and **`run_config.json`** only (audit / reproducibility). Other repeat artifacts (`training_metrics.csv`, `predictions_*.csv`, confusion matrices, checkpoints) stay **local/gitignored**.
+
+### Protocol trees vs the already-integrated grid
+
+The top-level `results/` tree is the earlier 5-repeat grid (split seeds **42 / 142 / 242 / 342 / 442**). Condition-specific and spinal-level tables there were already merged (PRs #15 and #16). The downloaded `results_ordinal_severity` dump matched those histories, so it was not re-imported.
+
+Three later retrains used the Beyond-Accuracy protocol seeds **42–46**. They are distinct GPU runs (no shared history hashes with the top-level tree) and live next to it:
+
+| Folder | Source dump | Tables in git |
+|--------|-------------|----------------|
+| `protocol_condition_specific/` | `results_condition-specific` | history + `run_config` + condition/spinal summaries |
+| `protocol_spinal_level/` | `results_spinal_level` | same |
+| `protocol_patient_level/` | `results_patient_level` | those plus `patient_level_*.csv` (needs local `predictions_*.csv` to rebuild) |
+
+Each protocol tree has **198 / 200** finished repeats. The same two runs are missing in all three: `nas_best_convnext3d_3d/right_neural_foraminal_narrowing/repeat_03` and `nas_best_efficientnet3d_3d/right_subarticular_stenosis/repeat_05`. Harvest `--results-root` against the protocol folder so `run_dir` resolves; `harvest_results` also reads `run_config.json` when `pipeline_run_manifest.json` was not copied.
 
 ### Metric columns
 
 - **Always (when retrain finished):** `train/val/test` `acc`, `accuracy_overall`, `f1_macro_overall`, `best_epoch`.
 - **Severity (OA, O-MAE, QWK, SER) + precision/recall:** logged **each epoch** when training is launched via `best_config_runs` (`--log-pipeline-metrics` on `train_vit_lumbar.py`). **`harvest_results`** copies overall **and per-level** (L1/L2 ... L5/S1) columns into `pipeline_results.csv`; optional `--legacy-severity-backfill` only fills missing **OA** from accuracy and **val** O-MAE/QWK/SER from val confusion matrices (old cloud bundles without the hook).
 - **Spinal-level tables** (`spinal_level_*.csv`) are post-hoc on those per-level columns (same 200 runs as condition-specific). Harvest / `run-all` write them automatically.
+- **Patient-level tables** (`patient_level_*.csv`) join `predictions_{train,val,test}.csv` (written at the best val epoch) by `patient_id` across the five conditions. Patient-macro exact-rate / O-MAE weight each patient equally; do not substitute pooled accuracy. Error profiles are `exact` / `adjacent_only` / `severe`. PLOA is not computed.
 
 Rebuild summaries from a downloaded results tree (no full retrain):
 
@@ -58,10 +79,11 @@ Article tables (after `pipeline_results.csv` exist):
 python -m rsna2024_lumbar.best_config_runs article-summary --output-base rsna2024_lumbar/data/best_config_runs/results
 python -m rsna2024_lumbar.best_config_runs condition-specific --output-base rsna2024_lumbar/data/best_config_runs/results
 python -m rsna2024_lumbar.best_config_runs spinal-level --output-base rsna2024_lumbar/data/best_config_runs/results
+python -m rsna2024_lumbar.best_config_runs patient-level --output-base rsna2024_lumbar/data/best_config_runs/results
 python -m rsna2024_lumbar.best_config_runs validate-results --output-base rsna2024_lumbar/data/best_config_runs/results
 ```
 
-Condition-specific and spinal-level tables are post-hoc on `pipeline_results` (same pattern as article-summary). Spinal-level analysis stratifies the same 200 runs by L1/L2 ... L5/S1; macro-level mean is the equal-weight mean of the five levels (not the pooled overall). Train with `--condition-specific-seeds` (42–46) for the Beyond-Accuracy protocol; existing harvested repeats keep their recorded `split_seed`. Incomplete 5-run groups are flagged and are not treated as complete.
+Condition-specific and spinal-level tables are post-hoc on `pipeline_results` (same pattern as article-summary). Spinal-level analysis stratifies the same 200 runs by L1/L2 ... L5/S1; macro-level mean is the equal-weight mean of the five levels (not the pooled overall). Patient-level analysis joins per-prediction dumps across conditions for the same patient. Train with `--condition-specific-seeds` (42–46) for the Beyond-Accuracy protocol; existing harvested repeats keep their recorded `split_seed`. Incomplete 5-run groups are flagged and are not treated as complete.
 
 Regenerate NAS OA snapshots:
 
@@ -91,7 +113,7 @@ Use **`--num-gpus 4`** (or `0` for auto) on `run-all` to shard pending jobs acro
 
 ## Cloud (8 GPUs)
 
-There is no separate condition-specific or spinal-level trainer. Pack the usual best_config_runs zip, unpack on the VM, then train with **`--condition-specific-seeds`** (split seeds 42–46). After `run-all`, `condition_specific_*.csv` and `spinal_level_*.csv` are written automatically.
+There is no separate condition-specific, spinal-level, or patient-level trainer. Pack the usual best_config_runs zip, unpack on the VM, then train with **`--condition-specific-seeds`** (split seeds 42–46). After `run-all`, `condition_specific_*.csv`, `spinal_level_*.csv`, and `patient_level_*.csv` are written automatically when `predictions_*.csv` exist in the repeat dirs.
 
 ### 1) Pack (local machine)
 
@@ -171,9 +193,11 @@ python -m rsna2024_lumbar.best_config_runs condition-specific \
   --output-base rsna2024_lumbar/data/best_config_runs/results
 python -m rsna2024_lumbar.best_config_runs spinal-level \
   --output-base rsna2024_lumbar/data/best_config_runs/results
+python -m rsna2024_lumbar.best_config_runs patient-level \
+  --output-base rsna2024_lumbar/data/best_config_runs/results
 ```
 
-`harvest_results` also writes the condition-specific and spinal-level CSVs when `pipeline_results` is present.
+`harvest_results` also writes the condition-specific, spinal-level, and patient-level CSVs when `pipeline_results` (and for patient-level, `predictions_*.csv`) is present.
 
 ## Output layout (local disk)
 

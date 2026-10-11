@@ -1,0 +1,54 @@
+{
+  "n_runs_expected": 200,
+  "n_runs_found": 198,
+  "architectures": [
+    "ConvNeXt",
+    "EfficientNet",
+    "MaxViT",
+    "ViT"
+  ],
+  "representations": [
+    "2.5D-to-3D",
+    "2D"
+  ],
+  "conditions": [
+    "SCS",
+    "LFN",
+    "RFN",
+    "LSS",
+    "RSS"
+  ],
+  "seeds": [
+    "42",
+    "43",
+    "44",
+    "45",
+    "46"
+  ],
+  "protocol_seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "incomplete_groups": [
+    {
+      "architecture": "ConvNeXt",
+      "representation": "2.5D-to-3D",
+      "condition": "RFN",
+      "n_runs": 4,
+      "expected_runs": 5
+    },
+    {
+      "architecture": "EfficientNet",
+      "representation": "2.5D-to-3D",
+      "condition": "RSS",
+      "n_runs": 4,
+      "expected_runs": 5
+    }
+  ],
+  "oa_equals_accuracy": true,
+  "oa_equals_accuracy_checked_rows": 594,
+  "ranking_notes": "oa_overall validation: best condition-macro is ConvNeXt 2D (0.8581); best condition SCS, worst LFN. f1_macro_overall validation: best condition-macro is MaxViT 2D (0.6778); best condition RSS, worst LFN. qwk_overall validation: best condition-macro is MaxViT 2D (0.7265); best condition SCS, worst LFN."
+}

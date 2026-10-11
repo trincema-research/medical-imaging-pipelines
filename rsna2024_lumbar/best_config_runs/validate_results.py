@@ -21,6 +21,13 @@ from rsna2024_lumbar.best_config_runs.condition_specific import (
     build_runs_dataframe,
     summarize_pipeline,
 )
+from rsna2024_lumbar.best_config_runs.patient_level import (
+    OUTPUT_SUMMARY as PATIENT_SUMMARY,
+    build_patient_runs,
+    load_prediction_records,
+    summarize_across_repeats,
+    summarize_repeats,
+)
 from rsna2024_lumbar.best_config_runs.spinal_level import (
     OUTPUT_PIPELINE_SUMMARY as SPINAL_PIPELINE_SUMMARY,
     aggregate_level_means,
@@ -289,6 +296,16 @@ def validate_results_tree(
     else:
         report.warning("missing_spinal_level", f"Missing {spinal_path.name}")
 
+    patient_path = output_base / PATIENT_SUMMARY
+    if patient_path.is_file():
+        report.issues.extend(
+            _validate_patient_level(
+                all_rows, patient_path, atol=atol, output_base=output_base
+            ).issues
+        )
+    else:
+        report.warning("missing_patient_level", f"Missing {patient_path.name}")
+
     if check_audit_files:
         report.issues.extend(_validate_repeat_audit_files(output_base).issues)
 
@@ -448,6 +465,65 @@ def _validate_spinal_level(
                 "spinal_level_best_worst",
                 f"{key}: best/worst file={got['best_level']}/{got['worst_level']} "
                 f"recomputed={row['best_level']}/{row['worst_level']}",
+                path=str(summary_path),
+            )
+    return report
+
+
+def _validate_patient_level(
+    pipeline_df: pd.DataFrame,
+    summary_path: Path,
+    *,
+    atol: float,
+    output_base: Path | None = None,
+) -> ValidationReport:
+    report = ValidationReport()
+    file_df = pd.read_csv(summary_path)
+    if file_df.empty:
+        report.error("patient_level_empty", f"Empty {summary_path.name}", path=str(summary_path))
+        return report
+    predictions = load_prediction_records(pipeline_df, output_base=output_base)
+    if predictions.empty:
+        return report
+    expected = summarize_across_repeats(summarize_repeats(build_patient_runs(predictions)))
+    if expected.empty:
+        return report
+    sample = expected[expected["split"] == "validation"]
+    file_idx = file_df.set_index(["architecture", "representation", "split"])
+    for _, row in sample.iterrows():
+        if not _is_finite_number(row.get("patient_macro_exact_rate_mean")):
+            continue
+        key = (row["architecture"], row["representation"], row["split"])
+        if key not in file_idx.index:
+            report.error(
+                "patient_level_missing_group",
+                f"patient summary missing {key}",
+                path=str(summary_path),
+            )
+            continue
+        got = file_idx.loc[key]
+        if abs(float(got["patient_macro_exact_rate_mean"]) - float(row["patient_macro_exact_rate_mean"])) > atol:
+            report.error(
+                "patient_level_macro_drift",
+                f"{key}: file={got['patient_macro_exact_rate_mean']} "
+                f"recomputed={row['patient_macro_exact_rate_mean']}",
+                path=str(summary_path),
+            )
+        profile_sum = (
+            float(got.get("patient_exact_profile_rate_mean", 0) or 0)
+            + float(got.get("patient_adjacent_only_rate_mean", 0) or 0)
+            + float(got.get("patient_severe_error_rate_mean", 0) or 0)
+        )
+        if abs(profile_sum - 1.0) > 1e-6 and _is_finite_number(got.get("patient_exact_profile_rate_mean")):
+            report.error(
+                "patient_level_profile_sum",
+                f"{key}: exact+adjacent+severe={profile_sum} != 1",
+                path=str(summary_path),
+            )
+        if str(got.get("status", "")) == "complete" and int(row.get("n_repeats", 0)) < DEFAULT_REPEATS:
+            report.error(
+                "patient_level_incomplete_as_complete",
+                f"{key}: marked complete with n_repeats={row.get('n_repeats')}",
                 path=str(summary_path),
             )
     return report

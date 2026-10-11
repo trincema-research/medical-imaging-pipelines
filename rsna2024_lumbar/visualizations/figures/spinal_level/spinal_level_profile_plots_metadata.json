@@ -1,0 +1,28 @@
+{
+  "source_file": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\best_config_runs\\results\\protocol_spinal_level\\spinal_level_means.csv",
+  "generated_from_real_results": true,
+  "split": "validation",
+  "architectures": [
+    "ViT",
+    "MaxViT",
+    "ConvNeXt",
+    "EfficientNet"
+  ],
+  "representations": [
+    "2D",
+    "2.5D-to-3D"
+  ],
+  "spinal_levels": [
+    "L1/L2",
+    "L2/L3",
+    "L3/L4",
+    "L4/L5",
+    "L5/S1"
+  ],
+  "timestamp": "2026-10-11T08:00:58.717621+00:00",
+  "git_commit": "6f31d5926b70e3795eb70692b88e23dd0d751630",
+  "script_name": "plot_spinal_level_results.py",
+  "n_rows": 40,
+  "vmin_f1": 0.24297305724847576,
+  "vmax_f1": 0.6961265070123996
+}

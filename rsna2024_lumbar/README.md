@@ -116,9 +116,10 @@ Publication figures from harvested CSVs (not from manuscript numbers). Same leve
 ```bash
 pip install -e ".[visualizations,dev]"
 python -m rsna2024_lumbar.visualizations patient-level
+python -m rsna2024_lumbar.visualizations spinal-level
 ```
 
-Writes PNG/PDF under [visualizations/figures/patient_level/](visualizations/figures/patient_level/). Depth: [visualizations/README.md](visualizations/README.md).
+Writes PNG/PDF under [visualizations/figures/](visualizations/figures/). Depth and figure links: [visualizations/README.md](visualizations/README.md).
 
 ## ✔ Tests
 

@@ -6,11 +6,15 @@ import argparse
 from pathlib import Path
 
 from rsna2024_lumbar.best_config_runs.paths import RESULTS_DIR
-from rsna2024_lumbar.visualizations import PATIENT_LEVEL_FIGURES_DIR
+from rsna2024_lumbar.visualizations import PATIENT_LEVEL_FIGURES_DIR, SPINAL_LEVEL_FIGURES_DIR
 from rsna2024_lumbar.visualizations.plot_patient_level_results import (
     DEFAULT_REPEAT,
     DEFAULT_SUMMARY,
     generate_patient_level_figures,
+)
+from rsna2024_lumbar.visualizations.plot_spinal_level_results import (
+    DEFAULT_MEANS,
+    generate_spinal_level_figures,
 )
 
 
@@ -47,12 +51,37 @@ def main(argv: list[str] | None = None) -> int:
         default=RESULTS_DIR,
         help="Unused except to document the default harvest tree.",
     )
+    spinal = sub.add_parser(
+        "spinal-level",
+        help="Spinal-level bottleneck, profile, overlay, and Macro-F1 heatmap figures.",
+    )
+    spinal.add_argument(
+        "--means",
+        type=Path,
+        default=DEFAULT_MEANS,
+        help="spinal_level_means.csv (or spinal_level_agg.csv).",
+    )
+    spinal.add_argument(
+        "--output-dir",
+        type=Path,
+        default=SPINAL_LEVEL_FIGURES_DIR,
+        help="Directory for PNG/PDF/CSV/JSON outputs.",
+    )
+    spinal.add_argument("--split", default="validation")
+
     args = parser.parse_args(argv)
 
     if args.command == "patient-level":
         generate_patient_level_figures(
             summary_path=args.summary,
             repeat_path=args.repeat_summary,
+            output_dir=args.output_dir,
+            split=args.split,
+        )
+        return 0
+    if args.command == "spinal-level":
+        generate_spinal_level_figures(
+            means_path=args.means,
             output_dir=args.output_dir,
             split=args.split,
         )

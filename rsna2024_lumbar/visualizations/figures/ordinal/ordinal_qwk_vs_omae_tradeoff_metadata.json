@@ -1,0 +1,38 @@
+{
+  "source_file": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\best_config_runs\\results\\condition_specific_by_condition.csv",
+  "generated_from_real_results": true,
+  "split": "validation",
+  "metrics": [
+    "OA",
+    "O-MAE",
+    "QWK",
+    "SER"
+  ],
+  "architectures": [
+    "ViT",
+    "MaxViT",
+    "ConvNeXt",
+    "EfficientNet"
+  ],
+  "representations": [
+    "2D",
+    "2.5D-to-3D"
+  ],
+  "conditions": [
+    "SCS",
+    "LFN",
+    "RFN",
+    "LSS",
+    "RSS"
+  ],
+  "timestamp": "2026-10-11T08:51:43.850733+00:00",
+  "git_commit": "ae704b06f2e9d2b6ab6043cdbc2c35cf44a8045d",
+  "script_name": "plot_ordinal_severity_results.py",
+  "n_condition_rows": 40,
+  "n_architecture_rows": 8,
+  "n_runs_min": 5,
+  "leaders": {
+    "2D": "ConvNeXt",
+    "2.5D-to-3D": "MaxViT"
+  }
+}

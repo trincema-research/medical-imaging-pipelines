@@ -66,6 +66,7 @@ Each protocol tree has **198 / 200** finished repeats. The same two runs are mis
 - **Severity (OA, O-MAE, QWK, SER) + precision/recall:** logged **each epoch** when training is launched via `best_config_runs` (`--log-pipeline-metrics` on `train_vit_lumbar.py`). **`harvest_results`** copies overall **and per-level** (L1/L2 ... L5/S1) columns into `pipeline_results.csv`; optional `--legacy-severity-backfill` only fills missing **OA** from accuracy and **val** O-MAE/QWK/SER from val confusion matrices (old cloud bundles without the hook).
 - **Spinal-level tables** (`spinal_level_*.csv`) are post-hoc on those per-level columns (same 200 runs as condition-specific). Harvest / `run-all` write them automatically.
 - **Patient-level tables** (`patient_level_*.csv`) join `predictions_{train,val,test}.csv` (written at the best val epoch) by `patient_id` across the five conditions. Patient-macro exact-rate / O-MAE weight each patient equally; do not substitute pooled accuracy. Error profiles are `exact` / `adjacent_only` / `severe`. PLOA is not computed.
+- **Kaggle metric** (`kaggle_metric_scores.csv`): official sample-weighted log loss on joined five-condition softmax (formula: [docs/kaggle_metric.md](../../docs/kaggle_metric.md)). Not the NAS cross-entropy. Local scores use GT-centered crops and the 70/15/15 split.
 
 Rebuild summaries from a downloaded results tree (no full retrain):
 

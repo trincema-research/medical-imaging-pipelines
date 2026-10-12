@@ -32,6 +32,8 @@ from rsna2024_lumbar.best_config_runs.results import (
     write_pipeline_results_csv,
 )
 from rsna2024_lumbar.best_config_runs.article_summary import write_article_summaries
+from rsna2024_lumbar.best_config_runs.kaggle_metric import ANY_SEVERE_SCALAR_OFFICIAL
+from rsna2024_lumbar.best_config_runs.kaggle_score import default_score_root, write_kaggle_scores
 from rsna2024_lumbar.best_config_runs.validate_results import format_report, validate_results_tree
 from rsna2024_lumbar.best_config_runs.runner import (
     finalize_all_model_summaries,
@@ -250,6 +252,35 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--no-audit-files",
         action="store_true",
         help="Skip training_history.json / run_config.json checks.",
+    )
+
+    kaggle = sub.add_parser(
+        "kaggle-score",
+        help="Official RSNA 2024 weighted log loss on best-model val/test predictions.",
+    )
+    kaggle.add_argument(
+        "--output-base",
+        type=Path,
+        default=None,
+        help="Family root (default: data/best_config_runs/results/retrain_pr).",
+    )
+    kaggle.add_argument(
+        "--any-severe-scalar",
+        type=float,
+        default=ANY_SEVERE_SCALAR_OFFICIAL,
+        help="Competition any_severe_spinal weight (official: 1.0).",
+    )
+    kaggle.add_argument(
+        "--no-eval",
+        action="store_true",
+        help="Do not run checkpoints when predictions_*.csv are missing.",
+    )
+    kaggle.add_argument(
+        "--only",
+        nargs="+",
+        default=None,
+        metavar="STEM",
+        help="Limit to config stems (e.g. nas_best_convnext_2d).",
     )
 
     return p.parse_args(argv)
@@ -540,6 +571,15 @@ def main(argv: list[str] | None = None) -> None:
         )
         print(format_report(report))
         raise SystemExit(0 if report.ok else 1)
+    if args.command == "kaggle-score":
+        output_base = args.output_base or default_score_root()
+        write_kaggle_scores(
+            output_base.resolve(),
+            eval_if_missing=not args.no_eval,
+            any_severe_scalar=args.any_severe_scalar,
+            only=args.only,
+        )
+        raise SystemExit(0)
     raise SystemExit(f"Unknown command: {args.command}")
 
 

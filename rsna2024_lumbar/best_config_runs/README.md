@@ -34,6 +34,7 @@ python -m rsna2024_lumbar.best_config_runs validate-results --output-base rsna20
 | `condition-specific` | Beyond-Accuracy condition-macro / best / worst / range / std |
 | `spinal-level` | Beyond-Accuracy spinal-level macro / best / worst / range / std |
 | `patient-level` | Beyond-Accuracy patient exact-rate / O-MAE / error-profile |
+| `kaggle-score` | Official RSNA 2024 weighted log loss on val/test softmax |
 | `validate-results` | Check harvested CSVs and summary tables |
 
 Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-completed`, `--only`, `--num-gpus` (1=sequential, 0=auto 2/4/8, or 2/4/8 parallel workers), `--save-checkpoints` (default off), `--data-root`, `--crops-root`. `--condition-specific-seeds` uses split seeds 42–46.
@@ -43,6 +44,8 @@ Common flags: `--repeats`, `--epochs`, `--early-stop-patience`, `--skip-complete
 | Module | Role |
 |--------|------|
 | `severity_metrics.py` | OA, O-MAE, QWK, SER |
+| `kaggle_metric.py` | Official sample-weighted log loss (`any_severe_spinal`, \(\lambda=1\)) |
+| `kaggle_score.py` | Join five-condition predictions and write `kaggle_metric_scores.csv` |
 | `multi_head.py` | Five-head logits → severity columns |
 | `config.py` | Load `nas_best_*.json` |
 | `train.py` / `train_entry.py` | Subprocess `train_vit_lumbar.py` with `RSNA2024_BEST_CONFIG_RUNS_METRICS=1` |

@@ -271,6 +271,7 @@ rsna2024_lumbar/data/best_config_runs/results/retrain_pr/
 !rsna2024_lumbar/data/best_config_runs/results/**/patient_exact_rate_distribution_*.csv
 !rsna2024_lumbar/data/best_config_runs/results/**/patient_omae_distribution_*.csv
 !rsna2024_lumbar/data/best_config_runs/results/**/patient_severe_error_rate_*.csv
+!rsna2024_lumbar/data/best_config_runs/results/**/kaggle_metric_scores.csv
 rsna2024_lumbar/data/ordinal_benchmark/**/*
 !rsna2024_lumbar/data/ordinal_benchmark/README.md
 rsna2024_lumbar/data/best_config_runs/results/**/*.pt

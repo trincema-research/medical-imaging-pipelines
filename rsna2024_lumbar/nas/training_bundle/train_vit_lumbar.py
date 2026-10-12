@@ -537,6 +537,63 @@ def save_split_predictions(
     return path
 
 
+def _load_model_state(path: Path, device: torch.device) -> Dict[str, Any]:
+    try:
+        ckpt = torch.load(path, map_location=device, weights_only=False)
+    except TypeError:
+        ckpt = torch.load(path, map_location=device)
+    if isinstance(ckpt, dict) and "model_state" in ckpt:
+        return ckpt["model_state"]
+    if isinstance(ckpt, dict) and "state_dict" in ckpt:
+        return ckpt["state_dict"]
+    if isinstance(ckpt, dict):
+        return ckpt
+    raise ValueError(f"Unrecognized checkpoint: {path}")
+
+
+def _eval_checkpoint_and_write_predictions(
+    model: nn.Module,
+    args,
+    device: torch.device,
+    val_loader: DataLoader,
+    test_loader: DataLoader,
+    output_dir: Path,
+) -> None:
+    ckpt_path = Path(args.eval_checkpoint)
+    missing, unexpected = model.load_state_dict(
+        _load_model_state(ckpt_path, device),
+        strict=False,
+    )
+    if missing or unexpected:
+        print(
+            f"Checkpoint key mismatch (strict=False): missing={list(missing)} "
+            f"unexpected={list(unexpected)}",
+            flush=True,
+        )
+    model.eval()
+    print(f"Loaded eval checkpoint: {ckpt_path}", flush=True)
+    for split, loader in (("val", val_loader), ("test", test_loader)):
+        loss, acc, logits, targets, study_ids = evaluate(
+            model,
+            loader,
+            multi_head_cross_entropy,
+            device,
+            show_batch_progress=args.progress,
+            batch_progress_desc=f"eval {split}",
+            log_interval=args.log_interval,
+        )
+        save_split_predictions(
+            logits,
+            targets,
+            study_ids,
+            output_dir,
+            split=split,
+            condition=args.condition,
+            epoch=int(getattr(args, "epoch", 0) or 0),
+        )
+        print(f"  {split}: loss={loss:.4f} acc={acc:.4f} -> predictions_{split}.csv", flush=True)
+
+
 @torch.no_grad()
 def evaluate(
     model: nn.Module,
@@ -884,6 +941,12 @@ def parse_args(argv: List[str] | None = None) -> argparse.Namespace:
             "Set by rsna2024_lumbar.best_config_runs training."
         ),
     )
+    parser.add_argument(
+        "--eval-checkpoint",
+        type=str,
+        default=None,
+        help="Load this checkpoint, write predictions_{val,test}.csv, and exit (no training).",
+    )
     return parser.parse_args(argv)
 
 
@@ -969,8 +1032,9 @@ def main(argv: List[str] | None = None) -> None:
     run_config["patience"] = args.patience
     run_config["best_metric"] = args.best_metric
     run_config["output_dir_resolved"] = str(output_dir)
-    with (output_dir / "run_config.json").open("w", encoding="utf-8") as fh:
-        json.dump(run_config, fh, indent=2)
+    if not args.eval_checkpoint:
+        with (output_dir / "run_config.json").open("w", encoding="utf-8") as fh:
+            json.dump(run_config, fh, indent=2)
 
     try:
         validate_split_fractions(
@@ -1109,13 +1173,14 @@ def main(argv: List[str] | None = None) -> None:
     split_summary["split_seed_used"] = split_seed
     split_summary["training_seed_after_split"] = args.seed
     set_seed(args.seed)
-    log_dataset_split(
-        split_summary,
-        output_dir / "dataset_split.json",
-        train_dataset=train_dataset,
-        val_dataset=val_dataset,
-        test_dataset=test_dataset,
-    )
+    if not args.eval_checkpoint:
+        log_dataset_split(
+            split_summary,
+            output_dir / "dataset_split.json",
+            train_dataset=train_dataset,
+            val_dataset=val_dataset,
+            test_dataset=test_dataset,
+        )
 
     model, _weights = build_lumbar_model(
         args.model_type,
@@ -1135,6 +1200,17 @@ def main(argv: List[str] | None = None) -> None:
         medsam_checkpoint=args.medsam_checkpoint,
     )
     model.to(device)
+
+    if args.eval_checkpoint:
+        _eval_checkpoint_and_write_predictions(
+            model,
+            args,
+            device,
+            val_loader,
+            test_loader,
+            output_dir,
+        )
+        return
 
     checkpoint_config = {
         **pipeline.to_checkpoint_dict(),

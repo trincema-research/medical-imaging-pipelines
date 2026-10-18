@@ -1,0 +1,13 @@
+severity_root: F:/severity_train
+expected_counts:
+  Normal: 8851
+  S1: 1999
+  S2: 2006
+  S3: 2007
+class_dirs:
+  Normal: normal
+  S1: pneumonia/severity_1_low_mild
+  S2: pneumonia/severity_2_moderate
+  S3: pneumonia/severity_3_severe
+seed: 2026
+native_hw: [1024, 1024]

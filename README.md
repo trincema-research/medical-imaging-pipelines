@@ -52,6 +52,17 @@ python -m rsna2024_lumbar.preprocessing \
   --crop-policy centered --progress
 ```
 
+## ▸ RSNA 2018 — lung segmentation
+
+Burden-stratified 1024×1024 lung masks. S1/S2/S3 are annotation-derived burden, not clinical severity. Silver masks are not ground truth. The mask PNGs stay local.
+
+```bash
+python -m rsna2018_cxr.segmentation build-manifest --severity-root F:/severity_train
+python -m rsna2018_cxr.segmentation segment
+```
+
+Method and iteration-1 counts: [rsna2018_cxr/segmentation/docs/iteration-1.md](rsna2018_cxr/segmentation/docs/iteration-1.md). Details: [rsna2018_cxr/README.md](rsna2018_cxr/README.md).
+
 ## Data rules
 
 | | Path | Git | What |

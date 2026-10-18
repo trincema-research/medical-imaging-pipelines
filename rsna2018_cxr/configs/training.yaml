@@ -1,0 +1,12 @@
+images_dir: F:/CXR_segmentation/dataset/images
+masks_dir: F:/CXR_segmentation/dataset/masks
+output: rsna2018_cxr/data/models/compact_unet.pt
+image_size: 1024
+epochs: 8
+batch_size: 4
+learning_rate: 0.001
+seed: 2026
+# Loss is 0.5 * BCE-with-logits + 0.5 * soft Dice.
+# Gold masks only. Do not point this at silver or pseudo labels.
+# Iteration 1 of this compact model was trained at 256 and is not the cohort segmenter.
+# See segmentation/docs/iteration-1.md. New runs stay at 1024.

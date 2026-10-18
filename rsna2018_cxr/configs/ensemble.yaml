@@ -1,0 +1,11 @@
+unet:
+  checkpoint: rsna2018_cxr/data/iteration-1/vgg11/unet_vgg11_1024_best.pth
+  threshold: 0.5
+  normalization: divide_by_255
+  # Cohort images are already 1024x1024. The segmenter consumes that grid.
+classical:
+  enabled: true
+  # Runs only on the inspection subset (10 studies per class), not the full cohort.
+fusion: majority
+# Two candidates are stored as their intersection. One candidate stays the U-Net mask.
+# A single model is never silver.

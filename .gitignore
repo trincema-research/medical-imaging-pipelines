@@ -239,6 +239,15 @@ rsna2024_lumbar/nas/training_bundle/**
 !rsna2024_lumbar/nas/training_bundle/.gitkeep
 !rsna2024_lumbar/nas/training_bundle/train_vit_lumbar.py
 
+# RSNA 2018 lung masks, manifests, and QC tables are generated locally.
+rsna2018_cxr/data/**
+!rsna2018_cxr/data/README.md
+!rsna2018_cxr/data/iteration-1/
+!rsna2018_cxr/data/iteration-1/**
+rsna2018_cxr/reports/qc/**
+rsna2018_cxr/reports/figures/**
+!rsna2018_cxr/reports/README.md
+
 # Full raw DICOM dump stays local. Label CSVs + a few smoke studies are force-added.
 rsna20*/data/raw/**
 !rsna20*/data/raw/README.md

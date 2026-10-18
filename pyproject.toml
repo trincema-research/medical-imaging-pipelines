@@ -47,16 +47,17 @@ rsna2024-perf-pipeline-unpack = "rsna2024_lumbar.best_config_runs.unpack_cloud:m
 rsna2024-perf-pipeline-deploy = "rsna2024_lumbar.best_config_runs.deploy_cloud:main"
 rsna2024-ordinal = "rsna2024_lumbar.best_config_runs.cli:main"
 rsna2024-visualizations = "rsna2024_lumbar.visualizations.cli:main"
+rsna2018-lung-seg = "rsna2018_cxr.segmentation.cli:main"
 
 [tool.setuptools.package-data]
 "rsna2024_lumbar.nas" = ["configs/*.json"]
 
 [tool.setuptools.packages.find]
-include = ["common*", "rsna2024_lumbar*"]
-exclude = ["rsna2024_lumbar.tests*"]
+include = ["common*", "rsna2024_lumbar*", "rsna2018_cxr*"]
+exclude = ["rsna2024_lumbar.tests*", "rsna2018_cxr.tests*"]
 
 [tool.pytest.ini_options]
-testpaths = ["rsna2024_lumbar/tests"]
+testpaths = ["rsna2024_lumbar/tests", "rsna2018_cxr/tests"]
 pythonpath = ["."]
 addopts = "-q"
 markers = [

@@ -1,17 +1,14 @@
 # ⬇ data
 
-Generated locally. Not committed, except this file. The mask PNGs are the iteration-1 segment of the severity split. A later Zenodo deposit is the place for the finished set, after the lung shapes are refined.
+The severity-split masks under `segmented/` are generated locally and are not committed. The VGG11 training run that produced them is committed under `iteration-1/vgg11/`.
 
-| Path | What |
-|---|---|
-| `manifests/master.csv` | one row per study |
-| `models/compact_unet.pt` | compact U-Net, iteration 1, trained at 256. Not the cohort segmenter |
-| `segmented/masks/<class>/*.png` | VGG11 lung field at 1024×1024 |
-| `segmented/left/`, `segmented/right/` | patient left / right |
-| `segmented/inspection/<class>/` | 10 overlays per class. Green U-Net, orange classical disagreement |
-| `segmented/inspection_shape/<class>/` | experimental shape-completion contours. Not applied to the cohort masks |
-| `segmented/manifest.csv` | paths, Dice, `label_status` |
-| `segmented/provenance.jsonl` | checkpoint, threshold, fusion, QC |
-| `segmented/review_queue.csv` | severity-balanced cases to review |
+| Path | Git | What |
+|---|---|---|
+| `iteration-1/vgg11/unet_vgg11_1024_best.pth` | yes | weights from epoch 62 |
+| `iteration-1/vgg11/metrics_history.csv` | yes | train, val, and test metrics for 100 epochs |
+| `iteration-1/vgg11/splits.csv` | yes | 99 / 11 / 28 ids used for that run |
+| `iteration-1/vgg11/masks/` | yes | 668 labeled lung masks the local set started with |
+| `models/compact_unet.pt` | no | compact U-Net side run. Not the cohort segmenter |
+| `segmented/` | no | 14,863 severity masks and inspection overlays |
 
-Counts and model settings: `segmentation/docs/iteration-1.md`.
+Source chest films stay at `F:\CXR_segmentation\dataset\images`.

@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-CHECKPOINT = Path(r"F:\CXR_segmentation\models\unet_vgg11_1024_best.pth")
+CHECKPOINT = Path(__file__).resolve().parents[1] / "data" / "iteration-1" / "vgg11" / "unet_vgg11_1024_best.pth"
 
 
 @pytest.mark.local

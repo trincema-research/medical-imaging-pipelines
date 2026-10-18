@@ -61,7 +61,7 @@ python -m rsna2018_cxr.segmentation build-manifest --severity-root F:/severity_t
 python -m rsna2018_cxr.segmentation segment
 ```
 
-Method and iteration-1 counts: [rsna2018_cxr/segmentation/docs/iteration-1.md](rsna2018_cxr/segmentation/docs/iteration-1.md). Details: [rsna2018_cxr/README.md](rsna2018_cxr/README.md).
+The VGG11 weights, training log, and labeled masks are in `rsna2018_cxr/data/iteration-1/vgg11/`. Severity masks stay local. Method: [rsna2018_cxr/segmentation/docs/iteration-1.md](rsna2018_cxr/segmentation/docs/iteration-1.md). Details: [rsna2018_cxr/README.md](rsna2018_cxr/README.md).
 
 ## Data rules
 

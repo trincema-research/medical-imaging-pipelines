@@ -2,6 +2,7 @@
 
 ```
 python -m rsna2018_cxr.segmentation build-manifest
+python -m rsna2018_cxr.segmentation train-vgg
 python -m rsna2018_cxr.segmentation train
 python -m rsna2018_cxr.segmentation segment
 ```
@@ -20,9 +21,11 @@ from rsna2018_cxr.segmentation.data.severity import build_manifest, count_by_cla
 
 HERE = Path(__file__).resolve().parents[1]
 DEFAULT_SEVERITY_ROOT = Path(r"F:\severity_train")
-DEFAULT_CHECKPOINT = Path(r"F:\CXR_segmentation\models\unet_vgg11_1024_best.pth")
+DEFAULT_VGG_ROOT = HERE / "data" / "iteration-1" / "vgg11"
+DEFAULT_CHECKPOINT = DEFAULT_VGG_ROOT / "unet_vgg11_1024_best.pth"
 DEFAULT_LABELED_IMAGES = Path(r"F:\CXR_segmentation\dataset\images")
-DEFAULT_LABELED_MASKS = Path(r"F:\CXR_segmentation\dataset\masks")
+DEFAULT_LABELED_MASKS = DEFAULT_VGG_ROOT / "masks"
+DEFAULT_VGG_SPLITS = DEFAULT_VGG_ROOT / "splits.csv"
 DEFAULT_MANIFEST = HERE / "data" / "manifests" / "master.csv"
 DEFAULT_REPORTS = HERE / "reports" / "qc"
 DEFAULT_SEGMENT_ROOT = HERE / "data" / "segmented"
@@ -49,7 +52,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     build.add_argument("--allow-count-mismatch", action="store_true")
     build.add_argument("--report-dir", type=Path, default=DEFAULT_REPORTS)
 
-    train = sub.add_parser("train", help="Train the compact U-Net on an existing labeled mask set at 1024.")
+    vgg = sub.add_parser("train-vgg", help="Train the VGG11-BN U-Net at 1024 on the iteration-1 split.")
+    vgg.add_argument("--images-dir", type=Path, default=DEFAULT_LABELED_IMAGES)
+    vgg.add_argument("--masks-dir", type=Path, default=DEFAULT_LABELED_MASKS)
+    vgg.add_argument("--splits", type=Path, default=DEFAULT_VGG_SPLITS)
+    vgg.add_argument("--output", type=Path, default=DEFAULT_CHECKPOINT)
+    vgg.add_argument("--epochs", type=int, default=100)
+    vgg.add_argument("--batch-size", type=int, default=4)
+    vgg.add_argument("--lr", type=float, default=5e-4)
+    vgg.add_argument("--num-workers", type=int, default=0)
+
+    train = sub.add_parser("train", help="Train the compact U-Net. This did not segment the cohort.")
     train.add_argument("--images-dir", type=Path, default=DEFAULT_LABELED_IMAGES)
     train.add_argument("--masks-dir", type=Path, default=DEFAULT_LABELED_MASKS)
     train.add_argument("--output", type=Path, default=DEFAULT_TRAIN_CHECKPOINT)
@@ -107,6 +120,28 @@ def cmd_build(args: argparse.Namespace) -> int:
     if mismatches and not args.allow_count_mismatch:
         print("count mismatch:", mismatches)
         return 1
+    return 0
+
+
+def cmd_train_vgg(args: argparse.Namespace) -> int:
+    if args.epochs < 1 or args.batch_size < 1:
+        raise SystemExit("epochs and batch-size must be positive.")
+    from rsna2018_cxr.segmentation.training.vgg import train_vgg11
+
+    result = train_vgg11(
+        args.images_dir,
+        args.masks_dir,
+        args.splits,
+        args.output,
+        epochs=args.epochs,
+        batch_size=args.batch_size,
+        learning_rate=args.lr,
+        num_workers=args.num_workers,
+    )
+    print(
+        f"best epoch {result['best_epoch']} val loss {result['best_val_loss']:.4f} "
+        f"on {result['n_train']} train / {result['n_val']} val -> {result['checkpoint']}"
+    )
     return 0
 
 
@@ -175,6 +210,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     if args.command == "build-manifest":
         return cmd_build(args)
+    if args.command == "train-vgg":
+        return cmd_train_vgg(args)
     if args.command == "train":
         return cmd_train(args)
     if args.command == "segment":

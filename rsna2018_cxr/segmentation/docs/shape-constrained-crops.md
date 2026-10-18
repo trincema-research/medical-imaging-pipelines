@@ -1,6 +1,6 @@
 # Shape-constrained lung crops
 
-Design notes for later. Not the current segmenter. Iteration 1, the run that wrote the masks, is `iteration-1.md`.
+Design notes for later. Iteration 1 did not use these models. The run that wrote the masks is the local VGG11-BN U-Net, recorded in `iteration-1.md`.
 
 Near term, keep generating masks with the U-Net and improve that loop on selected complete lungs. The first shape model to investigate after that is Post-DAE: a network trained on complete masks only, used to fit a whole lung onto the U-Net output for the chest film being processed.
 

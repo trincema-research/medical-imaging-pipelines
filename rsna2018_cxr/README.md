@@ -16,9 +16,9 @@ S1/S2/S3 are annotation-derived radiographic burden strata, not clinical severit
 
 ```bash
 python -m rsna2018_cxr.segmentation build-manifest --severity-root F:/severity_train
-python -m rsna2018_cxr.segmentation segment --checkpoint F:/CXR_segmentation/models/unet_vgg11_1024_best.pth
+python -m rsna2018_cxr.segmentation segment
 ```
 
-`segment` writes 1024×1024 masks to `data/segmented/`. Those PNGs stay local until a finished set is posted to Zenodo. The method, the VGG11 checkpoint metrics, the label counts, and the unused compact-U-Net training result are in [segmentation/docs/iteration-1.md](segmentation/docs/iteration-1.md).
+`segment` loads `data/iteration-1/vgg11/unet_vgg11_1024_best.pth` and writes 1024×1024 masks to `data/segmented/`. Those severity PNGs stay local until a finished set is posted to Zenodo. The weights, the 100-epoch log, the split, and the labeled masks are already in `data/iteration-1/vgg11/`. Method and counts: [segmentation/docs/iteration-1.md](segmentation/docs/iteration-1.md).
 
-The cohort segmenter is the external VGG11-BN U-Net. A classical Otsu mask is drawn only on 10 inspection films per class. Shape-completion overlays under `data/segmented/inspection_shape/` are a separate look and were not written back onto the cohort masks.
+A classical Otsu mask is drawn only on 10 inspection films per class. Shape-completion overlays under `data/segmented/inspection_shape/` were not written back onto the cohort masks. Post-DAE, HybridGNet, and MedSAM were not part of this run.

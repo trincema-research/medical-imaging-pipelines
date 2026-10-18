@@ -1,6 +1,8 @@
 # Iteration 1 — severity-split lung masks
 
-This is the run that segmented the Zenodo severity split (10.5281/zenodo.20783246) and wrote the first masks. The PNG masks, inspection overlays, and checkpoints stay on disk under `rsna2018_cxr/data/`. They are not in git. The finished mask set is intended for Zenodo once the lung shapes are refined. This note records the method, the models, and the counts from that run.
+This is the run that segmented the Zenodo severity split (10.5281/zenodo.20783246) and wrote the first masks. The segmenter is the local VGG11-BN U-Net. Post-DAE, HybridGNet, MedSAM, and CheXmask were not used.
+
+The weights, the epoch log, the train/val/test ids, and the labeled masks that training started from are in `data/iteration-1/vgg11/`. The 14,863 severity masks and the inspection overlays stay local under `data/segmented/` for a later Zenodo deposit.
 
 S1, S2, and S3 are annotation-derived radiographic burden, not clinical severity. Silver would be automatic agreement between models, not ground truth. Gold is human review only. This run never wrote gold. One model cannot be silver, so every saved mask is `pseudo` or `rejected`.
 
@@ -24,15 +26,20 @@ VGG11-BN U-Net, class `UNetVGG11`, loaded by `ExistingUNetBackend`.
 
 | | |
 |---|---|
-| Checkpoint | `F:\CXR_segmentation\models\unet_vgg11_1024_best.pth` |
+| Checkpoint | `data/iteration-1/vgg11/unet_vgg11_1024_best.pth` |
 | Architecture | VGG11-BN encoder, bilinear upsampling, 1-channel first convolution, 1-class logits |
+| Loss | BCE with logits. Best epoch is the lowest validation loss |
 | Trained at | 1024×1024 |
 | Best epoch | 62 of 100 |
 | Train Dice / Jaccard | 0.9824 / 0.9655 |
 | Val Dice / Jaccard | 0.9753 / 0.9522 |
+| Test Dice / Jaccard at that epoch | 0.9738 / 0.9495 |
 | Train loss / val loss | 0.0212 / 0.0300 |
-| Optimizer settings in the checkpoint | Adam, learning rate 0.0005, batch 4, mixed precision, ImageNet-initialized encoder |
-| Labeled films | `F:\CXR_segmentation\dataset` (Montgomery / Shenzhen style image and mask pairs) |
+| Optimizer | Adam, learning rate 0.0005, batch 4, mixed precision, plateau schedule |
+| Epoch log | `data/iteration-1/vgg11/metrics_history.csv` |
+| Split | 99 train / 11 val / 28 test, listed in `splits.csv` |
+| Labeled masks | `data/iteration-1/vgg11/masks/` (668 PNGs). Three split ids have no mask file; the loader treated those as empty |
+| Source films | `F:\CXR_segmentation\dataset\images`. Not committed; about 4.4 GB |
 
 Inference on the severity cohort:
 
@@ -41,6 +48,8 @@ Inference on the severity cohort:
 - CUDA uses fp16 autocast. The weights stay in the checkpoint dtype.
 - `postprocess_merged` drops tiny components. `split_lungs` separates the two lungs. With `radiological=True`, patient left is image right on a standard PA film.
 - The mask is saved at 1024×1024, the same grid as the film.
+
+Retrain with `python -m rsna2018_cxr.segmentation train-vgg`. The committed file is the weights and the scalar metrics from epoch 62. The original 186 MB file also stored the Adam state; that state is not in git because GitHub rejects a file over 100 MB, and inference does not need it.
 
 The compact U-Net in this repository was not used for these 14863 masks.
 

@@ -250,6 +250,24 @@ def test_shape_completion_mirrors_a_missing_side():
     assert completed[:, 62:90].any()
 
 
+def test_iteration1_vgg11_artifacts_are_present():
+    root = Path(__file__).resolve().parents[1] / "data" / "iteration-1" / "vgg11"
+    checkpoint = root / "unet_vgg11_1024_best.pth"
+    assert checkpoint.is_file()
+    assert checkpoint.stat().st_size < 100_000_000
+    history = (root / "metrics_history.csv").read_text(encoding="utf-8").splitlines()
+    header = history[0].split(",")
+    epoch_62 = history[62].split(",")
+    assert header[0] == "epoch"
+    assert epoch_62[0] == "62"
+    assert float(epoch_62[header.index("val_dice")]) == pytest.approx(0.9753145575523376)
+    splits = (root / "splits.csv").read_text(encoding="utf-8")
+    assert splits.count("\ntrain,") == 99
+    assert splits.count("\nval,") == 11
+    assert splits.count("\ntest,") == 28
+    assert len(list((root / "masks").glob("*.png"))) == 668
+
+
 def test_train_refuses_a_non_native_size():
     with pytest.raises(SystemExit, match="1024"):
         main(["train", "--image-size", "256"])

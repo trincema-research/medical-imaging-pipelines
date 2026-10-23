@@ -22,6 +22,18 @@ def test_regressor_forward_shapes():
     assert "l1" in parts
 
 
+def test_coordinate_r2_perfect_and_mean():
+    from rsna2024_lumbar.landmarks.models import coordinate_r2
+
+    target = torch.tensor([[[0.1, 0.2], [0.8, 0.9]], [[0.3, 0.4], [0.6, 0.7]]], dtype=torch.float32)
+    visible = torch.ones(2, 2)
+    perfect = coordinate_r2(target, target, visible)
+    assert abs(perfect["r2"] - 1.0) < 1e-6
+    mean = target.mean(dim=(0, 1), keepdim=True).expand_as(target)
+    baseline = coordinate_r2(mean, target, visible)
+    assert abs(baseline["r2"]) < 1e-5
+
+
 def test_list_condition_samples_reads_axial_fixture(tmp_path):
     raw = _axial_stack(tmp_path / "raw")
     samples = list_condition_samples(raw, "left_subarticular_stenosis")

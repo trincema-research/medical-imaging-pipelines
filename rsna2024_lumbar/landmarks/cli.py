@@ -117,7 +117,14 @@ def main(argv: list[str] | None = None) -> int:
             all_slices=args.all_slices,
             dense_csv=args.dense_csv,
         )
-        print(f"Wrote {meta['checkpoint']}  train={meta['n_train']} val={meta['n_val']}")
+        splits = meta.get("splits") or {}
+        extra = ""
+        if splits:
+            extra = (
+                f"  R2 train={splits['train']['r2']:.3f} "
+                f"val={splits['val']['r2']:.3f} test={splits['test']['r2']:.3f}"
+            )
+        print(f"Wrote {meta['checkpoint']}  train={meta['n_train']} val={meta['n_val']}{extra}")
         return 0
     if args.command == "infer":
         from rsna2024_lumbar.landmarks.infer import predict_condition_csv

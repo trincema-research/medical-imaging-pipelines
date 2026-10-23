@@ -17,7 +17,7 @@ from rsna2024_lumbar.landmarks.dataset import (
     load_rgb_slice,
     split_samples,
 )
-from rsna2024_lumbar.landmarks.models import build_regressor, landmark_loss, pixel_errors
+from rsna2024_lumbar.landmarks.models import build_regressor, coordinate_r2, landmark_loss, pixel_errors
 
 
 def _require_torch():
@@ -54,6 +54,9 @@ def _run_epoch(model, loader, *, train: bool, optimizer=None, device):
     torch, _DataLoader, _Dataset = _require_torch()
     model.train(train)
     totals = {"loss": 0.0, "l1": 0.0, "mae_px": 0.0, "pck5": 0.0, "n": 0}
+    pred_chunks: list = []
+    target_chunks: list = []
+    vis_chunks: list = []
     for batch in loader:
         images = batch["image"].to(device)
         xy = batch["xy"].to(device)
@@ -72,8 +75,16 @@ def _run_epoch(model, loader, *, train: bool, optimizer=None, device):
             totals["mae_px"] += err["mae_px"] * n
             totals["pck5"] += err["pck5"] * n
         totals["n"] += n
+        pred_chunks.append(pred_xy.detach().cpu())
+        target_chunks.append(xy.detach().cpu())
+        vis_chunks.append(visible.detach().cpu())
     count = max(totals["n"], 1)
-    return {k: (totals[k] / count if k != "n" else totals[k]) for k in totals}
+    out = {k: (totals[k] / count if k != "n" else totals[k]) for k in totals}
+    if pred_chunks:
+        out.update(coordinate_r2(torch.cat(pred_chunks), torch.cat(target_chunks), torch.cat(vis_chunks)))
+    else:
+        out.update({"r2": float("nan"), "r2_x": float("nan"), "r2_y": float("nan")})
+    return out
 
 
 def train_condition(
@@ -127,8 +138,9 @@ def train_condition(
         row = {"epoch": epoch, "train": train_m, "val": val_m}
         history.append(row)
         print(
-            f"epoch {epoch}/{epochs}  train l1={train_m['l1']:.4f} mae_px={train_m['mae_px']:.1f} pck5={train_m['pck5']:.3f}  "
-            f"val l1={val_m['l1']:.4f} mae_px={val_m['mae_px']:.1f} pck5={val_m['pck5']:.3f}",
+            f"epoch {epoch}/{epochs}  "
+            f"train l1={train_m['l1']:.4f} mae_px={train_m['mae_px']:.1f} pck5={train_m['pck5']:.3f} r2={train_m['r2']:.3f}  "
+            f"val l1={val_m['l1']:.4f} mae_px={val_m['mae_px']:.1f} pck5={val_m['pck5']:.3f} r2={val_m['r2']:.3f}",
             flush=True,
         )
         if val_m["l1"] < best_val:
@@ -144,6 +156,27 @@ def train_condition(
                 },
                 ckpt,
             )
+    blob = torch.load(ckpt, map_location=device, weights_only=False)
+    model.load_state_dict(blob["state_dict"])
+    model.eval()
+
+    def _eval(samples: list[LandmarkSample]) -> dict:
+        if not samples:
+            return {"r2": float("nan"), "r2_x": float("nan"), "r2_y": float("nan"), "n": 0}
+        return _run_epoch(model, _make_loader(samples, image_size, batch_size, False), train=False, device=device)
+
+    splits = {
+        "train": _eval(parts["train"]),
+        "val": _eval(parts["val"] or parts["train"]),
+        "test": _eval(parts["holdout"]),
+    }
+    print(
+        "best checkpoint  "
+        f"train r2={splits['train']['r2']:.3f} (x={splits['train']['r2_x']:.3f} y={splits['train']['r2_y']:.3f})  "
+        f"val r2={splits['val']['r2']:.3f} (x={splits['val']['r2_x']:.3f} y={splits['val']['r2_y']:.3f})  "
+        f"test r2={splits['test']['r2']:.3f} (x={splits['test']['r2_x']:.3f} y={splits['test']['r2_y']:.3f})",
+        flush=True,
+    )
     meta = {
         "condition": condition,
         "backbone": backbone,
@@ -153,6 +186,7 @@ def train_condition(
         "n_holdout": len(parts["holdout"]),
         "checkpoint": ckpt.as_posix(),
         "history": history,
+        "splits": splits,
         "split_seed": seed,
         "device": str(device),
         "all_slices": bool(all_slices),

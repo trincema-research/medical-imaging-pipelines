@@ -90,3 +90,27 @@ def pixel_errors(pred_xy, target_xy, visible, width: int, height: int) -> dict[s
         "mae_px": float(dist.mean().detach()),
         "pck5": float((dist <= 5.0).float().mean().detach()),
     }
+
+
+def _r2_1d(pred, target) -> float:
+    residual = ((pred - target) ** 2).sum()
+    total = ((target - target.mean()) ** 2).sum()
+    if float(total) <= 1e-12:
+        return float("nan")
+    return float(1.0 - residual / total)
+
+
+def coordinate_r2(pred_xy, target_xy, visible) -> dict[str, float]:
+    """R² of visible (x/W, y/H) points: per-axis and uniform average."""
+    mask = visible > 0.5
+    if int(mask.sum()) < 2:
+        return {"r2": float("nan"), "r2_x": float("nan"), "r2_y": float("nan")}
+    pred = pred_xy[mask]
+    target = target_xy[mask]
+    r2_x = _r2_1d(pred[:, 0], target[:, 0])
+    r2_y = _r2_1d(pred[:, 1], target[:, 1])
+    if r2_x != r2_x or r2_y != r2_y:
+        r2 = float("nan")
+    else:
+        r2 = 0.5 * (r2_x + r2_y)
+    return {"r2": r2, "r2_x": r2_x, "r2_y": r2_y}

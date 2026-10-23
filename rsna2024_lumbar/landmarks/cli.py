@@ -47,6 +47,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     train.add_argument("--seed", type=int, default=SPLIT_SEED_DEFAULT)
     train.add_argument("--pretrained", action="store_true")
     train.add_argument("--max-studies", type=int, default=None)
+    train.add_argument(
+        "--all-slices",
+        action="store_true",
+        help="Train on every densified DICOM (not only the median labeled instance).",
+    )
+    train.add_argument(
+        "--dense-csv",
+        type=Path,
+        default=None,
+        help="Dense coordinate table from `landmarks densify` (required with --all-slices).",
+    )
 
     infer = sub.add_parser("infer", help="Predict (x, y) and project onto the rest of each series.")
     infer.add_argument("--data-root", type=Path, default=DEFAULT_RAW)
@@ -54,6 +65,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     infer.add_argument("--output-csv", type=Path, required=True)
     infer.add_argument("--study-id", type=int, action="append", dest="study_ids")
     infer.add_argument("--no-project", action="store_true")
+    infer.add_argument(
+        "--per-slice",
+        action="store_true",
+        help="Run the net on every DICOM in the series instead of median-slice + project.",
+    )
     return p.parse_args(argv)
 
 
@@ -98,6 +114,8 @@ def main(argv: list[str] | None = None) -> int:
             seed=args.seed,
             pretrained=args.pretrained,
             max_studies=args.max_studies,
+            all_slices=args.all_slices,
+            dense_csv=args.dense_csv,
         )
         print(f"Wrote {meta['checkpoint']}  train={meta['n_train']} val={meta['n_val']}")
         return 0
@@ -110,6 +128,7 @@ def main(argv: list[str] | None = None) -> int:
             args.output_csv,
             study_ids=args.study_ids,
             project_series=not args.no_project,
+            per_slice=args.per_slice,
         )
         print(f"Wrote {meta['csv']}  rows={meta['n_rows']}")
         return 0

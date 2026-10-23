@@ -62,6 +62,7 @@ def collect_pack_files(*, data_root: Path, include_images: bool) -> list[Path]:
         YEAR_ROOT / "nas",
         YEAR_ROOT / "__init__.py",
         YEAR_ROOT / "docs" / "landmark_coordinates.md",
+        YEAR_ROOT / "docs" / "landmark_all_slice_pipeline.md",
         REPO_ROOT / "common",
         REPO_ROOT / "pyproject.toml",
         REPO_ROOT / "requirements.txt",

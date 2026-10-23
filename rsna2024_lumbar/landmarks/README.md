@@ -21,7 +21,20 @@ python -m rsna2024_lumbar.landmarks train \
 python -m rsna2024_lumbar.landmarks infer \
   --checkpoint rsna2024_lumbar/data/processed/dense_coordinates/runs/spinal_canal_stenosis_convnext_tiny.pt \
   --output-csv rsna2024_lumbar/data/processed/dense_coordinates/pred_scs.csv
+
+# every densified slice (not a 262k-column pixel table)
+python -m rsna2024_lumbar.landmarks train \
+  --condition spinal_canal_stenosis --all-slices \
+  --dense-csv rsna2024_lumbar/data/processed/dense_coordinates/train_label_coordinates_dense.csv
+
+# run the net on every DICOM instead of median + project
+python -m rsna2024_lumbar.landmarks infer \
+  --checkpoint rsna2024_lumbar/data/processed/dense_coordinates/runs/spinal_canal_stenosis_convnext_tiny.pt \
+  --output-csv rsna2024_lumbar/data/processed/dense_coordinates/pred_scs.csv \
+  --per-slice
 ```
+
+Resize to 512×512 as a **tensor** `(B, 3, 512, 512)` with five level heads. Do not flatten pixels into a wide CSV. Design: [docs/landmark_all_slice_pipeline.md](../docs/landmark_all_slice_pipeline.md).
 
 Dense CSVs stay under `data/processed/dense_coordinates/` (gitignored). Do not commit them.
 
@@ -29,7 +42,7 @@ Backbones: `convnext_tiny` (smoke), `convnext_base` and `efficientnet_v2_l` (1st
 
 ## Cloud pack / NAS
 
-32 trials per condition (4 backbones × 2 sizes × 2 batches × 2 lrs). Same 1/2/4/8 GPU shards as severity NAS (`k = ceil(N/G)`, `CUDA_VISIBLE_DEVICES`). `--all-conditions` is sequential-by-condition.
+8 trials per condition (4 backbones × 2 lrs) at fixed **512×512**. Batch size is not searched — default 8, override with `--batch-size`. Same 1/2/4/8 GPU shards as severity NAS (`k = ceil(N/G)`, `CUDA_VISIBLE_DEVICES`). `--all-conditions` is sequential-by-condition.
 
 ```bash
 # zip code + labels (small). Add --include-images to pack train_images/ (~30 GB DICOMs).
@@ -43,8 +56,8 @@ pip install -e ".[landmarks]"
 
 # print plan / 8-GPU search / one-shot install+run
 python -m rsna2024_lumbar.landmarks nas --list
-python -m rsna2024_lumbar.landmarks nas --num-gpus 8 --all-conditions --spawn --wait --skip-completed
-python -m rsna2024_lumbar.landmarks deploy --num-gpus 8 --all-conditions --skip-completed
+python -m rsna2024_lumbar.landmarks nas --num-gpus 8 --all-conditions --spawn --wait --skip-completed --batch-size 8
+python -m rsna2024_lumbar.landmarks deploy --num-gpus 8 --all-conditions --skip-completed --batch-size 8
 ```
 
-Do not commit the zip, DICOMs, or NAS histories. Depth: [docs/landmark_coordinates.md](../docs/landmark_coordinates.md).
+Do not commit the zip, DICOMs, or NAS histories. Depth: [docs/landmark_coordinates.md](../docs/landmark_coordinates.md) · [docs/landmark_all_slice_pipeline.md](../docs/landmark_all_slice_pipeline.md).

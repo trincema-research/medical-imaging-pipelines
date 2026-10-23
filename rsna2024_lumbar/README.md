@@ -58,7 +58,7 @@ python -m rsna2024_lumbar.landmarks pack --include-images
 python -m rsna2024_lumbar.landmarks nas --num-gpus 8 --all-conditions --spawn --wait
 ```
 
-Dense CSVs stay in `data/processed/dense_coordinates/` (gitignored). Do not commit the cloud zip. Depth: [landmarks/README.md](landmarks/README.md) · [docs/landmark_coordinates.md](docs/landmark_coordinates.md).
+Dense CSVs stay in `data/processed/dense_coordinates/` (gitignored). Do not commit the cloud zip. Depth: [landmarks/README.md](landmarks/README.md) · [docs/landmark_coordinates.md](docs/landmark_coordinates.md) · [docs/landmark_all_slice_pipeline.md](docs/landmark_all_slice_pipeline.md).
 
 ## ⚙ NAS
 

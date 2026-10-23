@@ -10,7 +10,13 @@ from rsna2024_lumbar.landmarks.constants import (
     IMAGE_SIZE_DEFAULT,
     LUMBAR_LEVELS,
 )
-from rsna2024_lumbar.landmarks.dataset import LandmarkSample, list_condition_samples, load_rgb_slice, split_samples
+from rsna2024_lumbar.landmarks.dataset import (
+    LandmarkSample,
+    list_condition_samples,
+    list_dense_slice_samples,
+    load_rgb_slice,
+    split_samples,
+)
 from rsna2024_lumbar.landmarks.models import build_regressor, landmark_loss, pixel_errors
 
 
@@ -83,10 +89,17 @@ def train_condition(
     seed: int = 42,
     pretrained: bool = False,
     max_studies: int | None = None,
+    all_slices: bool = False,
+    dense_csv: Path | None = None,
 ) -> dict:
     torch, _DataLoader, _Dataset = _require_torch()
     print(f"listing {condition} samples under {data_root}", flush=True)
-    samples = list_condition_samples(data_root, condition)
+    if all_slices:
+        if dense_csv is None:
+            raise SystemExit("train --all-slices needs --dense-csv (run densify first).")
+        samples = list_dense_slice_samples(data_root, condition, dense_csv)
+    else:
+        samples = list_condition_samples(data_root, condition)
     if max_studies is not None:
         keep = sorted({s.study_id for s in samples})[: int(max_studies)]
         samples = [s for s in samples if s.study_id in set(keep)]
@@ -142,6 +155,8 @@ def train_condition(
         "history": history,
         "split_seed": seed,
         "device": str(device),
+        "all_slices": bool(all_slices),
+        "dense_csv": str(dense_csv) if dense_csv else None,
     }
     (output_dir / f"{condition}_{backbone}_history.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     return meta

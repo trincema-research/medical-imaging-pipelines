@@ -59,10 +59,12 @@ Smoke backbone: `convnext_tiny` at 64 px.
 ```bash
 python -m rsna2024_lumbar.landmarks densify --progress
 python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --backbone convnext_base --pretrained
+python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --all-slices --dense-csv rsna2024_lumbar/data/processed/dense_coordinates/train_label_coordinates_dense.csv
 python -m rsna2024_lumbar.landmarks infer --checkpoint path/to.pt --output-csv path/to/pred.csv
+python -m rsna2024_lumbar.landmarks infer --checkpoint path/to.pt --output-csv path/to/pred.csv --per-slice
 ```
 
-Holdout studies and the unlabeled Kaggle test set are the later target for `infer`. Geometry-filled train slices are the cheap dense supervision for a second training round (`source=projected`).
+Holdout studies and the unlabeled Kaggle test set are the later target for `infer`. Geometry-filled train slices are the cheap dense supervision for a second training round (`source=projected`, or `train --all-slices`). All-image layout (tensor, not a 262k-column table): [landmark_all_slice_pipeline.md](landmark_all_slice_pipeline.md).
 
 ---
 
@@ -77,6 +79,6 @@ python unzip_lumbar_landmarks_cloud.py --zip lumbar_landmarks_cloud.zip --dest .
 python -m rsna2024_lumbar.landmarks deploy --num-gpus 8 --all-conditions --skip-completed
 ```
 
-Search grid (`landmarks/configs/landmark_nas_search_space.json`): ConvNeXt-Tiny / Base + EfficientNetV2-S / L × `{256, 512}` × batch `{4, 8}` × lr `{1e-4, 3e-4}` = **32 trials × 5 conditions**. Shard with the same formula as severity NAS: \(k=\lceil N/G\rceil\), one process per GPU, `CUDA_VISIBLE_DEVICES=g`. Eight GPUs → 4 trials each. `--all-conditions --spawn --wait` reuses the GPU set once per condition (sequential-by-condition, not 5× concurrent).
+Search grid (`landmarks/configs/landmark_nas_search_space.json`): ConvNeXt-Tiny / Base + EfficientNetV2-S / L × lr `{1e-4, 3e-4}` at fixed **512×512** = **8 trials × 5 conditions**. Batch size is a CLI flag (`--batch-size`, default 8), not a search axis. Shard with the same formula as severity NAS: \(k=\lceil N/G\rceil\), one process per GPU, `CUDA_VISIBLE_DEVICES=g`. Eight GPUs → 1 trial each. `--all-conditions --spawn --wait` reuses the GPU set once per condition (sequential-by-condition, not 5× concurrent).
 
 Do not commit `lumbar_landmarks_cloud.zip`, DICOMs, or `data/processed/dense_coordinates/nas/`.

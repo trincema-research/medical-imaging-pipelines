@@ -62,7 +62,7 @@ def _header_geometry(path: Path) -> SliceGeometry | None:
     return geometry_from_dataset(ds)
 
 
-def _list_series_dicoms(images_root: Path, study_id: int, series_id: int) -> list[Path]:
+def list_series_dicoms(images_root: Path, study_id: int, series_id: int) -> list[Path]:
     folder = images_root / str(int(study_id)) / str(int(series_id))
     if not folder.is_dir():
         return []
@@ -80,7 +80,7 @@ def densify_anchor(
     level: str,
 ) -> list[dict]:
     """Project one labeled mark onto every slice in that series."""
-    paths = _list_series_dicoms(images_root, study_id, series_id)
+    paths = list_series_dicoms(images_root, study_id, series_id)
     if not paths:
         return []
     labeled_path = images_root / str(int(study_id)) / str(int(series_id)) / f"{int(instance_number)}.dcm"

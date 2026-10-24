@@ -4,11 +4,11 @@ Binary ViT specialists for the RSNA 2018 3-level burden split (`normal` vs S1 / 
 
 ```
 ⚙  severity/                 train · NAS · retrain · weight export/download
-⬇  data/severity_models/     split CSV + manifest (weights downloaded)
+⬇  data/severity_models/     3 S1 specialist `.pt` files (Git LFS) + split CSV
 ✔  tests/
 ```
 
-The three published checkpoints are **S1 repeats** (normal vs `severity_1_low_mild`), not S2/S3. Each full training dump is ~1 GB (optimizer included) and cannot go in git. Inference-only copies (~346 MB) are on the GitHub Release `rsna2018-severity-s1-specialists`.
+The three checkpoints are **S1 repeats** (normal vs `severity_1_low_mild`), not S2/S3. Inference-only copies (~346 MB, no optimizer) live in `data/severity_models/` via Git LFS. The original ~1 GB training dumps stay local.
 
 ```bash
 pip install -e ".[severity,dev]"

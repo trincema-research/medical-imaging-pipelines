@@ -1,11 +1,13 @@
 # ⬇ severity_models/
 
-Committed: `val_test_images.csv`, `dataset_split.json`, `training_history.csv`, `manifest.json`.
+On disk here (Git LFS):
 
-Not committed: `*.pt` (346 MB inference files, or the original 1 GB dumps). Download:
+- `specialist_s1_val0.9470.pt`
+- `specialist_s1_val0.9433.pt`
+- `specialist_s1_val0.9415.pt`
+
+Also: `val_test_images.csv`, `dataset_split.json`, `training_history.csv`, `manifest.json`.
 
 ```bash
 python -m rsna2018_cxr.severity download-weights
 ```
-
-Release tag: `rsna2018-severity-s1-specialists`.

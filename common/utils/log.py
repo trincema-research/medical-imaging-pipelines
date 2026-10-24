@@ -15,6 +15,7 @@ _component = ""
 
 YEAR_TRACE_FOLDERS = {
     "rsna2024": "rsna2024_lumbar",
+    "rsna2025": "rsna2025_brain",
 }
 
 

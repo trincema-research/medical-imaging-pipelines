@@ -63,3 +63,17 @@ python -m rsna2024_lumbar.preprocessing \
 | ⬆ | `*/data/processed/` | no | full PNG cache (local or inside deploy zip) |
 
 Remote tests never need the big dump. Point `--data-root` at `data/raw` locally (or any existing checkout).
+
+## ▸ RSNA 2025 brain — download / unpack
+
+Same repo-root `.env` `KAGGLE_API_TOKEN` as lumbar. Accept the [aneurysm detection rules](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/rules) first.
+
+```bash
+pip install -e ".[kaggle,dev]"
+python -m rsna2025_brain.data.download
+python -m rsna2025_brain.data.unzip
+python -m rsna2025_brain.data.validate
+pytest rsna2025_brain/tests
+```
+
+Layout after unzip: `train.csv`, `train_localizers.csv`, `series/<SeriesInstanceUID>/*.dcm` under `rsna2025_brain/data/raw/`. DICOMs stay gitignored.

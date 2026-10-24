@@ -59,17 +59,20 @@ rsna2024-landmarks-nas = "rsna2024_lumbar.coordinate_prediction.launch:main"
 rsna2024-landmarks-pack = "rsna2024_lumbar.coordinate_prediction.pack:main"
 rsna2024-landmarks-unzip = "rsna2024_lumbar.coordinate_prediction.unzip:main"
 rsna2024-landmarks-deploy = "rsna2024_lumbar.coordinate_prediction.deploy:main"
+rsna2025-brain-download = "rsna2025_brain.data.download:main"
+rsna2025-brain-unzip = "rsna2025_brain.data.unzip:main"
+rsna2025-brain-validate = "rsna2025_brain.data.validate:main"
 
 [tool.setuptools.package-data]
 "rsna2024_lumbar.nas" = ["configs/*.json"]
 "rsna2024_lumbar.coordinate_prediction" = ["configs/*.json"]
 
 [tool.setuptools.packages.find]
-include = ["common*", "rsna2024_lumbar*"]
-exclude = ["rsna2024_lumbar.tests*"]
+include = ["common*", "rsna2024_lumbar*", "rsna2025_brain*"]
+exclude = ["rsna2024_lumbar.tests*", "rsna2025_brain.tests*"]
 
 [tool.pytest.ini_options]
-testpaths = ["rsna2024_lumbar/tests"]
+testpaths = ["rsna2024_lumbar/tests", "rsna2025_brain/tests"]
 pythonpath = ["."]
 addopts = "-q"
 markers = [

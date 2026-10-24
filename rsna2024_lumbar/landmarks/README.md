@@ -42,7 +42,7 @@ Backbones: `convnext_tiny` (smoke), `convnext_base` and `efficientnet_v2_l` (1st
 
 ## Cloud pack / NAS
 
-**512×512 is fixed** (not a search axis). `full` = 4 models × 4 lrs × 3 weight decays = **48** trials per condition. `convnext` / `efficientnet` are 24 each. `local` is the 12-trial 1-GPU scout. Batch size is not searched — default 8, override with `--batch-size`. Same 1/2/4/8 GPU shards as severity NAS (`k = ceil(N/G)`, `CUDA_VISIBLE_DEVICES`). `--all-conditions` is sequential-by-condition.
+**512×512 is fixed** (not a search axis). `full` = 4 models × 6 lrs × 5 weight decays = **120** trials per condition. `convnext` / `efficientnet` are 60 each. `local` is the 24-trial 1-GPU scout. Batch size is not searched — default 8, override with `--batch-size`. Same 1/2/4/8 GPU shards as severity NAS (`k = ceil(N/G)`, `CUDA_VISIBLE_DEVICES`). `--all-conditions` is sequential-by-condition.
 
 ```bash
 # zip code + labels (small). Add --include-images to pack train_images/ (~30 GB DICOMs).
@@ -57,7 +57,7 @@ pip install -e ".[landmarks]"
 # print every combination (no training)
 python -m rsna2024_lumbar.landmarks nas --family full --list
 
-# shard the same `full` grid (48 trials / condition) across 1, 2, 4, or 8 GPUs
+# shard the same `full` grid (120 trials / condition) across 1, 2, 4, or 8 GPUs
 python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 1 --spawn --wait --skip-completed
 python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 2 --spawn --wait --skip-completed
 python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 4 --spawn --wait --skip-completed
@@ -70,7 +70,7 @@ python -m rsna2024_lumbar.landmarks nas --family efficientnet --num-gpus 8 --all
 python -m rsna2024_lumbar.landmarks deploy --family full --num-gpus 8 --all-conditions --skip-completed
 ```
 
-`--num-gpus` must be 1, 2, 4, or 8 (`0` = auto). Shards are `k = ceil(N/G)`: `full` is 48 / 24 / 12 / 6 trials per GPU. Swap `--family full` for `convnext` (24), `efficientnet` (24), or `local` (12).
+`--num-gpus` must be 1, 2, 4, or 8 (`0` = auto). Shards are `k = ceil(N/G)`: `full` is 120 / 60 / 30 / 15 trials per GPU. Swap `--family full` for `convnext` (60), `efficientnet` (60), or `local` (24).
 
 Every trial writes `<condition>_<backbone>_metrics.csv` / `.json` and copies train/val/test splits into `trial.json`. Rows are `overall` plus each lumbar level (R², Rx, Ry, MAE, MAE-x, MAE-y, PCK@5, PCK@10, L1, `n_visible`). Use those later to pick condition×level pairs that need a specialist model.
 

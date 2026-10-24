@@ -135,7 +135,7 @@ Each run writes condition-level and per-lumbar-level metrics (R² / Rx / Ry, MAE
 
 Do not commit dense CSVs, DICOMs, or checkpoints.
 
-NAS families (same 2D heads, ImageNet init, **512×512 fixed**): `full` = 4 models × 4 lrs × 3 weight decays = **48** trials. `convnext` / `efficientnet` are 24 each. `local` is the 12-trial 1-GPU scout.
+NAS families (same 2D heads, ImageNet init, **512×512 fixed**): `full` = 4 models × 6 lrs × 5 weight decays = **120** trials. `convnext` / `efficientnet` are 60 each. `local` is the 24-trial 1-GPU scout.
 
 ```bash
 python -m rsna2024_lumbar.landmarks nas --family full --list

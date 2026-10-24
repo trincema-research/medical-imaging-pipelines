@@ -2,7 +2,7 @@
 
 `train_label_coordinates.csv` has one row per `(study_id, condition, level)` (48,692 marks). Neighbouring DICOMs in the same series have no click. This note is the Methods wording for filling those rows, then learning the same task the way the RSNA 2024 1st-place team did.
 
-Implementation: [`landmarks/`](../landmarks/).
+Implementation: [`coordinate_prediction/`](../coordinate_prediction/).
 
 ---
 
@@ -57,11 +57,11 @@ Smoke backbone: `convnext_tiny` at 64 px.
 ## 4. Commands
 
 ```bash
-python -m rsna2024_lumbar.landmarks densify --progress
-python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --backbone convnext_base --pretrained
-python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --all-slices --dense-csv rsna2024_lumbar/data/processed/dense_coordinates/train_label_coordinates_dense.csv
-python -m rsna2024_lumbar.landmarks infer --checkpoint path/to.pt --output-csv path/to/pred.csv
-python -m rsna2024_lumbar.landmarks infer --checkpoint path/to.pt --output-csv path/to/pred.csv --per-slice
+python -m rsna2024_lumbar.coordinate_prediction densify --progress
+python -m rsna2024_lumbar.coordinate_prediction train --condition spinal_canal_stenosis --backbone convnext_base --pretrained
+python -m rsna2024_lumbar.coordinate_prediction train --condition spinal_canal_stenosis --all-slices --dense-csv rsna2024_lumbar/data/processed/dense_coordinates/train_label_coordinates_dense.csv
+python -m rsna2024_lumbar.coordinate_prediction infer --checkpoint path/to.pt --output-csv path/to/pred.csv
+python -m rsna2024_lumbar.coordinate_prediction infer --checkpoint path/to.pt --output-csv path/to/pred.csv --per-slice
 ```
 
 Holdout studies and the unlabeled Kaggle test set are the later target for `infer`. Geometry-filled train slices are the cheap dense supervision for a second training round (`source=projected`, or `train --all-slices`). All-image layout (tensor, not a 262k-column table): [landmark_all_slice_pipeline.md](landmark_all_slice_pipeline.md).
@@ -74,26 +74,26 @@ Landmark training reads **DICOMs** (`train_images/`), not the PNG crop cache. Do
 
 ```bash
 copy .env.example .env
-pip install -e ".[kaggle,landmarks]"
+pip install -e ".[kaggle,coordinate_prediction]"
 python -m rsna2024_lumbar.data.download
 python -m rsna2024_lumbar.data.unzip
 python -m rsna2024_lumbar.data.validate
 
-python -m rsna2024_lumbar.landmarks nas \
+python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
   --num-gpus 8 --batch-size 8 \
   --spawn --wait --skip-completed
 ```
 
-`--num-gpus` is 1, 2, 4, or 8. `--batch-size` is the only other knob (default 8). Search grid (`landmarks/configs/landmark_nas_search_space.json`): ConvNeXt-Tiny / Base + EfficientNetV2-S / L × lr `{1e-5, 3e-5, 1e-4, 3e-4, 6e-4, 1e-3}` × weight decay `{0.001, 0.003, 0.01, 0.03, 0.05}` at fixed **512×512** = **120 trials × 5 conditions**. Image size is not searched. Shard with the same formula as severity NAS: \(k=\lceil N/G\rceil\), one process per GPU, `CUDA_VISIBLE_DEVICES=g`. Eight GPUs → 15 trials each. `--all-conditions --spawn --wait` reuses the GPU set once per condition (sequential-by-condition, not 5× concurrent).
+`--num-gpus` is 1, 2, 4, or 8. `--batch-size` is the only other knob (default 8). Search grid (`coordinate_prediction/configs/landmark_nas_search_space.json`): ConvNeXt-Tiny / Base + EfficientNetV2-S / L × lr `{1e-5, 3e-5, 1e-4, 3e-4, 6e-4, 1e-3}` × weight decay `{0.001, 0.003, 0.01, 0.03, 0.05}` at fixed **512×512** = **120 trials × 5 conditions**. Image size is not searched. Shard with the same formula as severity NAS: \(k=\lceil N/G\rceil\), one process per GPU, `CUDA_VISIBLE_DEVICES=g`. Eight GPUs → 15 trials each. `--all-conditions --spawn --wait` reuses the GPU set once per condition (sequential-by-condition, not 5× concurrent).
 
 To ship an already-downloaded dump to another box (do not commit the archive):
 
 ```bash
-python -m rsna2024_lumbar.landmarks pack --include-images
-python unzip_lumbar_landmarks_cloud.py --zip lumbar_landmarks_cloud.zip --dest ./landmarks_cloud
-python -m rsna2024_lumbar.landmarks deploy --family full --all-conditions --num-gpus 8 --batch-size 8 --skip-completed
+python -m rsna2024_lumbar.coordinate_prediction pack --include-images
+python unzip_lumbar_coordinate_prediction_cloud.py --zip lumbar_coordinate_prediction_cloud.zip --dest ./coordinate_prediction_cloud
+python -m rsna2024_lumbar.coordinate_prediction deploy --family full --all-conditions --num-gpus 8 --batch-size 8 --skip-completed
 ```
 
-Do not commit `lumbar_landmarks_cloud.zip`, DICOMs, or `data/processed/dense_coordinates/nas/`. Full command list: [../landmarks/README.md](../landmarks/README.md).
+Do not commit `lumbar_coordinate_prediction_cloud.zip`, DICOMs, or `data/processed/dense_coordinates/nas/`. Full command list: [../coordinate_prediction/README.md](../coordinate_prediction/README.md).

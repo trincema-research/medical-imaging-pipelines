@@ -1,8 +1,8 @@
-# Landmark (x, y) completion
+# Coordinate prediction (x, y)
 
 Complete `train_label_coordinates.csv` for **every slice** in a labeled series, then (optionally) learn the same points with the RSNA 2024 **1st-place** 2D regressors.
 
-NAS and `train` read the **raw Kaggle DICOMs** (`train_images/` + the three label CSVs). They do **not** use the PNG crop cache. Download the official zip, unpack it into `data/raw/`, then run NAS.
+NAS and `train` read the **raw Kaggle DICOMs** (`train_images/` + the three label CSVs). They do **not** use the PNG crop cache. Download the official zip, unpack it into `data/raw/`, then run NAS. This package used to live at `landmarks/`; `pip install -e ".[landmarks]"` and the `rsna2024-landmarks*` scripts still work as aliases.
 
 1st place ([Avengers write-up](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/writeups/avengers-1st-place-solution)) trained **2D** ConvNeXt-Base and EfficientNetV2-L on a 512×512 RGB slice (gray repeated 3×) with **level-separated heads** and **L1** on `(x/width, y/height)`. Same recipe here. Five condition pipelines, not 25 level nets.
 
@@ -15,7 +15,7 @@ From the repo root (`medical-imaging-pipelines/`). Accept the [competition rules
 copy .env.example .env
 
 # 2. install download + training extras
-pip install -e ".[kaggle,landmarks]"
+pip install -e ".[kaggle,coordinate_prediction]"
 
 # 3. official zip → rsna2024_lumbar/data/raw/  (unzips; ~30 GB train_images/)
 python -m rsna2024_lumbar.data.download
@@ -23,10 +23,10 @@ python -m rsna2024_lumbar.data.unzip       # only if a .zip is still in data/raw
 python -m rsna2024_lumbar.data.validate
 
 # 4. print the grid (no GPU). 4 models × 6 lrs × 5 wds = 120 per condition
-python -m rsna2024_lumbar.landmarks nas --family full --list
+python -m rsna2024_lumbar.coordinate_prediction nas --family full --list
 
 # 5. all 5 conditions × all 120 cells. Only --num-gpus and --batch-size change.
-python -m rsna2024_lumbar.landmarks nas \
+python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full \
   --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
@@ -48,7 +48,7 @@ python -m rsna2024_lumbar.landmarks nas \
 Default `--data-root` is `rsna2024_lumbar/data/raw` (what `data.download` fills). If the dump lives somewhere else, point at that folder:
 
 ```bash
-python -m rsna2024_lumbar.landmarks nas \
+python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full --all-conditions \
   --data-root /path/to/rsna-2024-lumbar-spine-degenerative-classification \
   --num-gpus 8 --batch-size 8 \
@@ -72,26 +72,26 @@ Do not commit the zip, DICOMs, or NAS histories. Download details: [data/README.
 Kaggle only marks one `(study, condition, level)`. Axial neighbours can reuse that in-plane point. `densify` projects the labeled LPS point with `ImagePositionPatient` / `ImageOrientationPatient` / `PixelSpacing`. NAS does **not** need densify (it uses the median labeled slice). Use densify for `--all-slices` training.
 
 ```bash
-pip install -e ".[landmarks,dev]"
+pip install -e ".[coordinate_prediction,dev]"
 
-python -m rsna2024_lumbar.landmarks densify --data-root rsna2024_lumbar/data/raw --progress
+python -m rsna2024_lumbar.coordinate_prediction densify --data-root rsna2024_lumbar/data/raw --progress
 
-python -m rsna2024_lumbar.landmarks train \
+python -m rsna2024_lumbar.coordinate_prediction train \
   --data-root rsna2024_lumbar/data/raw \
   --condition spinal_canal_stenosis --backbone convnext_tiny \
   --image-size 64 --epochs 2 --max-studies 4
 
-python -m rsna2024_lumbar.landmarks infer \
+python -m rsna2024_lumbar.coordinate_prediction infer \
   --data-root rsna2024_lumbar/data/raw \
   --checkpoint rsna2024_lumbar/data/processed/dense_coordinates/runs/spinal_canal_stenosis_convnext_tiny.pt \
   --output-csv rsna2024_lumbar/data/processed/dense_coordinates/pred_scs.csv
 
-python -m rsna2024_lumbar.landmarks train \
+python -m rsna2024_lumbar.coordinate_prediction train \
   --data-root rsna2024_lumbar/data/raw \
   --condition spinal_canal_stenosis --all-slices \
   --dense-csv rsna2024_lumbar/data/processed/dense_coordinates/train_label_coordinates_dense.csv
 
-python -m rsna2024_lumbar.landmarks infer \
+python -m rsna2024_lumbar.coordinate_prediction infer \
   --data-root rsna2024_lumbar/data/raw \
   --checkpoint rsna2024_lumbar/data/processed/dense_coordinates/runs/spinal_canal_stenosis_convnext_tiny.pt \
   --output-csv rsna2024_lumbar/data/processed/dense_coordinates/pred_scs.csv \
@@ -109,13 +109,13 @@ Backbones: `convnext_tiny` (smoke), `convnext_base` and `efficientnet_v2_l` (1st
 If the GPU box should download Kaggle itself, copy the repo, run the download commands above, then NAS. If you already have `data/raw/` and want one zip:
 
 ```bash
-python -m rsna2024_lumbar.landmarks pack --output lumbar_landmarks_cloud.zip
-python -m rsna2024_lumbar.landmarks pack --include-images --output lumbar_landmarks_cloud.zip
+python -m rsna2024_lumbar.coordinate_prediction pack --output lumbar_coordinate_prediction_cloud.zip
+python -m rsna2024_lumbar.coordinate_prediction pack --include-images --output lumbar_coordinate_prediction_cloud.zip
 
-python unzip_lumbar_landmarks_cloud.py --zip lumbar_landmarks_cloud.zip --dest ./landmarks_cloud
-cd landmarks_cloud
-pip install -e ".[kaggle,landmarks]"
-python -m rsna2024_lumbar.landmarks nas \
+python unzip_lumbar_coordinate_prediction_cloud.py --zip lumbar_coordinate_prediction_cloud.zip --dest ./coordinate_prediction_cloud
+cd coordinate_prediction_cloud
+pip install -e ".[kaggle,coordinate_prediction]"
+python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
   --num-gpus 8 --batch-size 8 \
@@ -125,7 +125,7 @@ python -m rsna2024_lumbar.landmarks nas \
 `deploy` is install + the same NAS launch:
 
 ```bash
-python -m rsna2024_lumbar.landmarks deploy \
+python -m rsna2024_lumbar.coordinate_prediction deploy \
   --family full --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
   --num-gpus 8 --batch-size 8 \

@@ -9,10 +9,10 @@ import numpy as np
 import pandas as pd
 import torch
 
-from rsna2024_lumbar.landmarks.constants import CONDITIONS, LEVEL_DISPLAY, LUMBAR_LEVELS, SOURCE_PREDICTED
-from rsna2024_lumbar.landmarks.dataset import list_condition_dicoms, list_condition_samples, load_rgb_slice
-from rsna2024_lumbar.landmarks.densify import densify_anchor
-from rsna2024_lumbar.landmarks.models import build_regressor
+from rsna2024_lumbar.coordinate_prediction.constants import CONDITIONS, LEVEL_DISPLAY, LUMBAR_LEVELS, SOURCE_PREDICTED
+from rsna2024_lumbar.coordinate_prediction.dataset import list_condition_dicoms, list_condition_samples, load_rgb_slice
+from rsna2024_lumbar.coordinate_prediction.densify import densify_anchor
+from rsna2024_lumbar.coordinate_prediction.models import build_regressor
 from rsna2024_lumbar.preprocessing.dicom_io import read_gray_uint8
 
 

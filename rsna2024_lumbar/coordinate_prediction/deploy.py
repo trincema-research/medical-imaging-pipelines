@@ -7,8 +7,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from rsna2024_lumbar.landmarks.constants import BATCH_SIZE_DEFAULT, CONDITIONS
-from rsna2024_lumbar.landmarks.search import FAMILIES, FAMILY_FULL
+from rsna2024_lumbar.coordinate_prediction.constants import BATCH_SIZE_DEFAULT, CONDITIONS
+from rsna2024_lumbar.coordinate_prediction.search import FAMILIES, FAMILY_FULL
 from rsna2024_lumbar.nas.paths import REPO_ROOT, default_data_root
 from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
 
@@ -62,12 +62,12 @@ def main(argv: list[str] | None = None) -> int:
         print("Dry-run OK.")
         return 0
     if not args.skip_install:
-        print(f"+ {sys.executable} -m pip install -e .[landmarks]")
-        subprocess.run([sys.executable, "-m", "pip", "install", "-e", ".[landmarks]"], cwd=repo, check=True)
+        print(f"+ {sys.executable} -m pip install -e .[coordinate_prediction]")
+        subprocess.run([sys.executable, "-m", "pip", "install", "-e", ".[coordinate_prediction]"], cwd=repo, check=True)
     cmd = [
         sys.executable,
         "-m",
-        "rsna2024_lumbar.landmarks.launch",
+        "rsna2024_lumbar.coordinate_prediction.launch",
         "--num-gpus",
         str(args.num_gpus),
         "--data-root",

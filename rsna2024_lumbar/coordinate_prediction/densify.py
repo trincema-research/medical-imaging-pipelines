@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 import pydicom
 
-from rsna2024_lumbar.landmarks.constants import (
+from rsna2024_lumbar.coordinate_prediction.constants import (
     DENSE_COORDINATES_DIRNAME,
     DENSE_CSV_NAME,
     SOURCE_COPIED,

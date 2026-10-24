@@ -9,9 +9,9 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 
-from rsna2024_lumbar.landmarks.constants import CONDITIONS, IMAGE_SIZE_DEFAULT, LEVEL_DISPLAY, LUMBAR_LEVELS
-from rsna2024_lumbar.landmarks.densify import list_series_dicoms
-from rsna2024_lumbar.landmarks.split import split_study_ids
+from rsna2024_lumbar.coordinate_prediction.constants import CONDITIONS, IMAGE_SIZE_DEFAULT, LEVEL_DISPLAY, LUMBAR_LEVELS
+from rsna2024_lumbar.coordinate_prediction.densify import list_series_dicoms
+from rsna2024_lumbar.coordinate_prediction.split import split_study_ids
 from rsna2024_lumbar.preprocessing.dicom_io import read_gray_uint8
 
 

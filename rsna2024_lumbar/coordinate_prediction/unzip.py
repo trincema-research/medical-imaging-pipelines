@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Extract lumbar_landmarks_cloud.zip with stdlib only (no package install).
+"""Extract lumbar_coordinate_prediction_cloud.zip with stdlib only (no package install).
 
-Shipped inside the zip as unzip_lumbar_landmarks_cloud.py.
+Shipped inside the zip as unzip_lumbar_coordinate_prediction_cloud.py.
 
-  python unzip_lumbar_landmarks_cloud.py --zip lumbar_landmarks_cloud.zip --dest ./landmarks_cloud
+  python unzip_lumbar_coordinate_prediction_cloud.py --zip lumbar_coordinate_prediction_cloud.zip --dest ./coordinate_prediction_cloud
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ import json
 import zipfile
 from pathlib import Path
 
-MANIFEST_NAME = "landmarks_deploy_manifest.json"
+MANIFEST_NAME = "coordinate_prediction_deploy_manifest.json"
 
 
 def repo_root_from_extracted(extract_dir: Path) -> Path:
@@ -57,8 +57,8 @@ def main(argv: list[str] | None = None) -> int:
     print()
     print("Next:")
     print(f"  cd {repo}")
-    print("  pip install -e '.[landmarks]'")
-    print("  python -m rsna2024_lumbar.landmarks deploy --num-gpus 8 --all-conditions --skip-completed")
+    print("  pip install -e '.[coordinate_prediction]'")
+    print("  python -m rsna2024_lumbar.coordinate_prediction deploy --num-gpus 8 --all-conditions --skip-completed")
     return 0
 
 

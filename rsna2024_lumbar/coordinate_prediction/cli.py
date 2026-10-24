@@ -1,4 +1,4 @@
-"""CLI: python -m rsna2024_lumbar.landmarks {densify,train,infer,nas,pack,unzip,deploy}"""
+"""CLI: python -m rsna2024_lumbar.coordinate_prediction {densify,train,infer,nas,pack,unzip,deploy}"""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import importlib
 import sys
 from pathlib import Path
 
-from rsna2024_lumbar.landmarks.constants import (
+from rsna2024_lumbar.coordinate_prediction.constants import (
     BACKBONE_CONVNEXT_TINY,
     BACKBONES,
     CONDITIONS,
@@ -15,7 +15,7 @@ from rsna2024_lumbar.landmarks.constants import (
     IMAGE_SIZE_DEFAULT,
     SPLIT_SEED_DEFAULT,
 )
-from rsna2024_lumbar.landmarks.densify import DEFAULT_OUTPUT, DEFAULT_RAW, densify_coordinates
+from rsna2024_lumbar.coordinate_prediction.densify import DEFAULT_OUTPUT, DEFAULT_RAW, densify_coordinates
 
 HERE = Path(__file__).resolve().parents[1]
 DEFAULT_RUNS = HERE / "data" / "processed" / DENSE_COORDINATES_DIRNAME / "runs"
@@ -57,7 +57,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--dense-csv",
         type=Path,
         default=None,
-        help="Dense coordinate table from `landmarks densify` (required with --all-slices).",
+        help="Dense coordinate table from `coordinate_prediction densify` (required with --all-slices).",
     )
 
     infer = sub.add_parser("infer", help="Predict (x, y) and project onto the rest of each series.")
@@ -75,10 +75,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 CLOUD_COMMANDS = {
-    "nas": "rsna2024_lumbar.landmarks.launch",
-    "pack": "rsna2024_lumbar.landmarks.pack",
-    "unzip": "rsna2024_lumbar.landmarks.unzip",
-    "deploy": "rsna2024_lumbar.landmarks.deploy",
+    "nas": "rsna2024_lumbar.coordinate_prediction.launch",
+    "pack": "rsna2024_lumbar.coordinate_prediction.pack",
+    "unzip": "rsna2024_lumbar.coordinate_prediction.unzip",
+    "deploy": "rsna2024_lumbar.coordinate_prediction.deploy",
 }
 
 
@@ -101,7 +101,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0
     if args.command == "train":
-        from rsna2024_lumbar.landmarks.train import train_condition
+        from rsna2024_lumbar.coordinate_prediction.train import train_condition
 
         meta = train_condition(
             args.data_root,
@@ -122,7 +122,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Wrote {meta['checkpoint']}  train={meta['n_train']} val={meta['n_val']}")
         return 0
     if args.command == "infer":
-        from rsna2024_lumbar.landmarks.infer import predict_condition_csv
+        from rsna2024_lumbar.coordinate_prediction.infer import predict_condition_csv
 
         meta = predict_condition_csv(
             args.data_root,

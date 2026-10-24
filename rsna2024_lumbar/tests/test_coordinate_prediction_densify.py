@@ -3,9 +3,9 @@ from pathlib import Path
 
 import numpy as np
 
-from rsna2024_lumbar.landmarks.cli import parse_args
-from rsna2024_lumbar.landmarks.densify import densify_anchor, densify_coordinates
-from rsna2024_lumbar.landmarks.split import split_study_ids
+from rsna2024_lumbar.coordinate_prediction.cli import parse_args
+from rsna2024_lumbar.coordinate_prediction.densify import densify_anchor, densify_coordinates
+from rsna2024_lumbar.coordinate_prediction.split import split_study_ids
 from rsna2024_lumbar.preprocessing.constants import label_column
 from rsna2024_lumbar.tests.helpers import write_gray_dicom
 

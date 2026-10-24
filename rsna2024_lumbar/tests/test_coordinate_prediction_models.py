@@ -1,14 +1,14 @@
 import pytest
 
-from rsna2024_lumbar.landmarks.constants import BACKBONE_CONVNEXT_TINY, LUMBAR_LEVELS
-from rsna2024_lumbar.landmarks.dataset import list_condition_samples
-from rsna2024_lumbar.tests.test_landmark_densify import _axial_stack
+from rsna2024_lumbar.coordinate_prediction.constants import BACKBONE_CONVNEXT_TINY, LUMBAR_LEVELS
+from rsna2024_lumbar.coordinate_prediction.dataset import list_condition_samples
+from rsna2024_lumbar.tests.test_coordinate_prediction_densify import _axial_stack
 
 torch = pytest.importorskip("torch")
 
 
 def test_regressor_forward_shapes():
-    from rsna2024_lumbar.landmarks.models import build_regressor, landmark_loss
+    from rsna2024_lumbar.coordinate_prediction.models import build_regressor, landmark_loss
 
     model = build_regressor(BACKBONE_CONVNEXT_TINY, pretrained=False)
     images = torch.zeros(2, 3, 64, 64)
@@ -23,7 +23,7 @@ def test_regressor_forward_shapes():
 
 
 def test_coordinate_r2_perfect_and_mean():
-    from rsna2024_lumbar.landmarks.models import coordinate_r2
+    from rsna2024_lumbar.coordinate_prediction.models import coordinate_r2
 
     target = torch.tensor([[[0.1, 0.2], [0.8, 0.9]], [[0.3, 0.4], [0.6, 0.7]]], dtype=torch.float32)
     visible = torch.ones(2, 2)
@@ -37,7 +37,7 @@ def test_coordinate_r2_perfect_and_mean():
 
 
 def test_coordinate_metrics_overall_and_per_level():
-    from rsna2024_lumbar.landmarks.models import LEVEL_METRIC_KEYS, coordinate_metrics
+    from rsna2024_lumbar.coordinate_prediction.models import LEVEL_METRIC_KEYS, coordinate_metrics
 
     pred = torch.tensor([[[0.10, 0.20], [0.50, 0.50]], [[0.12, 0.20], [0.80, 0.80]]], dtype=torch.float32)
     target = torch.tensor([[[0.10, 0.20], [0.50, 0.50]], [[0.10, 0.20], [0.80, 0.80]]], dtype=torch.float32)
@@ -59,7 +59,7 @@ def test_coordinate_metrics_overall_and_per_level():
 
 
 def test_coordinate_metrics_hidden_level_has_zero_visible():
-    from rsna2024_lumbar.landmarks.models import coordinate_metrics
+    from rsna2024_lumbar.coordinate_prediction.models import coordinate_metrics
 
     pred = torch.zeros(3, 2, 2)
     target = torch.zeros(3, 2, 2)

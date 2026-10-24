@@ -7,20 +7,20 @@ import zipfile
 
 import pytest
 
-from rsna2024_lumbar.landmarks.cli import main as landmarks_main
-from rsna2024_lumbar.landmarks.deploy import parse_args as parse_deploy_args
-from rsna2024_lumbar.landmarks.launch import (
+from rsna2024_lumbar.coordinate_prediction.cli import main as coordinate_prediction_main
+from rsna2024_lumbar.coordinate_prediction.deploy import parse_args as parse_deploy_args
+from rsna2024_lumbar.coordinate_prediction.launch import (
     DEFAULT_RAW,
     build_plan,
     format_plan,
     main as launch_main,
     parse_args as parse_launch_args,
 )
-from rsna2024_lumbar.landmarks.pack import collect_pack_files, main as pack_main
-from rsna2024_lumbar.landmarks.models import empty_coordinate_metrics
-from rsna2024_lumbar.landmarks.search import expand_trials
-from rsna2024_lumbar.landmarks.train import write_split_metrics
-from rsna2024_lumbar.landmarks.unzip import extract_zip
+from rsna2024_lumbar.coordinate_prediction.pack import collect_pack_files, main as pack_main
+from rsna2024_lumbar.coordinate_prediction.models import empty_coordinate_metrics
+from rsna2024_lumbar.coordinate_prediction.search import expand_trials
+from rsna2024_lumbar.coordinate_prediction.train import write_split_metrics
+from rsna2024_lumbar.coordinate_prediction.unzip import extract_zip
 from rsna2024_lumbar.nas.gpus import covered_trial_ids
 from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
 
@@ -126,7 +126,7 @@ def test_launch_cli_dry_run(capsys):
 
 
 def test_landmarks_cli_dispatches_nas_list(capsys):
-    landmarks_main(["nas", "--list"])
+    coordinate_prediction_main(["nas", "--list"])
     out = capsys.readouterr().out
     assert "120 trials per condition" in out
 
@@ -156,19 +156,19 @@ def test_pack_zip_without_images(tmp_path):
     data_root.mkdir()
     for name in LABEL_CSVS:
         (data_root / name).write_text("study_id\n", encoding="utf-8")
-    dest = tmp_path / "lumbar_landmarks_cloud.zip"
+    dest = tmp_path / "lumbar_coordinate_prediction_cloud.zip"
     pack_main(["--output", str(dest), "--data-root", str(data_root)])
     assert dest.is_file()
     with zipfile.ZipFile(dest) as zf:
         names = set(zf.namelist())
     assert "CLOUD_RUN.txt" in names
-    assert "landmarks_deploy_manifest.json" in names
-    assert "unzip_lumbar_landmarks_cloud.py" in names
-    assert any(name.endswith("landmarks/search.py") for name in names)
-    assert any(name.endswith("landmarks/configs/landmark_nas_search_space.json") for name in names)
-    assert any(name.endswith("landmarks/configs/landmark_nas_convnext.json") for name in names)
-    assert any(name.endswith("landmarks/configs/landmark_nas_efficientnet.json") for name in names)
-    assert any(name.endswith("landmarks/configs/landmark_nas_local.json") for name in names)
+    assert "coordinate_prediction_deploy_manifest.json" in names
+    assert "unzip_lumbar_coordinate_prediction_cloud.py" in names
+    assert any(name.endswith("coordinate_prediction/search.py") for name in names)
+    assert any(name.endswith("coordinate_prediction/configs/landmark_nas_search_space.json") for name in names)
+    assert any(name.endswith("coordinate_prediction/configs/landmark_nas_convnext.json") for name in names)
+    assert any(name.endswith("coordinate_prediction/configs/landmark_nas_efficientnet.json") for name in names)
+    assert any(name.endswith("coordinate_prediction/configs/landmark_nas_local.json") for name in names)
     assert any(name.endswith("nas/gpus.py") for name in names)
     assert any(name.endswith("train_label_coordinates.csv") for name in names)
     assert not any("train_images/" in name for name in names)
@@ -197,10 +197,10 @@ def test_unzip_stdlib_roundtrip(tmp_path):
     out = tmp_path / "extracted"
     repo = extract_zip(dest, out)
     assert (repo / "pyproject.toml").is_file()
-    manifest = json.loads((repo / "landmarks_deploy_manifest.json").read_text(encoding="utf-8"))
+    manifest = json.loads((repo / "coordinate_prediction_deploy_manifest.json").read_text(encoding="utf-8"))
     assert manifest["include_images"] is False
     assert manifest["trials_per_condition"] == 120
-    assert (repo / "unzip_lumbar_landmarks_cloud.py").is_file()
+    assert (repo / "unzip_lumbar_coordinate_prediction_cloud.py").is_file()
 
 
 def test_write_split_metrics_has_condition_and_level_rows(tmp_path):

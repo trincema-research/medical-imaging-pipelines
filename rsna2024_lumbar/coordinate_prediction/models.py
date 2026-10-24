@@ -6,7 +6,7 @@ slice, five heads, L1 on (x/width, y/height).
 
 from __future__ import annotations
 
-from rsna2024_lumbar.landmarks.constants import (
+from rsna2024_lumbar.coordinate_prediction.constants import (
     BACKBONE_CONVNEXT_BASE,
     BACKBONE_CONVNEXT_TINY,
     BACKBONE_EFFNET_V2_L,
@@ -28,7 +28,7 @@ def _require_torch():
         import torch.nn as nn
         from torchvision import models
     except ImportError as exc:
-        raise SystemExit("Landmark regression needs torch + torchvision. pip install -e '.[landmarks]'") from exc
+        raise SystemExit("Landmark regression needs torch + torchvision. pip install -e '.[coordinate_prediction]'") from exc
     return torch, nn, models
 
 

@@ -8,12 +8,12 @@ import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
-from rsna2024_lumbar.landmarks.constants import CONDITIONS, DENSE_COORDINATES_DIRNAME
-from rsna2024_lumbar.landmarks.search import expand_trials
+from rsna2024_lumbar.coordinate_prediction.constants import CONDITIONS, DENSE_COORDINATES_DIRNAME
+from rsna2024_lumbar.coordinate_prediction.search import expand_trials
 from rsna2024_lumbar.nas.paths import REPO_ROOT, YEAR_ROOT
 from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
 
-DEFAULT_ZIP = REPO_ROOT / "lumbar_landmarks_cloud.zip"
+DEFAULT_ZIP = REPO_ROOT / "lumbar_coordinate_prediction_cloud.zip"
 SKIP_DIR_NAMES = {
     "__pycache__",
     ".pytest_cache",
@@ -22,7 +22,7 @@ SKIP_DIR_NAMES = {
     DENSE_COORDINATES_DIRNAME,
 }
 STORE_SUFFIXES = {".dcm", ".npy", ".zip"}
-UNZIP_NAME = "unzip_lumbar_landmarks_cloud.py"
+UNZIP_NAME = "unzip_lumbar_coordinate_prediction_cloud.py"
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -57,7 +57,7 @@ def _iter_files(root: Path) -> list[Path]:
 def collect_pack_files(*, data_root: Path, include_images: bool) -> list[Path]:
     files: list[Path] = []
     for path in (
-        YEAR_ROOT / "landmarks",
+        YEAR_ROOT / "coordinate_prediction",
         YEAR_ROOT / "preprocessing",
         YEAR_ROOT / "nas",
         YEAR_ROOT / "__init__.py",
@@ -95,20 +95,20 @@ def cloud_run_text(*, include_images: bool) -> str:
         [
             "# Unzip, then from the repo root (directory with pyproject.toml):",
             "",
-            f"python {UNZIP_NAME} --zip lumbar_landmarks_cloud.zip --dest ./landmarks_cloud",
-            "cd landmarks_cloud",
-            "pip install -e '.[landmarks]'",
+            f"python {UNZIP_NAME} --zip lumbar_coordinate_prediction_cloud.zip --dest ./coordinate_prediction_cloud",
+            "cd coordinate_prediction_cloud",
+            "pip install -e '.[coordinate_prediction]'",
             "",
-            "# 8-GPU NAS (32 trials × 5 conditions, sequential-by-condition):",
-            "python -m rsna2024_lumbar.landmarks deploy --num-gpus 8 --all-conditions --skip-completed",
+            "# 8-GPU NAS (120 trials × 5 conditions, sequential-by-condition):",
+            "python -m rsna2024_lumbar.coordinate_prediction deploy --num-gpus 8 --all-conditions --skip-completed",
             "",
             "# Single condition / print plan only:",
-            "python -m rsna2024_lumbar.landmarks nas --num-gpus 8 --condition spinal_canal_stenosis",
-            "python -m rsna2024_lumbar.landmarks nas --list",
+            "python -m rsna2024_lumbar.coordinate_prediction nas --num-gpus 8 --condition spinal_canal_stenosis",
+            "python -m rsna2024_lumbar.coordinate_prediction nas --list",
             "",
             f"DICOMs in zip: {images}",
             "Labels: rsna2024_lumbar/data/raw/*.csv",
-            "Training: python -m rsna2024_lumbar.landmarks train  |  nas/worker",
+            "Training: python -m rsna2024_lumbar.coordinate_prediction train  |  nas/worker",
             "",
         ]
     )
@@ -131,7 +131,7 @@ def write_zip(output: Path, files: list[Path], *, data_root: Path, include_image
     output = output.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     repo = REPO_ROOT.resolve()
-    unzip_src = (YEAR_ROOT / "landmarks" / "unzip.py").read_text(encoding="utf-8")
+    unzip_src = (YEAR_ROOT / "coordinate_prediction" / "unzip.py").read_text(encoding="utf-8")
     manifest = {
         "created_at": datetime.now(timezone.utc).isoformat(),
         "include_images": include_images,
@@ -146,7 +146,7 @@ def write_zip(output: Path, files: list[Path], *, data_root: Path, include_image
             arc = _arcname(path, repo, Path(data_root))
             compress = zipfile.ZIP_STORED if path.suffix.lower() in STORE_SUFFIXES else zipfile.ZIP_DEFLATED
             zf.write(path, arc, compress_type=compress)
-        zf.writestr("landmarks_deploy_manifest.json", json.dumps(manifest, indent=2))
+        zf.writestr("coordinate_prediction_deploy_manifest.json", json.dumps(manifest, indent=2))
         zf.writestr("CLOUD_RUN.txt", cloud_run_text(include_images=include_images))
         zf.writestr(UNZIP_NAME, unzip_src)
     manifest["zip_path"] = output.as_posix()
@@ -161,7 +161,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Wrote {meta['zip_path']} ({meta['zip_mb']:.1f} MB)")
     print(f"  files: {meta['file_count']}")
     print(f"  images: {'yes' if args.include_images else 'no'}")
-    print(f"  unzip: python {UNZIP_NAME} --zip {Path(args.output).name} --dest ./landmarks_cloud")
+    print(f"  unzip: python {UNZIP_NAME} --zip {Path(args.output).name} --dest ./coordinate_prediction_cloud")
     return 0
 
 

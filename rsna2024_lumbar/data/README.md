@@ -37,20 +37,20 @@ python -m rsna2024_lumbar.data.validate --data-root rsna2024_lumbar/tests/fixtur
 Landmark NAS trains on this raw dump (DICOMs + label CSVs), not the PNG crop cache:
 
 ```bash
-python -m rsna2024_lumbar.landmarks nas \
+python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
   --num-gpus 8 --batch-size 8 \
   --spawn --wait --skip-completed
 ```
 
-Full download → NAS runbook: [../landmarks/README.md](../landmarks/README.md).
+Full download → NAS runbook: [../coordinate_prediction/README.md](../coordinate_prediction/README.md).
 
 To ship the dump **plus** landmark training scripts to a GPU box (do not commit the archive):
 
 ```bash
-python -m rsna2024_lumbar.landmarks pack --include-images
-python unzip_lumbar_landmarks_cloud.py --zip lumbar_landmarks_cloud.zip --dest ./landmarks_cloud
+python -m rsna2024_lumbar.coordinate_prediction pack --include-images
+python unzip_lumbar_coordinate_prediction_cloud.py --zip lumbar_coordinate_prediction_cloud.zip --dest ./coordinate_prediction_cloud
 ```
 
 Official Kaggle zip stays `data.unzip`. The landmark pack is a second archive (code + labels + optional `train_images/`).

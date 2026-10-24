@@ -2,15 +2,15 @@ from pathlib import Path
 
 import numpy as np
 
-from rsna2024_lumbar.landmarks.cli import parse_args
-from rsna2024_lumbar.landmarks.dataset import (
+from rsna2024_lumbar.coordinate_prediction.cli import parse_args
+from rsna2024_lumbar.coordinate_prediction.dataset import (
     LandmarkSample,
     list_condition_dicoms,
     list_dense_slice_samples,
     split_samples,
 )
-from rsna2024_lumbar.landmarks.densify import densify_coordinates
-from rsna2024_lumbar.tests.test_landmark_densify import _axial_stack
+from rsna2024_lumbar.coordinate_prediction.densify import densify_coordinates
+from rsna2024_lumbar.tests.test_coordinate_prediction_densify import _axial_stack
 
 
 def _sample(study_id: int, instance: int) -> LandmarkSample:

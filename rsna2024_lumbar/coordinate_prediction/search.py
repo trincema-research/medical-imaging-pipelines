@@ -7,7 +7,7 @@ import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from rsna2024_lumbar.landmarks.constants import (
+from rsna2024_lumbar.coordinate_prediction.constants import (
     BACKBONES,
     BATCH_SIZE_DEFAULT,
     CONDITIONS,

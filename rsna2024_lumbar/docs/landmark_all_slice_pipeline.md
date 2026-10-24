@@ -2,7 +2,7 @@
 
 This is the design for **lumbar landmark regression on all images**, not only the one Kaggle click per `(study, condition, level)`. It answers whether we should flatten each 512×512 MRI into 262,144 table columns. We should not.
 
-Code: [`landmarks/`](../landmarks/). Commands: [`landmarks/README.md`](../landmarks/README.md). Geometry fill: [landmark_coordinates.md](landmark_coordinates.md).
+Code: [`coordinate_prediction/`](../coordinate_prediction/). Commands: [`coordinate_prediction/README.md`](../coordinate_prediction/README.md). Geometry fill: [landmark_coordinates.md](landmark_coordinates.md).
 
 ---
 
@@ -117,21 +117,21 @@ Metrics: MAE in pixels, PCK@5 (fraction of visible points within 5 px). 2nd plac
 ```bash
 # official dump (raw DICOMs). NAS does not need the PNG crop cache.
 copy .env.example .env
-pip install -e ".[kaggle,landmarks]"
+pip install -e ".[kaggle,coordinate_prediction]"
 python -m rsna2024_lumbar.data.download
 python -m rsna2024_lumbar.data.unzip
 python -m rsna2024_lumbar.data.validate
 
-python -m rsna2024_lumbar.landmarks densify --data-root rsna2024_lumbar/data/raw --progress
+python -m rsna2024_lumbar.coordinate_prediction densify --data-root rsna2024_lumbar/data/raw --progress
 
 # B — one slice per study (Avengers)
-python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --backbone convnext_base --pretrained
+python -m rsna2024_lumbar.coordinate_prediction train --condition spinal_canal_stenosis --backbone convnext_base --pretrained
 
 # C — every densified slice
-python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --all-slices --dense-csv rsna2024_lumbar/data/processed/dense_coordinates/train_label_coordinates_dense.csv
+python -m rsna2024_lumbar.coordinate_prediction train --condition spinal_canal_stenosis --all-slices --dense-csv rsna2024_lumbar/data/processed/dense_coordinates/train_label_coordinates_dense.csv
 
 # D — every image at test / holdout
-python -m rsna2024_lumbar.landmarks infer --checkpoint path/to.pt --output-csv pred.csv --per-slice
+python -m rsna2024_lumbar.coordinate_prediction infer --checkpoint path/to.pt --output-csv pred.csv --per-slice
 ```
 
 Each run writes condition-level and per-lumbar-level metrics (R² / Rx / Ry, MAE, MAE-x / MAE-y, PCK@5 / PCK@10, L1, visible counts) for train / val / test:
@@ -145,12 +145,12 @@ Do not commit dense CSVs, DICOMs, or checkpoints.
 NAS families (same 2D heads, ImageNet init, **512×512 fixed**): `full` = 4 models × 6 lrs × 5 weight decays = **120** trials. `convnext` / `efficientnet` are 60 each. `local` is the 24-trial 1-GPU scout.
 
 ```bash
-python -m rsna2024_lumbar.landmarks nas --family full --list
-python -m rsna2024_lumbar.landmarks nas \
+python -m rsna2024_lumbar.coordinate_prediction nas --family full --list
+python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
   --num-gpus 8 --batch-size 8 \
   --spawn --wait --skip-completed
 ```
 
-`--num-gpus` 1/2/4/8 and `--batch-size` are the only knobs. Commands: [../landmarks/README.md](../landmarks/README.md).
+`--num-gpus` 1/2/4/8 and `--batch-size` are the only knobs. Commands: [../coordinate_prediction/README.md](../coordinate_prediction/README.md).

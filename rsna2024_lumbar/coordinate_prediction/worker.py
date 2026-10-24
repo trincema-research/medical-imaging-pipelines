@@ -6,9 +6,9 @@ import argparse
 import json
 from pathlib import Path
 
-from rsna2024_lumbar.landmarks.constants import BATCH_SIZE_DEFAULT, CONDITIONS, DENSE_COORDINATES_DIRNAME
-from rsna2024_lumbar.landmarks.search import FAMILIES, FAMILY_FULL, expand_trials
-from rsna2024_lumbar.landmarks.train import _jsonable, train_condition
+from rsna2024_lumbar.coordinate_prediction.constants import BATCH_SIZE_DEFAULT, CONDITIONS, DENSE_COORDINATES_DIRNAME
+from rsna2024_lumbar.coordinate_prediction.search import FAMILIES, FAMILY_FULL, expand_trials
+from rsna2024_lumbar.coordinate_prediction.train import _jsonable, train_condition
 
 HERE = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = HERE / "data" / "processed" / DENSE_COORDINATES_DIRNAME / "nas"

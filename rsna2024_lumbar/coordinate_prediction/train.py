@@ -6,20 +6,20 @@ import csv
 import json
 from pathlib import Path
 
-from rsna2024_lumbar.landmarks.constants import (
+from rsna2024_lumbar.coordinate_prediction.constants import (
     BACKBONE_CONVNEXT_TINY,
     IMAGE_SIZE_DEFAULT,
     LEVEL_DISPLAY,
     LUMBAR_LEVELS,
 )
-from rsna2024_lumbar.landmarks.dataset import (
+from rsna2024_lumbar.coordinate_prediction.dataset import (
     LandmarkSample,
     list_condition_samples,
     list_dense_slice_samples,
     load_rgb_slice,
     split_samples,
 )
-from rsna2024_lumbar.landmarks.models import (
+from rsna2024_lumbar.coordinate_prediction.models import (
     LEVEL_METRIC_KEYS,
     build_regressor,
     coordinate_metrics,
@@ -33,7 +33,7 @@ def _require_torch():
         import torch
         from torch.utils.data import DataLoader, Dataset
     except ImportError as exc:
-        raise SystemExit("pip install -e '.[landmarks]'") from exc
+        raise SystemExit("pip install -e '.[coordinate_prediction]'") from exc
     return torch, DataLoader, Dataset
 
 

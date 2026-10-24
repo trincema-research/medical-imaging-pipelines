@@ -9,8 +9,8 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from rsna2024_lumbar.landmarks.constants import BATCH_SIZE_DEFAULT, CONDITIONS, DENSE_COORDINATES_DIRNAME
-from rsna2024_lumbar.landmarks.search import FAMILIES, FAMILY_FULL, expand_trials
+from rsna2024_lumbar.coordinate_prediction.constants import BATCH_SIZE_DEFAULT, CONDITIONS, DENSE_COORDINATES_DIRNAME
+from rsna2024_lumbar.coordinate_prediction.search import FAMILIES, FAMILY_FULL, expand_trials
 from rsna2024_lumbar.nas.gpus import ALLOWED_NAS_GPU_COUNTS, GpuShard, resolve_num_gpus, shard_trial_range
 
 HERE = Path(__file__).resolve().parents[1]
@@ -96,7 +96,7 @@ def spawn_shard(plan: LandmarkLaunchPlan, shard: GpuShard, args: argparse.Namesp
     cmd = [
         sys.executable,
         "-m",
-        "rsna2024_lumbar.landmarks.worker",
+        "rsna2024_lumbar.coordinate_prediction.worker",
         "--family",
         plan.family,
         "--condition",

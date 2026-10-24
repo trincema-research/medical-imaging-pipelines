@@ -1,6 +1,6 @@
 # NAS — RSNA 2024 lumbar
 
-Six isolated families. Grids expand via ``python -m rsna2024_lumbar.nas``. GPU training uses the bundled legacy ``vit_nas_lumbar.py`` (copied into ``training_bundle/`` at pack time). Landmark ``(x, y)`` search is a separate grid: ``python -m rsna2024_lumbar.landmarks nas`` ([../landmarks/README.md](../landmarks/README.md)).
+Six isolated families. Grids expand via ``python -m rsna2024_lumbar.nas``. GPU training uses the bundled legacy ``vit_nas_lumbar.py`` (copied into ``training_bundle/`` at pack time). Coordinate ``(x, y)`` prediction is a separate grid: ``python -m rsna2024_lumbar.coordinate_prediction nas`` ([../coordinate_prediction/README.md](../coordinate_prediction/README.md)).
 
 **per condition** = one stenosis/narrowing task. **all 5** = ``--all-conditions`` (runs sequentially when ``--spawn --wait``).
 

@@ -128,3 +128,13 @@ python -m rsna2024_lumbar.landmarks infer --checkpoint path/to.pt --output-csv p
 ```
 
 Do not commit dense CSVs, DICOMs, or checkpoints.
+
+NAS families (same 2D heads, ImageNet init, **512×512 fixed**): `full` = 4 models × 4 lrs × 3 weight decays = **48** trials. `convnext` / `efficientnet` are 24 each. `local` is the 12-trial 1-GPU scout.
+
+```bash
+python -m rsna2024_lumbar.landmarks nas --family full --list
+python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 1 --spawn --wait --skip-completed
+python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 2 --spawn --wait --skip-completed
+python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 4 --spawn --wait --skip-completed
+python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 8 --spawn --wait --skip-completed
+```

@@ -1,0 +1,10 @@
+{
+  "backbones": ["convnext_tiny", "convnext_base"],
+  "image_sizes": [512],
+  "batch_size": 8,
+  "learning_rates": [0.00001, 0.0001, 0.0003, 0.001],
+  "weight_decays": [0.001, 0.01, 0.05],
+  "pretrained": [true],
+  "epochs": 20,
+  "seed": 42
+}

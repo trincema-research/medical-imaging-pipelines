@@ -7,18 +7,26 @@ import subprocess
 import sys
 from pathlib import Path
 
-from rsna2024_lumbar.landmarks.constants import CONDITIONS
+from rsna2024_lumbar.landmarks.constants import BATCH_SIZE_DEFAULT, CONDITIONS
+from rsna2024_lumbar.landmarks.search import FAMILIES, FAMILY_FULL
 from rsna2024_lumbar.nas.paths import REPO_ROOT, default_data_root
 from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Install deps and run landmark NAS on this machine.")
+    p.add_argument("--family", choices=list(FAMILIES), default=FAMILY_FULL)
     p.add_argument("--num-gpus", type=int, default=8)
     p.add_argument("--condition", choices=list(CONDITIONS), default="spinal_canal_stenosis")
     p.add_argument("--all-conditions", action="store_true")
     p.add_argument("--data-root", type=Path, default=None)
     p.add_argument("--epochs", type=int, default=None)
+    p.add_argument(
+        "--batch-size",
+        type=int,
+        default=None,
+        help=f"Fixed batch size for every trial (default {BATCH_SIZE_DEFAULT}).",
+    )
     p.add_argument("--max-studies", type=int, default=None)
     p.add_argument("--skip-completed", action="store_true")
     p.add_argument("--skip-install", action="store_true")
@@ -66,6 +74,8 @@ def main(argv: list[str] | None = None) -> int:
         str(data_root),
         "--spawn",
         "--wait",
+        "--family",
+        args.family,
     ]
     if args.all_conditions:
         cmd.append("--all-conditions")
@@ -73,6 +83,8 @@ def main(argv: list[str] | None = None) -> int:
         cmd.extend(["--condition", args.condition])
     if args.epochs is not None:
         cmd.extend(["--epochs", str(args.epochs)])
+    if args.batch_size is not None:
+        cmd.extend(["--batch-size", str(args.batch_size)])
     if args.max_studies is not None:
         cmd.extend(["--max-studies", str(args.max_studies)])
     if args.skip_completed:

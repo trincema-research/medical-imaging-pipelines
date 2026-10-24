@@ -29,6 +29,8 @@ def test_coordinate_r2_perfect_and_mean():
     visible = torch.ones(2, 2)
     perfect = coordinate_r2(target, target, visible)
     assert abs(perfect["r2"] - 1.0) < 1e-6
+    assert abs(perfect["r2_l1_l2"] - 1.0) < 1e-6
+    assert abs(perfect["r2_l2_l3"] - 1.0) < 1e-6
     mean = target.mean(dim=(0, 1), keepdim=True).expand_as(target)
     baseline = coordinate_r2(mean, target, visible)
     assert abs(baseline["r2"]) < 1e-5

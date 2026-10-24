@@ -10,6 +10,7 @@ SPLIT_SEED_DEFAULT = 42
 SPLIT_RATIOS = (0.70, 0.15, 0.15)
 IMAGE_SIZE_DEFAULT = 512
 IMAGE_SIZE_SMOKE = 64
+BATCH_SIZE_DEFAULT = 8
 
 # Avengers 1st place: ConvNeXt-Base + EfficientNetV2-L, level-separated (x/W, y/H) heads, L1.
 BACKBONE_CONVNEXT_BASE = "convnext_base"
@@ -36,6 +37,7 @@ __all__ = [
     "COORD_NAME_TO_CONDITION",
     "DENSE_COORDINATES_DIRNAME",
     "DENSE_CSV_NAME",
+    "BATCH_SIZE_DEFAULT",
     "IMAGE_SIZE_DEFAULT",
     "LEVEL_DISPLAY",
     "LUMBAR_LEVELS",

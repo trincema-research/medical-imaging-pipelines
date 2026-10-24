@@ -41,9 +41,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     train.add_argument("--condition", choices=list(CONDITIONS), required=True)
     train.add_argument("--backbone", choices=list(BACKBONES), default=BACKBONE_CONVNEXT_TINY)
     train.add_argument("--image-size", type=int, default=IMAGE_SIZE_DEFAULT)
-    train.add_argument("--epochs", type=int, default=5)
+    train.add_argument("--epochs", type=int, default=50)
     train.add_argument("--batch-size", type=int, default=4)
     train.add_argument("--lr", type=float, default=1e-4)
+    train.add_argument("--weight-decay", type=float, default=0.01)
     train.add_argument("--seed", type=int, default=SPLIT_SEED_DEFAULT)
     train.add_argument("--pretrained", action="store_true")
     train.add_argument("--max-studies", type=int, default=None)
@@ -111,20 +112,14 @@ def main(argv: list[str] | None = None) -> int:
             epochs=args.epochs,
             batch_size=args.batch_size,
             lr=args.lr,
+            weight_decay=args.weight_decay,
             seed=args.seed,
             pretrained=args.pretrained,
             max_studies=args.max_studies,
             all_slices=args.all_slices,
             dense_csv=args.dense_csv,
         )
-        splits = meta.get("splits") or {}
-        extra = ""
-        if splits:
-            extra = (
-                f"  R2 train={splits['train']['r2']:.3f} "
-                f"val={splits['val']['r2']:.3f} test={splits['test']['r2']:.3f}"
-            )
-        print(f"Wrote {meta['checkpoint']}  train={meta['n_train']} val={meta['n_val']}{extra}")
+        print(f"Wrote {meta['checkpoint']}  train={meta['n_train']} val={meta['n_val']}")
         return 0
     if args.command == "infer":
         from rsna2024_lumbar.landmarks.infer import predict_condition_csv

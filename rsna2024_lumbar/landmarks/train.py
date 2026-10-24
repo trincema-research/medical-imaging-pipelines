@@ -8,6 +8,7 @@ from pathlib import Path
 from rsna2024_lumbar.landmarks.constants import (
     BACKBONE_CONVNEXT_TINY,
     IMAGE_SIZE_DEFAULT,
+    LEVEL_DISPLAY,
     LUMBAR_LEVELS,
 )
 from rsna2024_lumbar.landmarks.dataset import (
@@ -48,6 +49,18 @@ def _make_loader(samples: list[LandmarkSample], image_size: int, batch_size: int
             }
 
     return DataLoader(_DS(), batch_size=batch_size, shuffle=shuffle)
+
+
+def _fmt_r2(metrics: dict) -> str:
+    return f"R2={metrics['r2']:.3f}  Rx={metrics['r2_x']:.3f}  Ry={metrics['r2_y']:.3f}"
+
+
+def _fmt_level_r2(metrics: dict) -> str:
+    parts: list[str] = []
+    for level in LUMBAR_LEVELS:
+        value = metrics.get(f"r2_{level}", float("nan"))
+        parts.append(f"{LEVEL_DISPLAY[level]}={value:.3f}")
+    return "  ".join(parts)
 
 
 def _run_epoch(model, loader, *, train: bool, optimizer=None, device):
@@ -94,9 +107,10 @@ def train_condition(
     *,
     backbone: str = BACKBONE_CONVNEXT_TINY,
     image_size: int = IMAGE_SIZE_DEFAULT,
-    epochs: int = 5,
+    epochs: int = 50,
     batch_size: int = 4,
     lr: float = 1e-4,
+    weight_decay: float = 0.01,
     seed: int = 42,
     pretrained: bool = False,
     max_studies: int | None = None,
@@ -121,28 +135,41 @@ def train_condition(
     output_dir.mkdir(parents=True, exist_ok=True)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = build_regressor(backbone, pretrained=pretrained).to(device)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=float(weight_decay))
     history = []
     best_val = float("inf")
     ckpt = output_dir / f"{condition}_{backbone}.pt"
     train_loader = _make_loader(parts["train"], image_size, batch_size, True)
     val_loader = _make_loader(parts["val"] or parts["train"], image_size, batch_size, False)
+    test_loader = _make_loader(parts["holdout"], image_size, batch_size, False) if parts["holdout"] else None
+    levels = "  ".join(LEVEL_DISPLAY[level] for level in LUMBAR_LEVELS)
     print(
-        f"split 70/15/15  train={len(parts['train'])} val={len(parts['val'])} "
-        f"holdout={len(parts['holdout'])}  device={device}  backbone={backbone}",
+        f"one net, 5 level heads at once ({levels})  condition={condition}",
         flush=True,
     )
+    print(
+        f"split 70/15/15  train={len(parts['train'])} val={len(parts['val'])} "
+        f"test={len(parts['holdout'])}  device={device}  backbone={backbone}  "
+        f"lr={lr} wd={weight_decay}  epochs={epochs}",
+        flush=True,
+    )
+    empty = {"r2": float("nan"), "r2_x": float("nan"), "r2_y": float("nan"), "mae_px": float("nan"), "pck5": float("nan"), "l1": float("nan"), "n": 0}
     for epoch in range(1, int(epochs) + 1):
         train_m = _run_epoch(model, train_loader, train=True, optimizer=optimizer, device=device)
         val_m = _run_epoch(model, val_loader, train=False, device=device)
-        row = {"epoch": epoch, "train": train_m, "val": val_m}
+        test_m = _run_epoch(model, test_loader, train=False, device=device) if test_loader else dict(empty)
+        row = {"epoch": epoch, "train": train_m, "val": val_m, "test": test_m}
         history.append(row)
-        print(
-            f"epoch {epoch}/{epochs}  "
-            f"train l1={train_m['l1']:.4f} mae_px={train_m['mae_px']:.1f} pck5={train_m['pck5']:.3f} r2={train_m['r2']:.3f}  "
-            f"val l1={val_m['l1']:.4f} mae_px={val_m['mae_px']:.1f} pck5={val_m['pck5']:.3f} r2={val_m['r2']:.3f}",
-            flush=True,
-        )
+        print(f"epoch {epoch}/{epochs}  {condition}  5 levels at once", flush=True)
+        for name, metrics in (("train", train_m), ("val", val_m), ("test", test_m)):
+            print(
+                f"  {name:<5}  {_fmt_r2(metrics)}  mae={metrics['mae_px']:.1f}px  "
+                f"pck5={metrics['pck5']:.3f}  l1={metrics['l1']:.4f}",
+                flush=True,
+            )
+        print(f"  train R2 by level  {_fmt_level_r2(train_m)}", flush=True)
+        print(f"  val   R2 by level  {_fmt_level_r2(val_m)}", flush=True)
+        print(f"  test  R2 by level  {_fmt_level_r2(test_m)}", flush=True)
         if val_m["l1"] < best_val:
             best_val = val_m["l1"]
             torch.save(
@@ -170,13 +197,11 @@ def train_condition(
         "val": _eval(parts["val"] or parts["train"]),
         "test": _eval(parts["holdout"]),
     }
-    print(
-        "best checkpoint  "
-        f"train r2={splits['train']['r2']:.3f} (x={splits['train']['r2_x']:.3f} y={splits['train']['r2_y']:.3f})  "
-        f"val r2={splits['val']['r2']:.3f} (x={splits['val']['r2_x']:.3f} y={splits['val']['r2_y']:.3f})  "
-        f"test r2={splits['test']['r2']:.3f} (x={splits['test']['r2_x']:.3f} y={splits['test']['r2_y']:.3f})",
-        flush=True,
-    )
+    print("best checkpoint  train / val / test R2", flush=True)
+    for name in ("train", "val", "test"):
+        m = splits[name]
+        print(f"  {name:<5}  {_fmt_r2(m)}  mae={m.get('mae_px', float('nan')):.1f}px  pck5={m.get('pck5', float('nan')):.3f}", flush=True)
+        print(f"         R2 by level  {_fmt_level_r2(m)}", flush=True)
     meta = {
         "condition": condition,
         "backbone": backbone,
@@ -187,6 +212,8 @@ def train_condition(
         "checkpoint": ckpt.as_posix(),
         "history": history,
         "splits": splits,
+        "lr": lr,
+        "weight_decay": float(weight_decay),
         "split_seed": seed,
         "device": str(device),
         "all_slices": bool(all_slices),

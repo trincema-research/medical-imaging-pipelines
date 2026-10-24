@@ -100,11 +100,11 @@ def _r2_1d(pred, target) -> float:
     return float(1.0 - residual / total)
 
 
-def coordinate_r2(pred_xy, target_xy, visible) -> dict[str, float]:
-    """R² of visible (x/W, y/H) points: per-axis and uniform average."""
+def _r2_visible(pred_xy, target_xy, visible) -> dict[str, float]:
     mask = visible > 0.5
+    empty = {"r2": float("nan"), "r2_x": float("nan"), "r2_y": float("nan")}
     if int(mask.sum()) < 2:
-        return {"r2": float("nan"), "r2_x": float("nan"), "r2_y": float("nan")}
+        return empty
     pred = pred_xy[mask]
     target = target_xy[mask]
     r2_x = _r2_1d(pred[:, 0], target[:, 0])
@@ -114,3 +114,16 @@ def coordinate_r2(pred_xy, target_xy, visible) -> dict[str, float]:
     else:
         r2 = 0.5 * (r2_x + r2_y)
     return {"r2": r2, "r2_x": r2_x, "r2_y": r2_y}
+
+
+def coordinate_r2(pred_xy, target_xy, visible) -> dict[str, float]:
+    """R² of visible (x/W, y/H): overall, per-axis, and per lumbar level."""
+    out = _r2_visible(pred_xy, target_xy, visible)
+    if getattr(pred_xy, "ndim", 0) == 3:
+        n_levels = int(pred_xy.shape[1])
+        for i, level in enumerate(LUMBAR_LEVELS[:n_levels]):
+            part = _r2_visible(pred_xy[:, i], target_xy[:, i], visible[:, i])
+            out[f"r2_{level}"] = part["r2"]
+            out[f"r2_{level}_x"] = part["r2_x"]
+            out[f"r2_{level}_y"] = part["r2_y"]
+    return out

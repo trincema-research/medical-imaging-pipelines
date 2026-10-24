@@ -79,6 +79,6 @@ python unzip_lumbar_landmarks_cloud.py --zip lumbar_landmarks_cloud.zip --dest .
 python -m rsna2024_lumbar.landmarks deploy --num-gpus 8 --all-conditions --skip-completed
 ```
 
-Search grid (`landmarks/configs/landmark_nas_search_space.json`): ConvNeXt-Tiny / Base + EfficientNetV2-S / L × lr `{1e-4, 3e-4}` at fixed **512×512** = **8 trials × 5 conditions**. Batch size is a CLI flag (`--batch-size`, default 8), not a search axis. Shard with the same formula as severity NAS: \(k=\lceil N/G\rceil\), one process per GPU, `CUDA_VISIBLE_DEVICES=g`. Eight GPUs → 1 trial each. `--all-conditions --spawn --wait` reuses the GPU set once per condition (sequential-by-condition, not 5× concurrent).
+Search grid (`landmarks/configs/landmark_nas_search_space.json`): ConvNeXt-Tiny / Base + EfficientNetV2-S / L × lr `{1e-5, 1e-4, 3e-4, 1e-3}` × weight decay `{0.001, 0.01, 0.05}` at fixed **512×512** = **48 trials × 5 conditions**. Image size is not searched. Batch size is a CLI flag (`--batch-size`, default 8), not a search axis. Shard with the same formula as severity NAS: \(k=\lceil N/G\rceil\), one process per GPU, `CUDA_VISIBLE_DEVICES=g`. Eight GPUs → 6 trials each. `--all-conditions --spawn --wait` reuses the GPU set once per condition (sequential-by-condition, not 5× concurrent).
 
 Do not commit `lumbar_landmarks_cloud.zip`, DICOMs, or `data/processed/dense_coordinates/nas/`.

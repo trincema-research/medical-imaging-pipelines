@@ -1,0 +1,20 @@
+{
+  "variant": "vit_b_16",
+  "image_size": 512,
+  "batch_size": 8,
+  "learning_rate": 5e-05,
+  "weight_decay": 0.05,
+  "freeze_backbone": false,
+  "use_pretrained": true,
+  "amp": true,
+  "head_depth": 1,
+  "head_hidden_dim": null,
+  "head_dropout": 0.0,
+  "head_activation": "gelu",
+  "optimizer_type": "AdamW",
+  "scheduler_type": "CosineAnnealingLR",
+  "epochs": 50,
+  "patience": 50,
+  "num_workers": 4,
+  "seed": 1234
+}

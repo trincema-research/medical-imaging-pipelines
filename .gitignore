@@ -247,6 +247,9 @@ rsna20*/data/raw/**
 !rsna20*/data/raw/train_series_descriptions.csv
 !rsna20*/data/raw/train_localizers.csv
 
+# CXR specialist weights are released, not committed (346 MB+).
+rsna2018_cxr/data/severity_models/*.pt
+
 # NAS compact exports are committed under rsna2024_lumbar/data/nas_compact/ (see README there).
 
 # Legacy path (see data/perf_pipeline/README.md) — ignore local leftovers

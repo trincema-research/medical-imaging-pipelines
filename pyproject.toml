@@ -26,6 +26,7 @@ perf_pipeline = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
 ordinal = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
 coordinate_prediction = ["torch>=2.1", "torchvision>=0.16"]
 landmarks = ["torch>=2.1", "torchvision>=0.16"]
+severity = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3", "matplotlib>=3.8"]
 
 [project.scripts]
 rsna2024-export-crops = "rsna2024_lumbar.preprocessing.cli:main"
@@ -62,17 +63,19 @@ rsna2024-landmarks-deploy = "rsna2024_lumbar.coordinate_prediction.deploy:main"
 rsna2025-brain-download = "rsna2025_brain.data.download:main"
 rsna2025-brain-unzip = "rsna2025_brain.data.unzip:main"
 rsna2025-brain-validate = "rsna2025_brain.data.validate:main"
+rsna2018-severity = "rsna2018_cxr.severity.cli:main"
 
 [tool.setuptools.package-data]
 "rsna2024_lumbar.nas" = ["configs/*.json"]
 "rsna2024_lumbar.coordinate_prediction" = ["configs/*.json"]
+"rsna2018_cxr.severity" = ["configs/*.json"]
 
 [tool.setuptools.packages.find]
-include = ["common*", "rsna2024_lumbar*", "rsna2025_brain*"]
-exclude = ["rsna2024_lumbar.tests*", "rsna2025_brain.tests*"]
+include = ["common*", "rsna2024_lumbar*", "rsna2025_brain*", "rsna2018_cxr*"]
+exclude = ["rsna2024_lumbar.tests*", "rsna2025_brain.tests*", "rsna2018_cxr.tests*"]
 
 [tool.pytest.ini_options]
-testpaths = ["rsna2024_lumbar/tests", "rsna2025_brain/tests"]
+testpaths = ["rsna2024_lumbar/tests", "rsna2025_brain/tests", "rsna2018_cxr/tests"]
 pythonpath = ["."]
 addopts = "-q"
 markers = [

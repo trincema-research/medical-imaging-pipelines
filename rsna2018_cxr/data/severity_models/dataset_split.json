@@ -1,0 +1,30 @@
+{
+  "data_root": "severity_split_jpg_dataset",
+  "split_csv": "rsna2018_cxr/data/severity_models/val_test_images.csv",
+  "positive_class": "severity_1_low_mild",
+  "dataset_layout": "rsna_normal_vs_severity_1_low_mild",
+  "num_classes": 2,
+  "class_to_idx": {
+    "normal": 0,
+    "severity_1_low_mild": 1
+  },
+  "total_files_loaded": 10850,
+  "files_per_class_before_split": {
+    "normal": 8851,
+    "severity_1_low_mild": 1999
+  },
+  "files_per_class_train": {
+    "normal": 7081,
+    "severity_1_low_mild": 1599
+  },
+  "files_per_class_val": {
+    "normal": 1770,
+    "severity_1_low_mild": 400
+  },
+  "files_per_class_test": {
+    "normal": 1770,
+    "severity_1_low_mild": 400
+  },
+  "val_and_test_identical": true,
+  "split_rule": "val/test membership from CSV; binary classes: normal vs severity_1_low_mild"
+}

@@ -9,7 +9,13 @@ import pytest
 
 from rsna2024_lumbar.landmarks.cli import main as landmarks_main
 from rsna2024_lumbar.landmarks.deploy import parse_args as parse_deploy_args
-from rsna2024_lumbar.landmarks.launch import build_plan, format_plan, main as launch_main
+from rsna2024_lumbar.landmarks.launch import (
+    DEFAULT_RAW,
+    build_plan,
+    format_plan,
+    main as launch_main,
+    parse_args as parse_launch_args,
+)
 from rsna2024_lumbar.landmarks.pack import collect_pack_files, main as pack_main
 from rsna2024_lumbar.landmarks.models import empty_coordinate_metrics
 from rsna2024_lumbar.landmarks.search import expand_trials
@@ -130,6 +136,13 @@ def test_launch_cli_lists_convnext_family(capsys):
     out = capsys.readouterr().out
     assert "family=convnext  60 trials per condition" in out
     assert "2×1×6×5 = 60" in out
+
+
+def test_launch_defaults_to_raw_dicom_dump():
+    args = parse_launch_args([])
+    assert args.data_root.resolve() == DEFAULT_RAW.resolve()
+    assert args.family == "full"
+    assert args.batch_size is None
 
 
 def test_deploy_forwards_family_and_gpu_count():

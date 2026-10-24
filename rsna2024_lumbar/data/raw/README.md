@@ -9,7 +9,7 @@ Not committed: the Kaggle `.zip`, `*.kaggle-partial`, the rest of `train_images/
 
 Download does **not** treat the two smoke studies as a full dump. It only skips when `train_images/` has a folder for every `study_id` in `train.csv`.
 
-How to fill the rest: [../README.md](../README.md). Token is the repo-root `.env`.
+How to fill the rest: [../README.md](../README.md). Token is the repo-root `.env`. Landmark NAS reads this folder: [../../landmarks/README.md](../../landmarks/README.md).
 
 ```
 train.csv

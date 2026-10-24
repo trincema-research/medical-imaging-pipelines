@@ -34,6 +34,18 @@ python -m rsna2024_lumbar.data.validate --data-root rsna2024_lumbar/tests/fixtur
 
 `--force` re-downloads. `--keep-zip` extracts but leaves the archive. `--dest` overrides `raw/`. A `*.kaggle-partial` file means the transfer is still running or was cut off — re-run download (do not unzip yet).
 
+Landmark NAS trains on this raw dump (DICOMs + label CSVs), not the PNG crop cache:
+
+```bash
+python -m rsna2024_lumbar.landmarks nas \
+  --family full --all-conditions \
+  --data-root rsna2024_lumbar/data/raw \
+  --num-gpus 8 --batch-size 8 \
+  --spawn --wait --skip-completed
+```
+
+Full download → NAS runbook: [../landmarks/README.md](../landmarks/README.md).
+
 To ship the dump **plus** landmark training scripts to a GPU box (do not commit the archive):
 
 ```bash

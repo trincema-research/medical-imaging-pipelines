@@ -14,6 +14,7 @@ from rsna2024_lumbar.landmarks.search import FAMILIES, FAMILY_FULL, expand_trial
 from rsna2024_lumbar.nas.gpus import ALLOWED_NAS_GPU_COUNTS, GpuShard, resolve_num_gpus, shard_trial_range
 
 HERE = Path(__file__).resolve().parents[1]
+DEFAULT_RAW = HERE / "data" / "raw"
 DEFAULT_OUTPUT = HERE / "data" / "processed" / DENSE_COORDINATES_DIRNAME / "nas"
 
 
@@ -33,7 +34,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--all-conditions", action="store_true")
     p.add_argument("--num-gpus", type=int, default=0, help="1, 2, 4, or 8. 0 = auto.")
     p.add_argument("--visible-gpus", type=int, default=None)
-    p.add_argument("--data-root", type=Path, default=None)
+    p.add_argument(
+        "--data-root",
+        type=Path,
+        default=DEFAULT_RAW,
+        help="Kaggle-shaped raw dump (train.csv + train_images/). Default: data/raw/.",
+    )
     p.add_argument("--output-base", type=Path, default=DEFAULT_OUTPUT)
     p.add_argument("--epochs", type=int, default=None)
     p.add_argument(
@@ -102,8 +108,7 @@ def spawn_shard(plan: LandmarkLaunchPlan, shard: GpuShard, args: argparse.Namesp
         "--output-base",
         str(args.output_base),
     ]
-    if args.data_root is not None:
-        cmd.extend(["--data-root", str(args.data_root)])
+    cmd.extend(["--data-root", str(args.data_root)])
     if args.epochs is not None:
         cmd.extend(["--epochs", str(args.epochs)])
     if args.batch_size is not None:

@@ -115,7 +115,14 @@ Metrics: MAE in pixels, PCK@5 (fraction of visible points within 5 px). 2nd plac
 ## 7. Commands
 
 ```bash
-python -m rsna2024_lumbar.landmarks densify --progress
+# official dump (raw DICOMs). NAS does not need the PNG crop cache.
+copy .env.example .env
+pip install -e ".[kaggle,landmarks]"
+python -m rsna2024_lumbar.data.download
+python -m rsna2024_lumbar.data.unzip
+python -m rsna2024_lumbar.data.validate
+
+python -m rsna2024_lumbar.landmarks densify --data-root rsna2024_lumbar/data/raw --progress
 
 # B — one slice per study (Avengers)
 python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --backbone convnext_base --pretrained
@@ -139,8 +146,11 @@ NAS families (same 2D heads, ImageNet init, **512×512 fixed**): `full` = 4 mode
 
 ```bash
 python -m rsna2024_lumbar.landmarks nas --family full --list
-python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 1 --spawn --wait --skip-completed
-python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 2 --spawn --wait --skip-completed
-python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 4 --spawn --wait --skip-completed
-python -m rsna2024_lumbar.landmarks nas --family full --num-gpus 8 --spawn --wait --skip-completed
+python -m rsna2024_lumbar.landmarks nas \
+  --family full --all-conditions \
+  --data-root rsna2024_lumbar/data/raw \
+  --num-gpus 8 --batch-size 8 \
+  --spawn --wait --skip-completed
 ```
+
+`--num-gpus` 1/2/4/8 and `--batch-size` are the only knobs. Commands: [../landmarks/README.md](../landmarks/README.md).

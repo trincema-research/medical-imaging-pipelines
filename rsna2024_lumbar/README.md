@@ -2,6 +2,7 @@
 
 ```
 ⚙  preprocessing/     crop DICOMs → PNG cache
+⚙  coordinate_prediction/  predict (x, y) · densify · 2D ConvNeXt / EfficientNetV2
 …  models/            later
 …  training/          later
 ⚙  nas/               NAS grids · GPU launch · cloud pack/deploy (8 families)
@@ -42,6 +43,26 @@ python -m rsna2024_lumbar.preprocessing \
 ```
 
 `--data-root` is any Kaggle-shaped folder (`train.csv` + `train_images/`). Default output is `data/processed/<policy>/`. Policies: `centered` (64×64), `extend50` (96×64). Incomplete studies (missing a level/DICOM) are skipped.
+
+## ⚙ Landmark coordinates (raw DICOMs → NAS)
+
+Kaggle marks one `(x, y)` per `(study, condition, level)`. Landmark NAS trains on the **raw dump** (`data/raw/train_images/`), not the PNG crop cache. Download + unpack first, then one command for all conditions × all hyperparameters. Only `--num-gpus` (1/2/4/8) and `--batch-size` change.
+
+```bash
+pip install -e ".[kaggle,coordinate_prediction]"
+copy .env.example .env    # KAGGLE_API_TOKEN
+python -m rsna2024_lumbar.data.download
+python -m rsna2024_lumbar.data.unzip
+python -m rsna2024_lumbar.data.validate
+
+python -m rsna2024_lumbar.coordinate_prediction nas \
+  --family full --all-conditions \
+  --data-root rsna2024_lumbar/data/raw \
+  --num-gpus 8 --batch-size 8 \
+  --spawn --wait --skip-completed
+```
+
+`densify` is optional (geometry fill / `--all-slices`). Depth: [coordinate_prediction/README.md](coordinate_prediction/README.md) · [docs/landmark_coordinates.md](docs/landmark_coordinates.md) · [docs/landmark_all_slice_pipeline.md](docs/landmark_all_slice_pipeline.md).
 
 ## ⚙ NAS
 

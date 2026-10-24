@@ -34,6 +34,27 @@ python -m rsna2024_lumbar.data.validate --data-root rsna2024_lumbar/tests/fixtur
 
 `--force` re-downloads. `--keep-zip` extracts but leaves the archive. `--dest` overrides `raw/`. A `*.kaggle-partial` file means the transfer is still running or was cut off — re-run download (do not unzip yet).
 
+Landmark NAS trains on this raw dump (DICOMs + label CSVs), not the PNG crop cache:
+
+```bash
+python -m rsna2024_lumbar.coordinate_prediction nas \
+  --family full --all-conditions \
+  --data-root rsna2024_lumbar/data/raw \
+  --num-gpus 8 --batch-size 8 \
+  --spawn --wait --skip-completed
+```
+
+Full download → NAS runbook: [../coordinate_prediction/README.md](../coordinate_prediction/README.md).
+
+To ship the dump **plus** landmark training scripts to a GPU box (do not commit the archive):
+
+```bash
+python -m rsna2024_lumbar.coordinate_prediction pack --include-images
+python unzip_lumbar_coordinate_prediction_cloud.py --zip lumbar_coordinate_prediction_cloud.zip --dest ./coordinate_prediction_cloud
+```
+
+Official Kaggle zip stays `data.unzip`. The landmark pack is a second archive (code + labels + optional `train_images/`).
+
 Every data script prints a trace (`START` · `STEP` · `DATA` · `OK` · `DONE` · `NEXT` · `WARN` · `FAIL`). Tokens are never logged (only `token_set` / `KGAT_` prefix). The same lines append under [../traces/](../traces/README.md): `download.log` / `unzip.log` / `validate.log` plus `pipeline.log` (all components, time order).
 
 Expected `raw/` layout: [raw/README.md](raw/README.md). Crops: [processed/README.md](processed/README.md). NAS compact: [nas_compact/README.md](nas_compact/README.md). Perf pipeline outputs: [best_config_runs/README.md](best_config_runs/README.md).

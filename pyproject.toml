@@ -24,6 +24,8 @@ best_config_runs = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
 visualizations = ["matplotlib>=3.8"]
 perf_pipeline = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
 ordinal = ["torch>=2.1", "torchvision>=0.16", "scikit-learn>=1.3"]
+coordinate_prediction = ["torch>=2.1", "torchvision>=0.16"]
+landmarks = ["torch>=2.1", "torchvision>=0.16"]
 
 [project.scripts]
 rsna2024-export-crops = "rsna2024_lumbar.preprocessing.cli:main"
@@ -47,9 +49,20 @@ rsna2024-perf-pipeline-unpack = "rsna2024_lumbar.best_config_runs.unpack_cloud:m
 rsna2024-perf-pipeline-deploy = "rsna2024_lumbar.best_config_runs.deploy_cloud:main"
 rsna2024-ordinal = "rsna2024_lumbar.best_config_runs.cli:main"
 rsna2024-visualizations = "rsna2024_lumbar.visualizations.cli:main"
+rsna2024-coordinate-prediction = "rsna2024_lumbar.coordinate_prediction.cli:main"
+rsna2024-coordinate-prediction-nas = "rsna2024_lumbar.coordinate_prediction.launch:main"
+rsna2024-coordinate-prediction-pack = "rsna2024_lumbar.coordinate_prediction.pack:main"
+rsna2024-coordinate-prediction-unzip = "rsna2024_lumbar.coordinate_prediction.unzip:main"
+rsna2024-coordinate-prediction-deploy = "rsna2024_lumbar.coordinate_prediction.deploy:main"
+rsna2024-landmarks = "rsna2024_lumbar.coordinate_prediction.cli:main"
+rsna2024-landmarks-nas = "rsna2024_lumbar.coordinate_prediction.launch:main"
+rsna2024-landmarks-pack = "rsna2024_lumbar.coordinate_prediction.pack:main"
+rsna2024-landmarks-unzip = "rsna2024_lumbar.coordinate_prediction.unzip:main"
+rsna2024-landmarks-deploy = "rsna2024_lumbar.coordinate_prediction.deploy:main"
 
 [tool.setuptools.package-data]
 "rsna2024_lumbar.nas" = ["configs/*.json"]
+"rsna2024_lumbar.coordinate_prediction" = ["configs/*.json"]
 
 [tool.setuptools.packages.find]
 include = ["common*", "rsna2024_lumbar*"]

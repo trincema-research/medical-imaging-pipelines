@@ -1,0 +1,15 @@
+{
+  "backbones": [
+    "convnext_tiny",
+    "convnext_base",
+    "efficientnet_v2_s",
+    "efficientnet_v2_l"
+  ],
+  "image_sizes": [512],
+  "batch_size": 8,
+  "learning_rates": [0.00001, 0.00003, 0.0001, 0.0003, 0.0006, 0.001],
+  "weight_decays": [0.001, 0.003, 0.01, 0.03, 0.05],
+  "pretrained": [true],
+  "epochs": 20,
+  "seed": 42
+}

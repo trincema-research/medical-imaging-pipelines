@@ -16,3 +16,5 @@ python -m rsna2024_lumbar.nas.pack --profile efficientnet_deploy --include-crops
 ```
 
 Trainers and `nas.deploy` read `data/processed/<policy>/` by default.
+
+Dense landmark CSVs (`dense_coordinates/`, gitignored) come from `python -m rsna2024_lumbar.coordinate_prediction densify`. See [../../coordinate_prediction/README.md](../../coordinate_prediction/README.md).

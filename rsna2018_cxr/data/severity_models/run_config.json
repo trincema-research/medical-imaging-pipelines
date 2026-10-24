@@ -1,0 +1,6 @@
+{
+  "config_json": "rsna2018_cxr/severity/configs/retrain_s1.json",
+  "split_csv": "rsna2018_cxr/data/severity_models/val_test_images.csv",
+  "positive_class": "severity_1_low_mild",
+  "best_metric": "val_acc_then_train_acc"
+}

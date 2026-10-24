@@ -77,3 +77,14 @@ pytest rsna2025_brain/tests
 ```
 
 Layout after unzip: `train.csv`, `train_localizers.csv`, `series/<SeriesInstanceUID>/*.dcm` under `rsna2025_brain/data/raw/`. DICOMs stay gitignored.
+
+## ▸ RSNA 2018 CXR — severity specialists
+
+ViT NAS + retrain for `normal` vs S1/S2/S3. The three released weights are S1 repeats (~346 MB each, not in git):
+
+```bash
+pip install -e ".[severity,dev]"
+python -m rsna2018_cxr.severity download-weights
+python -m rsna2018_cxr.severity nas --help
+pytest rsna2018_cxr/tests
+```

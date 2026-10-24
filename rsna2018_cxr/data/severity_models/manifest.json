@@ -1,0 +1,32 @@
+[
+  {
+    "name": "specialist_s1_val0.9470.pt",
+    "bytes": 345806447,
+    "sha256": "fdd440fa3d6ba3def5f4add3693d0ed89c7ac1981e9aee439f54ebf002f91a4f",
+    "positive_class": "severity_1_low_mild",
+    "val_acc": 0.9470046082949308,
+    "train_acc": 0.9875576036866359,
+    "epoch": 33,
+    "release_tag": "rsna2018-severity-s1-specialists"
+  },
+  {
+    "name": "specialist_s1_val0.9433.pt",
+    "bytes": 345806447,
+    "sha256": "ac793fe8831f4a9fb1a05e65a196524f8211a9e3c167d81ed037deaea1063156",
+    "positive_class": "severity_1_low_mild",
+    "val_acc": 0.9433179723502304,
+    "train_acc": 0.9932027649769585,
+    "epoch": 37,
+    "release_tag": "rsna2018-severity-s1-specialists"
+  },
+  {
+    "name": "specialist_s1_val0.9415.pt",
+    "bytes": 345806447,
+    "sha256": "c88e90bfa586d6c8191152034789f838cd3f9a84a7f98b388c0d37b77d91d7d2",
+    "positive_class": "severity_1_low_mild",
+    "val_acc": 0.9414746543778801,
+    "train_acc": 0.998963133640553,
+    "epoch": 48,
+    "release_tag": "rsna2018-severity-s1-specialists"
+  }
+]

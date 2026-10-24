@@ -72,4 +72,6 @@ python -m rsna2024_lumbar.landmarks deploy --family full --num-gpus 8 --all-cond
 
 `--num-gpus` must be 1, 2, 4, or 8 (`0` = auto). Shards are `k = ceil(N/G)`: `full` is 48 / 24 / 12 / 6 trials per GPU. Swap `--family full` for `convnext` (24), `efficientnet` (24), or `local` (12).
 
+Every trial writes `<condition>_<backbone>_metrics.csv` / `.json` and copies train/val/test splits into `trial.json`. Rows are `overall` plus each lumbar level (R², Rx, Ry, MAE, MAE-x, MAE-y, PCK@5, PCK@10, L1, `n_visible`). Use those later to pick condition×level pairs that need a specialist model.
+
 Do not commit the zip, DICOMs, or NAS histories. Depth: [docs/landmark_coordinates.md](../docs/landmark_coordinates.md) · [docs/landmark_all_slice_pipeline.md](../docs/landmark_all_slice_pipeline.md).

@@ -36,6 +36,40 @@ def test_coordinate_r2_perfect_and_mean():
     assert abs(baseline["r2"]) < 1e-5
 
 
+def test_coordinate_metrics_overall_and_per_level():
+    from rsna2024_lumbar.landmarks.models import LEVEL_METRIC_KEYS, coordinate_metrics
+
+    pred = torch.tensor([[[0.10, 0.20], [0.50, 0.50]], [[0.12, 0.20], [0.80, 0.80]]], dtype=torch.float32)
+    target = torch.tensor([[[0.10, 0.20], [0.50, 0.50]], [[0.10, 0.20], [0.80, 0.80]]], dtype=torch.float32)
+    visible = torch.ones(2, 2)
+    out = coordinate_metrics(pred, target, visible, width=100, height=100)
+    assert out["n"] == 2
+    assert out["n_visible"] == 4
+    assert abs(out["mae_x_px"] - 0.5) < 1e-5
+    assert abs(out["mae_y_px"]) < 1e-5
+    assert set(out["levels"]) == {"l1_l2", "l2_l3"}
+    assert out["levels"]["l1_l2"]["n_visible"] == 2
+    assert abs(out["levels"]["l1_l2"]["mae_px"] - 1.0) < 1e-5
+    assert out["levels"]["l2_l3"]["mae_px"] == 0.0
+    assert out["levels"]["l2_l3"]["pck5"] == 1.0
+    assert out["pck10"] == out["pck5"] or out["pck10"] >= out["pck5"]
+    for key in LEVEL_METRIC_KEYS:
+        assert f"{key}_l1_l2" in out
+        assert f"{key}_l2_l3" in out
+
+
+def test_coordinate_metrics_hidden_level_has_zero_visible():
+    from rsna2024_lumbar.landmarks.models import coordinate_metrics
+
+    pred = torch.zeros(3, 2, 2)
+    target = torch.zeros(3, 2, 2)
+    visible = torch.tensor([[1.0, 0.0], [1.0, 0.0], [1.0, 0.0]])
+    out = coordinate_metrics(pred, target, visible, width=64, height=64)
+    assert out["levels"]["l1_l2"]["n_visible"] == 3
+    assert out["levels"]["l2_l3"]["n_visible"] == 0
+    assert out["n_visible_l2_l3"] == 0
+
+
 def test_list_condition_samples_reads_axial_fixture(tmp_path):
     raw = _axial_stack(tmp_path / "raw")
     samples = list_condition_samples(raw, "left_subarticular_stenosis")

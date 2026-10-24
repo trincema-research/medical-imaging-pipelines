@@ -8,7 +8,7 @@ from pathlib import Path
 
 from rsna2024_lumbar.landmarks.constants import BATCH_SIZE_DEFAULT, CONDITIONS, DENSE_COORDINATES_DIRNAME
 from rsna2024_lumbar.landmarks.search import FAMILIES, FAMILY_FULL, expand_trials
-from rsna2024_lumbar.landmarks.train import train_condition
+from rsna2024_lumbar.landmarks.train import _jsonable, train_condition
 
 HERE = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = HERE / "data" / "processed" / DENSE_COORDINATES_DIRNAME / "nas"
@@ -51,7 +51,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"skip {trial.slug}", flush=True)
             continue
         print(f"trial {trial.slug}", flush=True)
-        train_condition(
+        meta = train_condition(
             args.data_root,
             out,
             trial.condition,
@@ -65,22 +65,31 @@ def main(argv: list[str] | None = None) -> int:
             pretrained=trial.pretrained,
             max_studies=args.max_studies,
         )
+        metrics_path = out / f"{trial.condition}_{trial.backbone}_metrics.json"
+        metrics = {}
+        if metrics_path.is_file():
+            metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
         (out / "trial.json").write_text(
             json.dumps(
-                {
-                    "trial_id": trial.trial_id,
-                    "slug": trial.slug,
-                    "condition": trial.condition,
-                    "backbone": trial.backbone,
-                    "image_size": trial.image_size,
-                    "batch_size": trial.batch_size,
-                    "family": trial.family,
-                    "lr": trial.lr,
-                    "weight_decay": trial.weight_decay,
-                    "pretrained": trial.pretrained,
-                    "epochs": trial.epochs,
-                    "seed": trial.seed,
-                },
+                _jsonable(
+                    {
+                        "trial_id": trial.trial_id,
+                        "slug": trial.slug,
+                        "condition": trial.condition,
+                        "backbone": trial.backbone,
+                        "image_size": trial.image_size,
+                        "batch_size": trial.batch_size,
+                        "family": trial.family,
+                        "lr": trial.lr,
+                        "weight_decay": trial.weight_decay,
+                        "pretrained": trial.pretrained,
+                        "epochs": trial.epochs,
+                        "seed": trial.seed,
+                        "splits": meta.get("splits") or metrics.get("splits") or {},
+                        "metrics_csv": meta.get("metrics_csv"),
+                        "metrics_json": meta.get("metrics_json"),
+                    }
+                ),
                 indent=2,
             ),
             encoding="utf-8",

@@ -127,6 +127,12 @@ python -m rsna2024_lumbar.landmarks train --condition spinal_canal_stenosis --al
 python -m rsna2024_lumbar.landmarks infer --checkpoint path/to.pt --output-csv pred.csv --per-slice
 ```
 
+Each run writes condition-level and per-lumbar-level metrics (R² / Rx / Ry, MAE, MAE-x / MAE-y, PCK@5 / PCK@10, L1, visible counts) for train / val / test:
+
+- `<condition>_<backbone>_metrics.csv` — one row per `(split, overall|L1/L2…L5/S1)`
+- `<condition>_<backbone>_metrics.json` — same numbers nested under `splits.*.levels`
+- NAS `trial.json` copies the best-checkpoint `splits` so later we can rank weak condition×level cells and decide whether a specialist net is worth it.
+
 Do not commit dense CSVs, DICOMs, or checkpoints.
 
 NAS families (same 2D heads, ImageNet init, **512×512 fixed**): `full` = 4 models × 4 lrs × 3 weight decays = **48** trials. `convnext` / `efficientnet` are 24 each. `local` is the 12-trial 1-GPU scout.

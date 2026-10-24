@@ -78,18 +78,46 @@ def landmark_loss(pred_xy, pred_vis, target_xy, visible, *, vis_weight: float = 
     }
 
 
-def pixel_errors(pred_xy, target_xy, visible, width: int, height: int) -> dict[str, float]:
-    torch, _nn, _models = _require_torch()
-    mask = visible > 0.5
-    if int(mask.sum()) == 0:
-        return {"mae_px": float("nan"), "pck5": float("nan")}
-    dx = (pred_xy[..., 0] - target_xy[..., 0]) * float(width)
-    dy = (pred_xy[..., 1] - target_xy[..., 1]) * float(height)
-    dist = torch.sqrt(dx * dx + dy * dy)[mask]
+LEVEL_METRIC_KEYS = (
+    "n_visible",
+    "l1",
+    "r2",
+    "r2_x",
+    "r2_y",
+    "mae_px",
+    "mae_x_px",
+    "mae_y_px",
+    "pck5",
+    "pck10",
+)
+
+
+def empty_level_metrics() -> dict[str, float]:
     return {
-        "mae_px": float(dist.mean().detach()),
-        "pck5": float((dist <= 5.0).float().mean().detach()),
+        "n_visible": 0,
+        "l1": float("nan"),
+        "r2": float("nan"),
+        "r2_x": float("nan"),
+        "r2_y": float("nan"),
+        "mae_px": float("nan"),
+        "mae_x_px": float("nan"),
+        "mae_y_px": float("nan"),
+        "pck5": float("nan"),
+        "pck10": float("nan"),
     }
+
+
+def empty_coordinate_metrics(*, n_levels: int | None = None) -> dict:
+    levels = list(LUMBAR_LEVELS if n_levels is None else LUMBAR_LEVELS[: int(n_levels)])
+    out = empty_level_metrics()
+    out["n"] = 0
+    out["loss"] = float("nan")
+    out["bce"] = float("nan")
+    out["levels"] = {level: empty_level_metrics() for level in levels}
+    for level in levels:
+        for key in LEVEL_METRIC_KEYS:
+            out[f"{key}_{level}"] = out["levels"][level][key]
+    return out
 
 
 def _r2_1d(pred, target) -> float:
@@ -116,6 +144,40 @@ def _r2_visible(pred_xy, target_xy, visible) -> dict[str, float]:
     return {"r2": r2, "r2_x": r2_x, "r2_y": r2_y}
 
 
+def _visible_xy(pred_xy, target_xy, visible):
+    if pred_xy.ndim == 3:
+        pred_xy = pred_xy.reshape(-1, 2)
+        target_xy = target_xy.reshape(-1, 2)
+        visible = visible.reshape(-1)
+    mask = visible > 0.5
+    return pred_xy[mask], target_xy[mask], mask
+
+
+def _errors_visible(pred_xy, target_xy, visible, width: int, height: int) -> dict[str, float]:
+    torch, _nn, _models = _require_torch()
+    pred, target, mask = _visible_xy(pred_xy, target_xy, visible)
+    out = empty_level_metrics()
+    out["n_visible"] = int(mask.sum())
+    if out["n_visible"] == 0:
+        return out
+    dx = (pred[:, 0] - target[:, 0]) * float(width)
+    dy = (pred[:, 1] - target[:, 1]) * float(height)
+    dist = torch.sqrt(dx * dx + dy * dy)
+    out["l1"] = float((pred - target).abs().mean().detach())
+    out["mae_px"] = float(dist.mean().detach())
+    out["mae_x_px"] = float(dx.abs().mean().detach())
+    out["mae_y_px"] = float(dy.abs().mean().detach())
+    out["pck5"] = float((dist <= 5.0).float().mean().detach())
+    out["pck10"] = float((dist <= 10.0).float().mean().detach())
+    if out["n_visible"] >= 2:
+        out.update(_r2_visible(pred_xy, target_xy, visible))
+    return out
+
+
+def pixel_errors(pred_xy, target_xy, visible, width: int, height: int) -> dict[str, float]:
+    return _errors_visible(pred_xy, target_xy, visible, width, height)
+
+
 def coordinate_r2(pred_xy, target_xy, visible) -> dict[str, float]:
     """R² of visible (x/W, y/H): overall, per-axis, and per lumbar level."""
     out = _r2_visible(pred_xy, target_xy, visible)
@@ -126,4 +188,20 @@ def coordinate_r2(pred_xy, target_xy, visible) -> dict[str, float]:
             out[f"r2_{level}"] = part["r2"]
             out[f"r2_{level}_x"] = part["r2_x"]
             out[f"r2_{level}_y"] = part["r2_y"]
+    return out
+
+
+def coordinate_metrics(pred_xy, target_xy, visible, width: int, height: int) -> dict:
+    """Overall + per-level R², pixel error, PCK, L1, and visible counts."""
+    n_levels = int(pred_xy.shape[1]) if getattr(pred_xy, "ndim", 0) == 3 else 0
+    out = _errors_visible(pred_xy, target_xy, visible, width, height)
+    out["n"] = int(pred_xy.shape[0])
+    levels: dict[str, dict[str, float]] = {}
+    if n_levels:
+        for i, level in enumerate(LUMBAR_LEVELS[:n_levels]):
+            part = _errors_visible(pred_xy[:, i], target_xy[:, i], visible[:, i], width, height)
+            levels[level] = part
+            for key in LEVEL_METRIC_KEYS:
+                out[f"{key}_{level}"] = part[key]
+    out["levels"] = levels
     return out

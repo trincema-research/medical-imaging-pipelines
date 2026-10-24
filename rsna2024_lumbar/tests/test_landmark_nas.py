@@ -11,7 +11,9 @@ from rsna2024_lumbar.landmarks.cli import main as landmarks_main
 from rsna2024_lumbar.landmarks.deploy import parse_args as parse_deploy_args
 from rsna2024_lumbar.landmarks.launch import build_plan, format_plan, main as launch_main
 from rsna2024_lumbar.landmarks.pack import collect_pack_files, main as pack_main
+from rsna2024_lumbar.landmarks.models import empty_coordinate_metrics
 from rsna2024_lumbar.landmarks.search import expand_trials
+from rsna2024_lumbar.landmarks.train import write_split_metrics
 from rsna2024_lumbar.landmarks.unzip import extract_zip
 from rsna2024_lumbar.nas.gpus import covered_trial_ids
 from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
@@ -186,3 +188,20 @@ def test_unzip_stdlib_roundtrip(tmp_path):
     assert manifest["include_images"] is False
     assert manifest["trials_per_condition"] == 48
     assert (repo / "unzip_lumbar_landmarks_cloud.py").is_file()
+
+
+def test_write_split_metrics_has_condition_and_level_rows(tmp_path):
+    splits = {name: empty_coordinate_metrics() for name in ("train", "val", "test")}
+    written = write_split_metrics(tmp_path, "spinal_canal_stenosis", "convnext_tiny", splits)
+    assert written["n_rows"] == 18
+    blob = json.loads(written["json"].read_text(encoding="utf-8"))
+    assert blob["condition"] == "spinal_canal_stenosis"
+    assert set(blob["splits"]["test"]["levels"]) == {"l1_l2", "l2_l3", "l3_l4", "l4_l5", "l5_s1"}
+    assert blob["splits"]["test"]["levels"]["l3_l4"]["r2"] is None
+    text = written["csv"].read_text(encoding="utf-8")
+    assert "level_display" in text
+    assert "L3/L4" in text
+    assert "overall" in text
+    assert "n_visible" in text
+    assert "mae_x_px" in text
+    assert "pck10" in text

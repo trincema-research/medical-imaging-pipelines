@@ -469,14 +469,22 @@ def plot_2d_vs_25d_degradation_gain(arch: pd.DataFrame, output_dir: Path) -> tup
         hi = max(max(values_2d), max(values_25d))
         pad = max(abs(hi) * 0.22, 0.02)
         ax.set_ylim(min(0.0, lo - pad * 0.1), hi + pad)
-    axes[0, 0].legend(frameon=False)
+    handles, labels = axes[0, 0].get_legend_handles_labels()
+    fig.legend(
+        handles,
+        labels,
+        loc="lower center",
+        ncol=2,
+        frameon=False,
+        bbox_to_anchor=(0.5, 0.045),
+    )
     fig.suptitle("2D vs 2.5D-to-3D Ordinal Degradation / Gain", fontsize=16, fontweight="bold")
     if leaders:
         note = "  ·  ".join(f"{rep}: {arch_name} leads all four metrics" for rep, arch_name in leaders.items())
-        fig.text(0.5, 0.01, note, ha="center", fontsize=8)
-        fig.tight_layout(rect=(0.0, 0.04, 1.0, 0.95))
+        fig.text(0.5, 0.008, note, ha="center", fontsize=8)
+        fig.tight_layout(rect=(0.0, 0.08, 1.0, 0.95))
     else:
-        fig.tight_layout(rect=(0.0, 0.02, 1.0, 0.95))
+        fig.tight_layout(rect=(0.0, 0.07, 1.0, 0.95))
     return _save_figure(fig, output_dir, "ordinal_2d_vs_25d_gain_degradation")
 
 

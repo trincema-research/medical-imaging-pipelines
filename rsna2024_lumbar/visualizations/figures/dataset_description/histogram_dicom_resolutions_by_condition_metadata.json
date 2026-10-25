@@ -1,0 +1,9 @@
+{
+  "generated_from_real_results": true,
+  "script_name": "plot_dicom_resolutions.py",
+  "timestamp": "2026-10-25T17:41:42.418937+00:00",
+  "git_commit": "eb28f6300c57f3336ec79c2b997ed9befd4d327e",
+  "count_grouping": "thousands separators for 5+ digit integers only",
+  "source_counts": "F:\\workspace\\medical-imaging-pipelines-ordinal-figures\\rsna2024_lumbar\\data\\dataset_description\\dicom_resolution_counts_by_condition.csv",
+  "n_rows": 263
+}

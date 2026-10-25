@@ -1,5 +1,5 @@
 {
-  "source_file": "F:\\workspace\\medical-imaging-pipelines\\rsna2024_lumbar\\data\\best_config_runs\\results\\protocol_condition_specific\\condition_specific_by_condition.csv",
+  "source_file": "F:\\workspace\\medical-imaging-pipelines-ordinal-figures\\rsna2024_lumbar\\data\\best_config_runs\\results\\protocol_condition_specific\\condition_specific_by_condition.csv",
   "generated_from_real_results": true,
   "split": "validation",
   "metric": "Macro-F1",
@@ -20,8 +20,8 @@
     "LSS",
     "RSS"
   ],
-  "timestamp": "2026-10-11T09:21:27.158694+00:00",
-  "git_commit": "e8d1675996ca9a0b67b2210e6d919c03f91bad0b",
+  "timestamp": "2026-10-24T16:14:44.936380+00:00",
+  "git_commit": "315b86537dcf07403488f9417d48553b2c527ca0",
   "script_name": "plot_condition_specific_results.py",
   "n_rows": 40,
   "incomplete_groups": [

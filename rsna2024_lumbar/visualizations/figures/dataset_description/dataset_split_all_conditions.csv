@@ -1,0 +1,16 @@
+condition,split,studies_usable,dicom_crops,fraction_actual,fraction_target,Normal/Mild,Moderate,Severe,missing,split_seed
+spinal_canal_stenosis,train,1327,6635,0.698789,0.7,5826,490,319,0,42
+spinal_canal_stenosis,val,286,1430,0.150606,0.15,1241,119,70,0,42
+spinal_canal_stenosis,test,286,1430,0.150606,0.15,1268,96,66,0,42
+left_neural_foraminal_narrowing,train,1381,6905,0.700304,0.7,5373,1255,277,0,42
+left_neural_foraminal_narrowing,val,295,1475,0.149594,0.15,1143,272,60,0,42
+left_neural_foraminal_narrowing,test,296,1480,0.150101,0.15,1155,265,60,0,42
+right_neural_foraminal_narrowing,train,1378,6890,0.699137,0.7,5372,1237,256,25,42
+right_neural_foraminal_narrowing,val,296,1480,0.150178,0.15,1146,269,65,0,42
+right_neural_foraminal_narrowing,test,297,1485,0.150685,0.15,1163,260,57,5,42
+left_subarticular_stenosis,train,1256,6280,0.698166,0.7,4526,1181,568,5,42
+left_subarticular_stenosis,val,273,1365,0.151751,0.15,993,244,128,0,42
+left_subarticular_stenosis,test,270,1350,0.150083,0.15,996,235,119,0,42
+right_subarticular_stenosis,train,1262,6310,0.699557,0.7,4553,1182,575,0,42
+right_subarticular_stenosis,val,264,1320,0.146341,0.15,951,247,122,0,42
+right_subarticular_stenosis,test,278,1390,0.154102,0.15,1003,261,126,0,42

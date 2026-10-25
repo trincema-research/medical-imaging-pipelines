@@ -324,9 +324,18 @@ def plot_reliability_profiles(df: pd.DataFrame, output_dir: Path) -> tuple[Path,
         ax.set_title(rep, fontweight="bold")
         ax.grid(alpha=0.25, linestyle="--")
     axes[0].set_ylabel("Validation Macro-F1")
-    axes[1].legend(title="Architecture", loc="best", frameon=False)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(
+        handles,
+        labels,
+        title="Architecture",
+        loc="lower center",
+        ncol=4,
+        frameon=False,
+        bbox_to_anchor=(0.5, -0.02),
+    )
     fig.suptitle("Condition-Specific Reliability Profiles", fontsize=16, fontweight="bold")
-    fig.tight_layout()
+    fig.tight_layout(rect=(0.0, 0.08, 1.0, 0.95))
     return _save_figure(fig, output_dir, "condition_specific_reliability_profiles")
 
 
@@ -378,8 +387,15 @@ def plot_bottleneck_analysis(summary: pd.DataFrame, output_dir: Path) -> tuple[P
             fontsize=9.5,
         )
     handles = [Patch(facecolor=CONDITION_COLORS[c], edgecolor="black", label=c) for c in CONDITION_ORDER]
-    ax.legend(handles=handles, title="Worst condition", frameon=False)
-    fig.tight_layout()
+    ax.legend(
+        handles=handles,
+        title="Worst condition",
+        loc="lower center",
+        bbox_to_anchor=(0.5, -0.18),
+        ncol=5,
+        frameon=False,
+    )
+    fig.tight_layout(rect=(0.0, 0.08, 1.0, 1.0))
     return _save_figure(fig, output_dir, "condition_specific_bottleneck_analysis")
 
 

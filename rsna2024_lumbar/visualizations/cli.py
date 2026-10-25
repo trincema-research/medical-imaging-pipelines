@@ -8,6 +8,7 @@ from pathlib import Path
 from rsna2024_lumbar.best_config_runs.paths import RESULTS_DIR
 from rsna2024_lumbar.visualizations import (
     CONDITION_SPECIFIC_FIGURES_DIR,
+    DATASET_DESCRIPTION_FIGURES_DIR,
     ORDINAL_FIGURES_DIR,
     PATIENT_LEVEL_FIGURES_DIR,
     SPINAL_LEVEL_FIGURES_DIR,
@@ -28,6 +29,26 @@ from rsna2024_lumbar.visualizations.plot_ordinal_severity_results import (
 from rsna2024_lumbar.visualizations.plot_condition_specific_results import (
     DEFAULT_MEANS as CONDITION_DEFAULT_MEANS,
     generate_condition_specific_figures,
+)
+from rsna2024_lumbar.visualizations.plot_dataset_scale import (
+    DEFAULT_COUNTS as DATASET_DEFAULT_COUNTS,
+    DEFAULT_SCALE as DATASET_DEFAULT_SCALE,
+    generate_dataset_scale_figures,
+)
+from rsna2024_lumbar.visualizations.plot_dicom_reuse import (
+    DEFAULT_DUPLICATION,
+    DEFAULT_PAIRWISE,
+    DEFAULT_SUMMARY as DICOM_DEFAULT_SUMMARY,
+    generate_dicom_reuse_figures,
+)
+from rsna2024_lumbar.visualizations.plot_dicom_resolutions import (
+    DEFAULT_COUNTS as RESOLUTION_DEFAULT_COUNTS,
+    generate_dicom_resolution_figures,
+)
+from rsna2024_lumbar.visualizations.plot_dataset_split import (
+    DEFAULT_FRACTIONS,
+    DEFAULT_SPLITS,
+    generate_dataset_split_figures,
 )
 
 
@@ -118,6 +139,55 @@ def main(argv: list[str] | None = None) -> int:
     )
     condition.add_argument("--split", default="validation")
 
+    dataset = sub.add_parser(
+        "dataset-scale",
+        help="Dataset scale bars and condition × severity mix (usable crops).",
+    )
+    dataset.add_argument("--scale", type=Path, default=DATASET_DEFAULT_SCALE)
+    dataset.add_argument("--counts", type=Path, default=DATASET_DEFAULT_COUNTS)
+    dataset.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DATASET_DESCRIPTION_FIGURES_DIR,
+        help="Directory for PNG/PDF/CSV/JSON outputs.",
+    )
+
+    reuse = sub.add_parser(
+        "dicom-reuse",
+        help="Stacked crops by within-condition DICOM reuse and cross-condition sharing.",
+    )
+    reuse.add_argument("--duplication", type=Path, default=DEFAULT_DUPLICATION)
+    reuse.add_argument("--summary", type=Path, default=DICOM_DEFAULT_SUMMARY)
+    reuse.add_argument("--pairwise", type=Path, default=DEFAULT_PAIRWISE)
+    reuse.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DATASET_DESCRIPTION_FIGURES_DIR,
+        help="Directory for PNG/PDF/CSV/JSON outputs.",
+    )
+
+    resolutions = sub.add_parser(
+        "dicom-resolutions",
+        help="DICOM resolution histograms by condition (series-matched slices).",
+    )
+    resolutions.add_argument("--counts", type=Path, default=RESOLUTION_DEFAULT_COUNTS)
+    resolutions.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DATASET_DESCRIPTION_FIGURES_DIR,
+        help="Directory for PNG/PDF/CSV/JSON outputs.",
+    )
+
+    split = sub.add_parser(
+        "dataset-split",
+        help="Actual vs target train/val/test split fractions by condition.",
+    )
+    split.add_argument("--splits", type=Path, default=DEFAULT_SPLITS)
+    split.add_argument("--output-dir", type=Path, default=DATASET_DESCRIPTION_FIGURES_DIR)
+    split.add_argument("--train-fraction", type=float, default=DEFAULT_FRACTIONS["train"])
+    split.add_argument("--val-fraction", type=float, default=DEFAULT_FRACTIONS["val"])
+    split.add_argument("--test-fraction", type=float, default=DEFAULT_FRACTIONS["test"])
+
     args = parser.parse_args(argv)
 
     if args.command == "patient-level":
@@ -147,6 +217,36 @@ def main(argv: list[str] | None = None) -> int:
             means_path=args.means,
             output_dir=args.output_dir,
             split=args.split,
+        )
+        return 0
+    if args.command == "dataset-scale":
+        generate_dataset_scale_figures(
+            scale_path=args.scale,
+            counts_path=args.counts,
+            output_dir=args.output_dir,
+        )
+        return 0
+    if args.command == "dicom-reuse":
+        generate_dicom_reuse_figures(
+            duplication_path=args.duplication,
+            summary_path=args.summary,
+            pairwise_path=args.pairwise,
+            output_dir=args.output_dir,
+        )
+        return 0
+    if args.command == "dicom-resolutions":
+        generate_dicom_resolution_figures(
+            counts_path=args.counts,
+            output_dir=args.output_dir,
+        )
+        return 0
+    if args.command == "dataset-split":
+        generate_dataset_split_figures(
+            splits_path=args.splits,
+            output_dir=args.output_dir,
+            train_fraction=args.train_fraction,
+            val_fraction=args.val_fraction,
+            test_fraction=args.test_fraction,
         )
         return 0
     raise SystemExit(f"Unknown command: {args.command}")

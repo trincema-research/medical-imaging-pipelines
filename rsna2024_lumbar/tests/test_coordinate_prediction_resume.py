@@ -13,19 +13,24 @@ from rsna2024_lumbar.coordinate_prediction.resume import (
     STATE_COMPLETE,
     STATE_INCOMPLETE,
     STATE_PENDING,
+    append_training_metrics_row,
     atomic_write_text,
     classify_trial,
     collect_trial_statuses,
+    flatten_epoch_metrics,
     format_id_ranges,
     format_status_report,
     history_path,
     last_checkpoint_path,
+    last_logged_epoch,
     next_epoch,
     resume_hparams,
     resume_hparams_match,
+    training_metrics_path,
     trial_is_complete,
     trial_output_dir,
     wants_resume,
+    write_epoch_history_csvs,
 )
 from rsna2024_lumbar.coordinate_prediction.search import expand_trials
 from rsna2024_lumbar.coordinate_prediction.worker import main as worker_main
@@ -65,13 +70,51 @@ def test_next_epoch_continues_after_last_finished():
 
 def test_trial_complete_only_when_history_exists(tmp_path: Path):
     condition, backbone = "spinal_canal_stenosis", "convnext_tiny"
-    assert classify_trial(tmp_path, condition, backbone) == STATE_PENDING
+    assert classify_trial(tmp_path, condition, backbone, epochs=20) == STATE_PENDING
     last_checkpoint_path(tmp_path, condition, backbone).write_bytes(b"partial")
-    assert trial_is_complete(tmp_path, condition, backbone) is False
-    assert classify_trial(tmp_path, condition, backbone) == STATE_INCOMPLETE
+    assert trial_is_complete(tmp_path, condition, backbone, epochs=20) is False
+    assert classify_trial(tmp_path, condition, backbone, epochs=20) == STATE_INCOMPLETE
     atomic_write_text(history_path(tmp_path, condition, backbone), "{}")
-    assert trial_is_complete(tmp_path, condition, backbone) is True
-    assert classify_trial(tmp_path, condition, backbone) == STATE_COMPLETE
+    assert trial_is_complete(tmp_path, condition, backbone, epochs=20) is True
+    assert classify_trial(tmp_path, condition, backbone, epochs=20) == STATE_COMPLETE
+
+
+def test_metrics_csv_completes_when_planned_epochs_are_logged(tmp_path: Path):
+    condition, backbone = "spinal_canal_stenosis", "convnext_tiny"
+    csv_path = training_metrics_path(tmp_path)
+    append_training_metrics_row(csv_path, {"epoch": 1, "val_l1": 0.4})
+    append_training_metrics_row(csv_path, {"epoch": 2, "val_l1": 0.3})
+    assert last_logged_epoch(csv_path) == 2
+    assert trial_is_complete(tmp_path, condition, backbone, epochs=3) is False
+    assert classify_trial(tmp_path, condition, backbone, epochs=3) == STATE_INCOMPLETE
+    append_training_metrics_row(csv_path, {"epoch": 3, "val_l1": 0.2})
+    assert trial_is_complete(tmp_path, condition, backbone, epochs=3) is True
+    assert classify_trial(tmp_path, condition, backbone, epochs=3) == STATE_COMPLETE
+
+
+def test_flatten_and_write_epoch_csvs(tmp_path: Path):
+    metrics = {
+        "n": 4,
+        "loss": 0.2,
+        "bce": 0.1,
+        "n_visible": 3,
+        "l1": 0.05,
+        "r2": 0.9,
+        "r2_x": 0.8,
+        "r2_y": 0.7,
+        "mae_px": 2.5,
+        "mae_x_px": 1.0,
+        "mae_y_px": 1.5,
+        "pck5": 0.5,
+        "pck10": 0.8,
+        "levels": {},
+    }
+    row = flatten_epoch_metrics(1, {"train": metrics, "val": metrics, "test": metrics})
+    assert row["epoch"] == 1
+    assert row["val_l1"] == 0.05
+    write_epoch_history_csvs(tmp_path, row)
+    assert last_logged_epoch(training_metrics_path(tmp_path)) == 1
+    assert (tmp_path / "training_history.csv").is_file()
 
 
 def test_format_id_ranges_collapses_contiguous_ids():
@@ -163,6 +206,39 @@ def test_spawn_shard_forwards_no_resume(monkeypatch, tmp_path: Path):
     plan = type("P", (), {"family": "local", "condition": "spinal_canal_stenosis"})()
     spawn_shard(plan, shard, args)
     assert "--no-resume" in captured[0]
+
+
+def test_worker_skips_complete_metrics_csv(monkeypatch, tmp_path: Path, capsys):
+    trial = expand_trials("spinal_canal_stenosis", family="local")[0]
+    out = tmp_path / "local" / trial.condition / trial.slug
+    out.mkdir(parents=True)
+    for epoch in range(1, trial.epochs + 1):
+        append_training_metrics_row(training_metrics_path(out), {"epoch": epoch, "val_l1": 0.1})
+    called: list[str] = []
+
+    def _boom(*_args, **_kwargs):
+        called.append("train")
+        raise AssertionError("complete csv trials must not retrain")
+
+    monkeypatch.setattr("rsna2024_lumbar.coordinate_prediction.worker.train_condition", _boom)
+    worker_main(
+        [
+            "--family",
+            "local",
+            "--condition",
+            "spinal_canal_stenosis",
+            "--start-trial",
+            "1",
+            "--end-trial",
+            "1",
+            "--output-base",
+            str(tmp_path),
+            "--data-root",
+            str(tmp_path),
+        ]
+    )
+    assert called == []
+    assert "skip" in capsys.readouterr().out
 
 
 def test_worker_skips_complete_trial(monkeypatch, tmp_path: Path, capsys):

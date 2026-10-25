@@ -1,22 +1,31 @@
 """Crash-resume helpers for landmark train / NAS.
 
-A trial is **complete** when ``{condition}_{backbone}_history.json`` exists
-(written only after the full epoch loop finishes). Anything else on disk
-without that file is **incomplete**. No folder means **pending**.
+Severity NAS writes ``training_metrics.csv`` after every epoch
+(``train_vit_lumbar.py``) and ``best_config_runs`` treats a run as complete
+when that CSV reaches the planned epoch count. Landmark NAS uses the same
+files and rule.
 
-We cannot recover an epoch that died mid-step. Re-running the same command
-skips complete trials and retries incomplete / pending ones.
+A trial is **complete** when ``training_metrics.csv`` has ``epoch >= planned``
+or a legacy ``*_history.json`` exists. An in-flight epoch cannot be recovered.
 """
 
 from __future__ import annotations
 
+import csv
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
+from rsna2024_lumbar.coordinate_prediction.constants import LUMBAR_LEVELS
+from rsna2024_lumbar.coordinate_prediction.models import LEVEL_METRIC_KEYS
+
 STATE_COMPLETE = "complete"
 STATE_INCOMPLETE = "incomplete"
 STATE_PENDING = "pending"
+
+TRAINING_METRICS_CSV = "training_metrics.csv"
+TRAINING_HISTORY_CSV = "training_history.csv"
+EPOCH_FLAT_KEYS = ("n", "loss", "bce", *LEVEL_METRIC_KEYS)
 
 RESUME_HPARAM_KEYS = (
     "condition",
@@ -39,8 +48,95 @@ def last_checkpoint_path(output_dir: Path, condition: str, backbone: str) -> Pat
     return Path(output_dir) / f"{condition}_{backbone}_last.pt"
 
 
-def trial_is_complete(output_dir: Path, condition: str, backbone: str) -> bool:
-    return history_path(output_dir, condition, backbone).is_file()
+def training_metrics_path(output_dir: Path) -> Path:
+    return Path(output_dir) / TRAINING_METRICS_CSV
+
+
+def training_history_csv_path(output_dir: Path) -> Path:
+    return Path(output_dir) / TRAINING_HISTORY_CSV
+
+
+def _csv_cell(value: Any) -> Any:
+    if isinstance(value, float) and value != value:
+        return ""
+    return value
+
+
+def flatten_epoch_metrics(epoch: int, splits: dict[str, dict]) -> dict[str, Any]:
+    """One wide row, same idea as ``train_vit_lumbar`` epoch_history."""
+    row: dict[str, Any] = {"epoch": int(epoch)}
+    for split, metrics in splits.items():
+        metrics = metrics or {}
+        for key in EPOCH_FLAT_KEYS:
+            row[f"{split}_{key}"] = metrics.get(key)
+        nested = metrics.get("levels") or {}
+        for level in LUMBAR_LEVELS:
+            part = nested.get(level) or {}
+            for key in LEVEL_METRIC_KEYS:
+                row[f"{split}_{key}_{level}"] = part.get(key, metrics.get(f"{key}_{level}"))
+    return row
+
+
+def append_training_metrics_row(path: Path, row: dict[str, Any]) -> Path:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_header = not path.is_file() or path.stat().st_size == 0
+    fieldnames = list(row.keys())
+    if not write_header:
+        with path.open(newline="", encoding="utf-8") as fh:
+            existing = csv.DictReader(fh).fieldnames or []
+            fieldnames = list(existing)
+            for key in row:
+                if key not in fieldnames:
+                    fieldnames.append(key)
+    with path.open("a", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fieldnames, extrasaction="ignore")
+        if write_header:
+            writer.writeheader()
+        writer.writerow({key: _csv_cell(row.get(key)) for key in fieldnames})
+    return path
+
+
+def write_epoch_history_csvs(output_dir: Path, row: dict[str, Any]) -> None:
+    append_training_metrics_row(training_metrics_path(output_dir), row)
+    append_training_metrics_row(training_history_csv_path(output_dir), row)
+
+
+def reset_epoch_csvs(output_dir: Path) -> None:
+    for path in (training_metrics_path(output_dir), training_history_csv_path(output_dir)):
+        if path.is_file():
+            path.unlink()
+
+
+def last_logged_epoch(path: Path) -> int:
+    path = Path(path)
+    if not path.is_file() or path.stat().st_size == 0:
+        return 0
+    try:
+        import pandas as pd
+
+        frame = pd.read_csv(path)
+    except Exception:
+        return 0
+    if frame.empty or "epoch" not in frame.columns:
+        return 0
+    return int(frame["epoch"].max())
+
+
+def trial_is_complete(
+    output_dir: Path,
+    condition: str,
+    backbone: str,
+    epochs: int | None = None,
+) -> bool:
+    if history_path(output_dir, condition, backbone).is_file():
+        return True
+    if epochs is None:
+        return False
+    logged = last_logged_epoch(training_metrics_path(output_dir))
+    if logged == 0:
+        logged = last_logged_epoch(training_history_csv_path(output_dir))
+    return logged >= int(epochs)
 
 
 def trial_output_dir(output_base: Path, family: str, condition: str, slug: str) -> Path:
@@ -53,6 +149,8 @@ def trial_has_started(output_dir: Path, condition: str, backbone: str) -> bool:
         return False
     markers = (
         last_checkpoint_path(out, condition, backbone),
+        training_metrics_path(out),
+        training_history_csv_path(out),
         out / f"{condition}_{backbone}.pt",
         out / f"{condition}_{backbone}_metrics.json",
         out / "trial.json",
@@ -62,8 +160,13 @@ def trial_has_started(output_dir: Path, condition: str, backbone: str) -> bool:
     return out.is_dir() and any(out.iterdir())
 
 
-def classify_trial(output_dir: Path, condition: str, backbone: str) -> str:
-    if trial_is_complete(output_dir, condition, backbone):
+def classify_trial(
+    output_dir: Path,
+    condition: str,
+    backbone: str,
+    epochs: int | None = None,
+) -> str:
+    if trial_is_complete(output_dir, condition, backbone, epochs=epochs):
         return STATE_COMPLETE
     if trial_has_started(output_dir, condition, backbone):
         return STATE_INCOMPLETE
@@ -93,7 +196,9 @@ def collect_trial_statuses(
                 trial_id=int(trial.trial_id),
                 slug=str(trial.slug),
                 condition=str(trial.condition),
-                state=classify_trial(out, trial.condition, trial.backbone),
+                state=classify_trial(
+                    out, trial.condition, trial.backbone, epochs=getattr(trial, "epochs", None)
+                ),
                 output_dir=out,
             )
         )

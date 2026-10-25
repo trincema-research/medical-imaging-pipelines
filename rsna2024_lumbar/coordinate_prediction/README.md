@@ -57,7 +57,7 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
 
 `--num-gpus` is **1, 2, 4, or 8** (`0` = auto). `--batch-size` is the same for every trial (start at 8; use 4 if ConvNeXt-Base / EfficientNetV2-L OOM). Everything else is fixed: **512×512**, ImageNet init, 20 epochs, AdamW, lr `{1e-5, 3e-5, 1e-4, 3e-4, 6e-4, 1e-3}`, weight decay `{0.001, 0.003, 0.01, 0.03, 0.05}`.
 
-`--all-conditions` runs the five conditions **one after another**, each using the full GPU pool (`full` = 120 trials → 15 per GPU on 8 cards). Resume is **on by default**: re-run the same command after a crash or kill. A trial is complete only when `*_history.json` exists; those are skipped. Incomplete or pending trials run again. An epoch that dies mid-step cannot be recovered. Check the grid on disk (no GPU):
+`--all-conditions` runs the five conditions **one after another**, each using the full GPU pool (`full` = 120 trials → 15 per GPU on 8 cards). Resume is **on by default**: re-run the same command after a crash or kill. After every epoch the worker appends one row to `training_metrics.csv` and `training_history.csv` (same pattern as severity `train_vit_lumbar` / `best_config_runs`). A trial is complete when that CSV reaches the planned epoch count, or when a legacy `*_history.json` exists. Those are skipped. An epoch that dies mid-step cannot be recovered. Check the grid on disk (no GPU):
 
 ```bash
 python -m rsna2024_lumbar.coordinate_prediction nas --family full --status
@@ -71,8 +71,9 @@ Outputs (gitignored): `rsna2024_lumbar/data/processed/dense_coordinates/nas/full
 - `<condition>_<backbone>_metrics.csv` / `.json` — train/val/test, overall **and each lumbar level**
 - `trial.json` — hyperparameters + those splits
 - `<condition>_<backbone>.pt` — best val checkpoint
-- `<condition>_<backbone>_history.json` — present only when the trial finished
-- `<condition>_<backbone>_last.pt` — last finished epoch (trial started but may still be incomplete)
+- `training_metrics.csv` / `training_history.csv` — one row per finished epoch (written immediately)
+- `<condition>_<backbone>_history.json` — full JSON dump after the last epoch
+- `<condition>_<backbone>_last.pt` — last finished epoch weights (used if the trial is retried)
 
 Do not commit the zip, DICOMs, or NAS histories. Download details: [data/README.md](../data/README.md).
 

@@ -28,10 +28,15 @@ from rsna2024_lumbar.coordinate_prediction.models import (
 )
 from rsna2024_lumbar.coordinate_prediction.resume import (
     atomic_write_text,
+    flatten_epoch_metrics,
     last_checkpoint_path,
+    last_logged_epoch,
     next_epoch,
+    reset_epoch_csvs,
     resume_hparams,
     resume_hparams_match,
+    training_metrics_path,
+    write_epoch_history_csvs,
 )
 
 
@@ -303,18 +308,30 @@ def train_condition(
         pretrained=pretrained,
         all_slices=all_slices,
     )
+    metrics_csv = training_metrics_path(output_dir)
     start_epoch = 1
     if resume:
         last_blob = load_last_checkpoint(last_path, device)
+        logged = last_logged_epoch(metrics_csv)
         if last_blob and resume_hparams_match(last_blob.get("hparams"), hparams):
             model.load_state_dict(last_blob["state_dict"])
             optimizer.load_state_dict(last_blob["optimizer"])
             history = list(last_blob.get("history") or [])
             best_val = float(last_blob.get("best_val") or float("inf"))
-            start_epoch = next_epoch(int(last_blob.get("epoch") or 0))
+            start_epoch = next_epoch(max(int(last_blob.get("epoch") or 0), logged))
             print(f"resume {condition} {backbone} from epoch {start_epoch}/{epochs}", flush=True)
         elif last_blob:
             print(f"resume checkpoint hparams mismatch; starting {condition} from epoch 1", flush=True)
+            reset_epoch_csvs(output_dir)
+        elif logged:
+            print(
+                f"found {metrics_csv.name} through epoch {logged} but no last.pt; "
+                f"retraining {condition} from epoch 1",
+                flush=True,
+            )
+            reset_epoch_csvs(output_dir)
+    else:
+        reset_epoch_csvs(output_dir)
     train_loader = _make_loader(parts["train"], image_size, batch_size, True)
     val_loader = _make_loader(parts["val"] or parts["train"], image_size, batch_size, False)
     test_loader = _make_loader(parts["holdout"], image_size, batch_size, False) if parts["holdout"] else None
@@ -337,6 +354,10 @@ def train_condition(
         test_m = _run_epoch(model, test_loader, train=False, device=device) if test_loader else empty_coordinate_metrics()
         row = {"epoch": epoch, "train": train_m, "val": val_m, "test": test_m}
         history.append(row)
+        write_epoch_history_csvs(
+            output_dir,
+            flatten_epoch_metrics(epoch, {"train": train_m, "val": val_m, "test": test_m}),
+        )
         print(f"epoch {epoch}/{epochs}  {condition}  5 levels at once", flush=True)
         for name, metrics in (("train", train_m), ("val", val_m), ("test", test_m)):
             print(

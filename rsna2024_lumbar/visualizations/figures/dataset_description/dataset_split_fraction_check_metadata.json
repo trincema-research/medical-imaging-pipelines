@@ -1,0 +1,9 @@
+{
+  "generated_from_real_results": true,
+  "script_name": "plot_dataset_split.py",
+  "timestamp": "2026-10-25T17:44:14.405654+00:00",
+  "git_commit": "805b7ed0cb8b93f07f104ecc81ff2a0c3ae530bb",
+  "count_grouping": "thousands separators for 5+ digit integers only",
+  "source_splits": "F:\\workspace\\medical-imaging-pipelines-ordinal-figures\\rsna2024_lumbar\\data\\dataset_description\\dataset_split_all_conditions.csv",
+  "n_conditions": 5
+}

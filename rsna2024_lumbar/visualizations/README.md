@@ -136,3 +136,15 @@ Reads `dicom_resolution_counts_by_condition.csv`. Same 5+ digit comma rule.
 | Figure | PNG | PDF |
 |--------|-----|-----|
 | Resolutions by condition | [histogram_dicom_resolutions_by_condition.png](figures/dataset_description/histogram_dicom_resolutions_by_condition.png) | [pdf](figures/dataset_description/histogram_dicom_resolutions_by_condition.pdf) |
+
+```bash
+python -m rsna2024_lumbar.visualizations dataset-split
+# same:
+python -m rsna2024_lumbar.visualizations.plot_dataset_split
+```
+
+Reads `dataset_split_all_conditions.csv`. Same 5+ digit comma rule.
+
+| Figure | PNG | PDF |
+|--------|-----|-----|
+| Split fraction check | [dataset_split_fraction_check.png](figures/dataset_description/dataset_split_fraction_check.png) | [pdf](figures/dataset_description/dataset_split_fraction_check.pdf) |

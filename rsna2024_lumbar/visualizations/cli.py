@@ -45,6 +45,11 @@ from rsna2024_lumbar.visualizations.plot_dicom_resolutions import (
     DEFAULT_COUNTS as RESOLUTION_DEFAULT_COUNTS,
     generate_dicom_resolution_figures,
 )
+from rsna2024_lumbar.visualizations.plot_dataset_split import (
+    DEFAULT_FRACTIONS,
+    DEFAULT_SPLITS,
+    generate_dataset_split_figures,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -173,6 +178,16 @@ def main(argv: list[str] | None = None) -> int:
         help="Directory for PNG/PDF/CSV/JSON outputs.",
     )
 
+    split = sub.add_parser(
+        "dataset-split",
+        help="Actual vs target train/val/test split fractions by condition.",
+    )
+    split.add_argument("--splits", type=Path, default=DEFAULT_SPLITS)
+    split.add_argument("--output-dir", type=Path, default=DATASET_DESCRIPTION_FIGURES_DIR)
+    split.add_argument("--train-fraction", type=float, default=DEFAULT_FRACTIONS["train"])
+    split.add_argument("--val-fraction", type=float, default=DEFAULT_FRACTIONS["val"])
+    split.add_argument("--test-fraction", type=float, default=DEFAULT_FRACTIONS["test"])
+
     args = parser.parse_args(argv)
 
     if args.command == "patient-level":
@@ -223,6 +238,15 @@ def main(argv: list[str] | None = None) -> int:
         generate_dicom_resolution_figures(
             counts_path=args.counts,
             output_dir=args.output_dir,
+        )
+        return 0
+    if args.command == "dataset-split":
+        generate_dataset_split_figures(
+            splits_path=args.splits,
+            output_dir=args.output_dir,
+            train_fraction=args.train_fraction,
+            val_fraction=args.val_fraction,
+            test_fraction=args.test_fraction,
         )
         return 0
     raise SystemExit(f"Unknown command: {args.command}")

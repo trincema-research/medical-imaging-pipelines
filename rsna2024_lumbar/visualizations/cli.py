@@ -35,6 +35,12 @@ from rsna2024_lumbar.visualizations.plot_dataset_scale import (
     DEFAULT_SCALE as DATASET_DEFAULT_SCALE,
     generate_dataset_scale_figures,
 )
+from rsna2024_lumbar.visualizations.plot_dicom_reuse import (
+    DEFAULT_DUPLICATION,
+    DEFAULT_PAIRWISE,
+    DEFAULT_SUMMARY as DICOM_DEFAULT_SUMMARY,
+    generate_dicom_reuse_figures,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -137,6 +143,20 @@ def main(argv: list[str] | None = None) -> int:
         help="Directory for PNG/PDF/CSV/JSON outputs.",
     )
 
+    reuse = sub.add_parser(
+        "dicom-reuse",
+        help="Stacked crops by within-condition DICOM reuse and cross-condition sharing.",
+    )
+    reuse.add_argument("--duplication", type=Path, default=DEFAULT_DUPLICATION)
+    reuse.add_argument("--summary", type=Path, default=DICOM_DEFAULT_SUMMARY)
+    reuse.add_argument("--pairwise", type=Path, default=DEFAULT_PAIRWISE)
+    reuse.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DATASET_DESCRIPTION_FIGURES_DIR,
+        help="Directory for PNG/PDF/CSV/JSON outputs.",
+    )
+
     args = parser.parse_args(argv)
 
     if args.command == "patient-level":
@@ -172,6 +192,14 @@ def main(argv: list[str] | None = None) -> int:
         generate_dataset_scale_figures(
             scale_path=args.scale,
             counts_path=args.counts,
+            output_dir=args.output_dir,
+        )
+        return 0
+    if args.command == "dicom-reuse":
+        generate_dicom_reuse_figures(
+            duplication_path=args.duplication,
+            summary_path=args.summary,
+            pairwise_path=args.pairwise,
             output_dir=args.output_dir,
         )
         return 0

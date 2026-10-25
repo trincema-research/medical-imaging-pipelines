@@ -112,3 +112,15 @@ Outputs under [`figures/dataset_description/`](figures/dataset_description/):
 | Figure | PNG | PDF |
 |--------|-----|-----|
 | Scale + severity mix | [dataset_scale_and_severity_combo.png](figures/dataset_description/dataset_scale_and_severity_combo.png) | [pdf](figures/dataset_description/dataset_scale_and_severity_combo.pdf) |
+
+```bash
+python -m rsna2024_lumbar.visualizations dicom-reuse
+# same:
+python -m rsna2024_lumbar.visualizations.plot_dicom_reuse
+```
+
+Reads `dicom_duplication_by_condition.csv`, `dicom_cross_condition_summary.csv`, and `dicom_cross_condition_pairwise.csv`. Same 5+ digit comma rule.
+
+| Figure | PNG | PDF |
+|--------|-----|-----|
+| Stacked crops by DICOM reuse | [stacked_crops_by_dicom_reuse.png](figures/dataset_description/stacked_crops_by_dicom_reuse.png) | [pdf](figures/dataset_description/stacked_crops_by_dicom_reuse.pdf) |

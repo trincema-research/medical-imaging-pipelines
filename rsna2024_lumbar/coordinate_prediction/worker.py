@@ -50,7 +50,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"worker {args.condition} trials {start}-{end} of {len(trials)}", flush=True)
     for trial in slice_:
         out = Path(args.output_base) / args.family / trial.condition / trial.slug
-        if resume and trial_is_complete(out, trial.condition, trial.backbone):
+        if resume and trial_is_complete(out, trial.condition, trial.backbone, epochs=trial.epochs):
             print(f"skip {trial.slug} (complete)", flush=True)
             continue
         print(f"{'resume' if resume else 'trial'} {trial.slug}", flush=True)

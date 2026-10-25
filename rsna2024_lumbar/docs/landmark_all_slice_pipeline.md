@@ -153,4 +153,4 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
   --spawn --wait
 ```
 
-`--num-gpus` 1/2/4/8 and `--batch-size` are the only knobs. Re-run the same command after a crash; finished trials skip and interrupted ones continue. Commands: [../coordinate_prediction/README.md](../coordinate_prediction/README.md).
+`--num-gpus` 1/2/4/8 and `--batch-size` are the only knobs. Re-run the same command after a crash; `nas --status` shows complete / incomplete / pending trial ids. Commands: [../coordinate_prediction/README.md](../coordinate_prediction/README.md).

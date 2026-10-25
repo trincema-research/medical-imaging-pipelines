@@ -57,14 +57,22 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
 
 `--num-gpus` is **1, 2, 4, or 8** (`0` = auto). `--batch-size` is the same for every trial (start at 8; use 4 if ConvNeXt-Base / EfficientNetV2-L OOM). Everything else is fixed: **512×512**, ImageNet init, 20 epochs, AdamW, lr `{1e-5, 3e-5, 1e-4, 3e-4, 6e-4, 1e-3}`, weight decay `{0.001, 0.003, 0.01, 0.03, 0.05}`.
 
-`--all-conditions` runs the five conditions **one after another**, each using the full GPU pool (`full` = 120 trials → 15 per GPU on 8 cards). Resume is **on by default**: re-run the same command after a crash or kill. Finished trials (`*_history.json`) are skipped; an interrupted trial continues from the last finished epoch (`*_last.pt`). `--no-resume` starts those trials over. `--skip-completed` is kept as an alias. Dry-run the shard plan (no training): omit `--spawn`.
+`--all-conditions` runs the five conditions **one after another**, each using the full GPU pool (`full` = 120 trials → 15 per GPU on 8 cards). Resume is **on by default**: re-run the same command after a crash or kill. A trial is complete only when `*_history.json` exists; those are skipped. Incomplete or pending trials run again. An epoch that dies mid-step cannot be recovered. Check the grid on disk (no GPU):
+
+```bash
+python -m rsna2024_lumbar.coordinate_prediction nas --family full --status
+python -m rsna2024_lumbar.coordinate_prediction nas --family full --all-conditions --status
+```
+
+`--no-resume` starts those trials over. `--skip-completed` is kept as an alias. Dry-run the shard plan (no training): omit `--spawn`. `--list` prints the planned slugs without looking at outputs.
 
 Outputs (gitignored): `rsna2024_lumbar/data/processed/dense_coordinates/nas/full/<condition>/<slug>/`
 
 - `<condition>_<backbone>_metrics.csv` / `.json` — train/val/test, overall **and each lumbar level**
 - `trial.json` — hyperparameters + those splits
 - `<condition>_<backbone>.pt` — best val checkpoint
-- `<condition>_<backbone>_last.pt` — last finished epoch (used to resume after a crash)
+- `<condition>_<backbone>_history.json` — present only when the trial finished
+- `<condition>_<backbone>_last.pt` — last finished epoch (trial started but may still be incomplete)
 
 Do not commit the zip, DICOMs, or NAS histories. Download details: [data/README.md](../data/README.md).
 

@@ -143,12 +143,16 @@ def test_launch_defaults_to_raw_dicom_dump():
     assert args.data_root.resolve() == DEFAULT_RAW.resolve()
     assert args.family == "full"
     assert args.batch_size is None
+    assert args.resume is True
+    assert args.no_resume is False
 
 
 def test_deploy_forwards_family_and_gpu_count():
     args = parse_deploy_args(["--family", "local", "--num-gpus", "1"])
     assert args.family == "local"
     assert args.num_gpus == 1
+    assert args.resume is True
+    assert args.no_resume is False
 
 
 def test_pack_zip_without_images(tmp_path):

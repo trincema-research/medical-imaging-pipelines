@@ -59,7 +59,7 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
   --num-gpus 8 --batch-size 8 \
-  --spawn --wait --skip-completed
+  --spawn --wait
 ```
 
 `densify` is optional (geometry fill / `--all-slices`). Depth: [coordinate_prediction/README.md](coordinate_prediction/README.md) · [docs/landmark_coordinates.md](docs/landmark_coordinates.md) · [docs/landmark_all_slice_pipeline.md](docs/landmark_all_slice_pipeline.md).

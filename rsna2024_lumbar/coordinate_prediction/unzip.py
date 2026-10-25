@@ -58,7 +58,7 @@ def main(argv: list[str] | None = None) -> int:
     print("Next:")
     print(f"  cd {repo}")
     print("  pip install -e '.[coordinate_prediction]'")
-    print("  python -m rsna2024_lumbar.coordinate_prediction deploy --num-gpus 8 --all-conditions --skip-completed")
+    print("  python -m rsna2024_lumbar.coordinate_prediction deploy --num-gpus 8 --all-conditions")
     return 0
 
 

@@ -26,6 +26,13 @@ from rsna2024_lumbar.coordinate_prediction.models import (
     empty_coordinate_metrics,
     landmark_loss,
 )
+from rsna2024_lumbar.coordinate_prediction.resume import (
+    atomic_write_text,
+    last_checkpoint_path,
+    next_epoch,
+    resume_hparams,
+    resume_hparams_match,
+)
 
 
 def _require_torch():
@@ -196,6 +203,54 @@ def _run_epoch(model, loader, *, train: bool, optimizer=None, device):
     return out
 
 
+def _atomic_torch_save(obj: dict, path: Path, torch) -> None:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    torch.save(obj, tmp)
+    tmp.replace(path)
+
+
+def load_last_checkpoint(path: Path, map_location) -> dict | None:
+    path = Path(path)
+    if not path.is_file():
+        return None
+    torch, _DataLoader, _Dataset = _require_torch()
+    try:
+        blob = torch.load(path, map_location=map_location, weights_only=False)
+    except (OSError, RuntimeError, EOFError, ValueError) as exc:
+        print(f"could not read {path} ({exc}); starting from epoch 1", flush=True)
+        return None
+    return blob if isinstance(blob, dict) else None
+
+
+def save_last_checkpoint(
+    path: Path,
+    *,
+    model,
+    optimizer,
+    epoch: int,
+    best_val: float,
+    history: list,
+    hparams: dict,
+) -> Path:
+    torch, _DataLoader, _Dataset = _require_torch()
+    dest = Path(path)
+    _atomic_torch_save(
+        {
+            "epoch": int(epoch),
+            "best_val": float(best_val),
+            "history": history,
+            "hparams": hparams,
+            "state_dict": model.state_dict(),
+            "optimizer": optimizer.state_dict(),
+        },
+        dest,
+        torch,
+    )
+    return dest
+
+
 def train_condition(
     data_root: Path,
     output_dir: Path,
@@ -212,6 +267,7 @@ def train_condition(
     max_studies: int | None = None,
     all_slices: bool = False,
     dense_csv: Path | None = None,
+    resume: bool = True,
 ) -> dict:
     torch, _DataLoader, _Dataset = _require_torch()
     print(f"listing {condition} samples under {data_root}", flush=True)
@@ -235,6 +291,30 @@ def train_condition(
     history = []
     best_val = float("inf")
     ckpt = output_dir / f"{condition}_{backbone}.pt"
+    last_path = last_checkpoint_path(output_dir, condition, backbone)
+    hparams = resume_hparams(
+        condition=condition,
+        backbone=backbone,
+        image_size=image_size,
+        batch_size=batch_size,
+        lr=lr,
+        weight_decay=weight_decay,
+        seed=seed,
+        pretrained=pretrained,
+        all_slices=all_slices,
+    )
+    start_epoch = 1
+    if resume:
+        last_blob = load_last_checkpoint(last_path, device)
+        if last_blob and resume_hparams_match(last_blob.get("hparams"), hparams):
+            model.load_state_dict(last_blob["state_dict"])
+            optimizer.load_state_dict(last_blob["optimizer"])
+            history = list(last_blob.get("history") or [])
+            best_val = float(last_blob.get("best_val") or float("inf"))
+            start_epoch = next_epoch(int(last_blob.get("epoch") or 0))
+            print(f"resume {condition} {backbone} from epoch {start_epoch}/{epochs}", flush=True)
+        elif last_blob:
+            print(f"resume checkpoint hparams mismatch; starting {condition} from epoch 1", flush=True)
     train_loader = _make_loader(parts["train"], image_size, batch_size, True)
     val_loader = _make_loader(parts["val"] or parts["train"], image_size, batch_size, False)
     test_loader = _make_loader(parts["holdout"], image_size, batch_size, False) if parts["holdout"] else None
@@ -249,7 +329,9 @@ def train_condition(
         f"lr={lr} wd={weight_decay}  epochs={epochs}",
         flush=True,
     )
-    for epoch in range(1, int(epochs) + 1):
+    if start_epoch > int(epochs):
+        print(f"already finished {epochs} epochs; writing final metrics", flush=True)
+    for epoch in range(start_epoch, int(epochs) + 1):
         train_m = _run_epoch(model, train_loader, train=True, optimizer=optimizer, device=device)
         val_m = _run_epoch(model, val_loader, train=False, device=device)
         test_m = _run_epoch(model, test_loader, train=False, device=device) if test_loader else empty_coordinate_metrics()
@@ -278,8 +360,18 @@ def train_condition(
                 },
                 ckpt,
             )
-    blob = torch.load(ckpt, map_location=device, weights_only=False)
-    model.load_state_dict(blob["state_dict"])
+        save_last_checkpoint(
+            last_path,
+            model=model,
+            optimizer=optimizer,
+            epoch=epoch,
+            best_val=best_val,
+            history=history,
+            hparams=hparams,
+        )
+    if ckpt.is_file():
+        blob = torch.load(ckpt, map_location=device, weights_only=False)
+        model.load_state_dict(blob["state_dict"])
     model.eval()
 
     def _eval(samples: list[LandmarkSample]) -> dict:
@@ -335,5 +427,8 @@ def train_condition(
     )
     meta["metrics_json"] = written["json"].as_posix()
     meta["metrics_csv"] = written["csv"].as_posix()
-    (output_dir / f"{condition}_{backbone}_history.json").write_text(json.dumps(_jsonable(meta), indent=2), encoding="utf-8")
+    atomic_write_text(
+        output_dir / f"{condition}_{backbone}_history.json",
+        json.dumps(_jsonable(meta), indent=2),
+    )
     return meta

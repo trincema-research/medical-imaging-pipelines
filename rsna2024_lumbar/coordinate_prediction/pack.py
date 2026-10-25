@@ -100,7 +100,7 @@ def cloud_run_text(*, include_images: bool) -> str:
             "pip install -e '.[coordinate_prediction]'",
             "",
             "# 8-GPU NAS (120 trials × 5 conditions, sequential-by-condition):",
-            "python -m rsna2024_lumbar.coordinate_prediction deploy --num-gpus 8 --all-conditions --skip-completed",
+            "python -m rsna2024_lumbar.coordinate_prediction deploy --num-gpus 8 --all-conditions",
             "",
             "# Single condition / print plan only:",
             "python -m rsna2024_lumbar.coordinate_prediction nas --num-gpus 8 --condition spinal_canal_stenosis",

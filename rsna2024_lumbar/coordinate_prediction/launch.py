@@ -10,6 +10,11 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from rsna2024_lumbar.coordinate_prediction.constants import BATCH_SIZE_DEFAULT, CONDITIONS, DENSE_COORDINATES_DIRNAME
+from rsna2024_lumbar.coordinate_prediction.resume import (
+    collect_trial_statuses,
+    format_status_report,
+    wants_resume,
+)
 from rsna2024_lumbar.coordinate_prediction.search import FAMILIES, FAMILY_FULL, expand_trials
 from rsna2024_lumbar.nas.gpus import ALLOWED_NAS_GPU_COUNTS, GpuShard, resolve_num_gpus, shard_trial_range
 
@@ -49,8 +54,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help=f"Fixed batch size for every trial (default {BATCH_SIZE_DEFAULT}). Not a search axis.",
     )
     p.add_argument("--max-studies", type=int, default=None)
-    p.add_argument("--skip-completed", action="store_true")
+    p.add_argument("--resume", action="store_true", default=True, help="Skip finished trials (default).")
+    p.add_argument("--no-resume", action="store_true", help="Retrain from epoch 1 even if outputs exist.")
+    p.add_argument(
+        "--skip-completed",
+        action="store_true",
+        help="Deprecated alias; resume is on by default.",
+    )
     p.add_argument("--list", action="store_true", help="Print the grid and exit.")
+    p.add_argument(
+        "--status",
+        action="store_true",
+        help="Print complete / incomplete / pending trials under --output-base and exit.",
+    )
     p.add_argument("--spawn", action="store_true")
     p.add_argument("--wait", action="store_true")
     return p.parse_args(argv)
@@ -115,6 +131,10 @@ def spawn_shard(plan: LandmarkLaunchPlan, shard: GpuShard, args: argparse.Namesp
         cmd.extend(["--batch-size", str(args.batch_size)])
     if args.max_studies is not None:
         cmd.extend(["--max-studies", str(args.max_studies)])
+    if wants_resume(args):
+        cmd.append("--resume")
+    else:
+        cmd.append("--no-resume")
     if args.skip_completed:
         cmd.append("--skip-completed")
     print(f"GPU {shard.gpu_id}: trials {shard.start_trial}-{shard.end_trial}", flush=True)
@@ -149,6 +169,15 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  product    {len(backs)}×{len(sizes)}×{len(lrs)}×{len(wds)} = {len(trials)}")
         for trial in trials:
             print(f"  {trial.slug}")
+        return 0
+    if args.status:
+        rows = []
+        for condition in conditions:
+            trials = expand_trials(
+                condition, family=args.family, epochs=args.epochs, batch_size=args.batch_size
+            )
+            rows.extend(collect_trial_statuses(trials, output_base=args.output_base, family=args.family))
+        print(format_status_report(rows, family=args.family, output_base=args.output_base))
         return 0
     plans = [
         build_plan(c, args.num_gpus, family=args.family, visible=args.visible_gpus) for c in conditions

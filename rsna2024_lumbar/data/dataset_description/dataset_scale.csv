@@ -1,0 +1,7 @@
+metric,count
+raw_dicom_files,147218
+unique_dicom_files_total,23597
+usable_dicom_crops_total,47190
+label_cells_total,49375
+label_cells_missing,572
+studies_in_train_csv,1975

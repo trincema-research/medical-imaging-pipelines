@@ -1,0 +1,6 @@
+condition,total,Normal/Mild,Moderate,Severe,missing
+spinal_canal_stenosis,9495,8335,705,455,0
+left_neural_foraminal_narrowing,9860,7671,1792,397,0
+right_neural_foraminal_narrowing,9825,7681,1766,378,0
+left_subarticular_stenosis,8990,6515,1660,815,0
+right_subarticular_stenosis,9020,6507,1690,823,0

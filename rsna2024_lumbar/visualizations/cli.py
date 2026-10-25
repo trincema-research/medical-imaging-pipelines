@@ -8,6 +8,7 @@ from pathlib import Path
 from rsna2024_lumbar.best_config_runs.paths import RESULTS_DIR
 from rsna2024_lumbar.visualizations import (
     CONDITION_SPECIFIC_FIGURES_DIR,
+    DATASET_DESCRIPTION_FIGURES_DIR,
     ORDINAL_FIGURES_DIR,
     PATIENT_LEVEL_FIGURES_DIR,
     SPINAL_LEVEL_FIGURES_DIR,
@@ -28,6 +29,11 @@ from rsna2024_lumbar.visualizations.plot_ordinal_severity_results import (
 from rsna2024_lumbar.visualizations.plot_condition_specific_results import (
     DEFAULT_MEANS as CONDITION_DEFAULT_MEANS,
     generate_condition_specific_figures,
+)
+from rsna2024_lumbar.visualizations.plot_dataset_scale import (
+    DEFAULT_COUNTS as DATASET_DEFAULT_COUNTS,
+    DEFAULT_SCALE as DATASET_DEFAULT_SCALE,
+    generate_dataset_scale_figures,
 )
 
 
@@ -118,6 +124,19 @@ def main(argv: list[str] | None = None) -> int:
     )
     condition.add_argument("--split", default="validation")
 
+    dataset = sub.add_parser(
+        "dataset-scale",
+        help="Dataset scale bars and condition × severity mix (usable crops).",
+    )
+    dataset.add_argument("--scale", type=Path, default=DATASET_DEFAULT_SCALE)
+    dataset.add_argument("--counts", type=Path, default=DATASET_DEFAULT_COUNTS)
+    dataset.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DATASET_DESCRIPTION_FIGURES_DIR,
+        help="Directory for PNG/PDF/CSV/JSON outputs.",
+    )
+
     args = parser.parse_args(argv)
 
     if args.command == "patient-level":
@@ -147,6 +166,13 @@ def main(argv: list[str] | None = None) -> int:
             means_path=args.means,
             output_dir=args.output_dir,
             split=args.split,
+        )
+        return 0
+    if args.command == "dataset-scale":
+        generate_dataset_scale_figures(
+            scale_path=args.scale,
+            counts_path=args.counts,
+            output_dir=args.output_dir,
         )
         return 0
     raise SystemExit(f"Unknown command: {args.command}")

@@ -96,3 +96,19 @@ Outputs under [`figures/condition_specific/`](figures/condition_specific/):
 | Macro-F1 heatmap | [condition_specific_macro_f1_heatmap.png](figures/condition_specific/condition_specific_macro_f1_heatmap.png) | [pdf](figures/condition_specific/condition_specific_macro_f1_heatmap.pdf) |
 | Condition-level audit table | [condition_specific_plot_source.csv](figures/condition_specific/condition_specific_plot_source.csv) | |
 | Bottleneck / uniformity table | [condition_specific_bottleneck_uniformity_source.csv](figures/condition_specific/condition_specific_bottleneck_uniformity_source.csv) | |
+
+## Dataset scale
+
+```bash
+python -m rsna2024_lumbar.visualizations dataset-scale
+# same:
+python -m rsna2024_lumbar.visualizations.plot_dataset_scale
+```
+
+Reads `data/dataset_description/dataset_scale.csv` and `counts_condition_x_severity.csv`. Count labels use thousands separators only for 5+ digit integers (four-digit values stay ungrouped).
+
+Outputs under [`figures/dataset_description/`](figures/dataset_description/):
+
+| Figure | PNG | PDF |
+|--------|-----|-----|
+| Scale + severity mix | [dataset_scale_and_severity_combo.png](figures/dataset_description/dataset_scale_and_severity_combo.png) | [pdf](figures/dataset_description/dataset_scale_and_severity_combo.pdf) |

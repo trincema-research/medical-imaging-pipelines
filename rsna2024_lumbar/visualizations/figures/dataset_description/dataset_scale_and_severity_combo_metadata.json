@@ -1,0 +1,17 @@
+{
+  "generated_from_real_results": true,
+  "script_name": "plot_dataset_scale.py",
+  "timestamp": "2026-10-25T17:27:53.231738+00:00",
+  "git_commit": "261e638b872b483e58fa462e57bf35091ecc9d32",
+  "count_grouping": "thousands separators for 5+ digit integers only",
+  "source_scale": "F:\\workspace\\medical-imaging-pipelines-ordinal-figures\\rsna2024_lumbar\\data\\dataset_description\\dataset_scale.csv",
+  "source_counts": "F:\\workspace\\medical-imaging-pipelines-ordinal-figures\\rsna2024_lumbar\\data\\dataset_description\\counts_condition_x_severity.csv",
+  "scale": {
+    "raw_dicom_files": 147218,
+    "unique_dicom_files_total": 23597,
+    "usable_dicom_crops_total": 47190,
+    "label_cells_total": 49375,
+    "label_cells_missing": 572,
+    "studies_in_train_csv": 1975
+  }
+}

@@ -9,10 +9,24 @@ from rsna2024_lumbar.visualizations.plot_dicom_reuse import (
     DEFAULT_DUPLICATION,
     DEFAULT_PAIRWISE,
     DEFAULT_SUMMARY,
+    MAX_SHOWN_MULT,
+    _bin_multiplicity,
     generate_dicom_reuse_figures,
     load_duplication,
     load_overlap,
 )
+
+
+def test_bin_multiplicity_keeps_exact_max_when_no_higher():
+    labels, values = _bin_multiplicity({1: 10, 5: 3})
+    assert labels == ["1", "2", "3", "4", "5"]
+    assert values == [10, 0, 0, 0, 3]
+
+
+def test_bin_multiplicity_collapses_above_max():
+    labels, values = _bin_multiplicity({1: 10, MAX_SHOWN_MULT: 3, MAX_SHOWN_MULT + 2: 2})
+    assert labels[-1] == f"{MAX_SHOWN_MULT}+"
+    assert values[-1] == 5
 
 
 def test_committed_duplication_loads():
@@ -22,6 +36,23 @@ def test_committed_duplication_loads():
     assert results["left_subarticular_stenosis"]["n_coord_rows"] == 9608
     assert overlap["global_unique_dicoms"] == 24546
     assert overlap["pairwise_overlap"]["LSS&RSS"] == 5478
+    assert overlap["check_sum_minus_extras_equals_global"] is True
+
+
+def test_load_duplication_rejects_missing_columns(tmp_path: Path):
+    path = tmp_path / "duplication.csv"
+    pd.DataFrame({"condition": ["spinal_canal_stenosis"], "multiplicity": [1]}).to_csv(path, index=False)
+    with pytest.raises(ValueError, match="missing columns"):
+        load_duplication(path)
+
+
+def test_load_overlap_rejects_bad_summary(tmp_path: Path):
+    summary = tmp_path / "summary.csv"
+    pairwise = tmp_path / "pairwise.csv"
+    pd.DataFrame({"metric": ["global_unique_dicoms"]}).to_csv(summary, index=False)
+    pd.DataFrame({"condition": ["spinal_canal_stenosis"]}).to_csv(pairwise, index=False)
+    with pytest.raises(ValueError, match="metric,value"):
+        load_overlap(summary, pairwise)
 
 
 def test_generate_writes_reuse_figure(tmp_path: Path):
@@ -43,6 +74,8 @@ def test_generate_writes_reuse_figure(tmp_path: Path):
     )
     assert paths["reuse_png"].is_file()
     assert paths["reuse_pdf"].is_file()
+    assert paths["source_duplication"].is_file()
+    assert paths["meta"].is_file()
 
 
 @pytest.mark.skipif(not DEFAULT_DUPLICATION.is_file(), reason="dicom reuse inventory not committed")

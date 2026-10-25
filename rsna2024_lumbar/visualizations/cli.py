@@ -41,6 +41,10 @@ from rsna2024_lumbar.visualizations.plot_dicom_reuse import (
     DEFAULT_SUMMARY as DICOM_DEFAULT_SUMMARY,
     generate_dicom_reuse_figures,
 )
+from rsna2024_lumbar.visualizations.plot_dicom_resolutions import (
+    DEFAULT_COUNTS as RESOLUTION_DEFAULT_COUNTS,
+    generate_dicom_resolution_figures,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -157,6 +161,18 @@ def main(argv: list[str] | None = None) -> int:
         help="Directory for PNG/PDF/CSV/JSON outputs.",
     )
 
+    resolutions = sub.add_parser(
+        "dicom-resolutions",
+        help="DICOM resolution histograms by condition (series-matched slices).",
+    )
+    resolutions.add_argument("--counts", type=Path, default=RESOLUTION_DEFAULT_COUNTS)
+    resolutions.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DATASET_DESCRIPTION_FIGURES_DIR,
+        help="Directory for PNG/PDF/CSV/JSON outputs.",
+    )
+
     args = parser.parse_args(argv)
 
     if args.command == "patient-level":
@@ -200,6 +216,12 @@ def main(argv: list[str] | None = None) -> int:
             duplication_path=args.duplication,
             summary_path=args.summary,
             pairwise_path=args.pairwise,
+            output_dir=args.output_dir,
+        )
+        return 0
+    if args.command == "dicom-resolutions":
+        generate_dicom_resolution_figures(
+            counts_path=args.counts,
             output_dir=args.output_dir,
         )
         return 0

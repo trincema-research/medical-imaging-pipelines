@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from rsna2024_lumbar.coordinate_prediction.constants import BATCH_SIZE_DEFAULT, CONDITIONS
+from rsna2024_lumbar.coordinate_prediction.resume import wants_resume
 from rsna2024_lumbar.coordinate_prediction.search import FAMILIES, FAMILY_FULL
 from rsna2024_lumbar.nas.paths import REPO_ROOT, default_data_root
 from rsna2024_lumbar.preprocessing.constants import LABEL_CSVS
@@ -28,7 +29,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help=f"Fixed batch size for every trial (default {BATCH_SIZE_DEFAULT}).",
     )
     p.add_argument("--max-studies", type=int, default=None)
-    p.add_argument("--skip-completed", action="store_true")
+    p.add_argument("--resume", action="store_true", default=True)
+    p.add_argument("--no-resume", action="store_true")
+    p.add_argument(
+        "--skip-completed",
+        action="store_true",
+        help="Deprecated alias; resume is on by default.",
+    )
     p.add_argument("--skip-install", action="store_true")
     p.add_argument("--dry-run", action="store_true")
     return p.parse_args(argv)
@@ -87,6 +94,10 @@ def main(argv: list[str] | None = None) -> int:
         cmd.extend(["--batch-size", str(args.batch_size)])
     if args.max_studies is not None:
         cmd.extend(["--max-studies", str(args.max_studies)])
+    if wants_resume(args):
+        cmd.append("--resume")
+    else:
+        cmd.append("--no-resume")
     if args.skip_completed:
         cmd.append("--skip-completed")
     print(f"+ {' '.join(cmd)}")

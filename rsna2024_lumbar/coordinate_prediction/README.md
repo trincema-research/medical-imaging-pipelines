@@ -32,7 +32,7 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
   --data-root rsna2024_lumbar/data/raw \
   --num-gpus 8 \
   --batch-size 8 \
-  --spawn --wait --skip-completed
+  --spawn --wait
 ```
 
 `--data-root` must look like the Kaggle extract:
@@ -52,18 +52,19 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full --all-conditions \
   --data-root /path/to/rsna-2024-lumbar-spine-degenerative-classification \
   --num-gpus 8 --batch-size 8 \
-  --spawn --wait --skip-completed
+  --spawn --wait
 ```
 
 `--num-gpus` is **1, 2, 4, or 8** (`0` = auto). `--batch-size` is the same for every trial (start at 8; use 4 if ConvNeXt-Base / EfficientNetV2-L OOM). Everything else is fixed: **512×512**, ImageNet init, 20 epochs, AdamW, lr `{1e-5, 3e-5, 1e-4, 3e-4, 6e-4, 1e-3}`, weight decay `{0.001, 0.003, 0.01, 0.03, 0.05}`.
 
-`--all-conditions` runs the five conditions **one after another**, each using the full GPU pool (`full` = 120 trials → 15 per GPU on 8 cards). `--skip-completed` resumes. Dry-run the shard plan (no training): omit `--spawn`.
+`--all-conditions` runs the five conditions **one after another**, each using the full GPU pool (`full` = 120 trials → 15 per GPU on 8 cards). Resume is **on by default**: re-run the same command after a crash or kill. Finished trials (`*_history.json`) are skipped; an interrupted trial continues from the last finished epoch (`*_last.pt`). `--no-resume` starts those trials over. `--skip-completed` is kept as an alias. Dry-run the shard plan (no training): omit `--spawn`.
 
 Outputs (gitignored): `rsna2024_lumbar/data/processed/dense_coordinates/nas/full/<condition>/<slug>/`
 
 - `<condition>_<backbone>_metrics.csv` / `.json` — train/val/test, overall **and each lumbar level**
 - `trial.json` — hyperparameters + those splits
-- checkpoint `.pt`
+- `<condition>_<backbone>.pt` — best val checkpoint
+- `<condition>_<backbone>_last.pt` — last finished epoch (used to resume after a crash)
 
 Do not commit the zip, DICOMs, or NAS histories. Download details: [data/README.md](../data/README.md).
 
@@ -119,7 +120,7 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
   --num-gpus 8 --batch-size 8 \
-  --spawn --wait --skip-completed
+  --spawn --wait
 ```
 
 `deploy` is install + the same NAS launch:
@@ -128,8 +129,7 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
 python -m rsna2024_lumbar.coordinate_prediction deploy \
   --family full --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
-  --num-gpus 8 --batch-size 8 \
-  --skip-completed
+  --num-gpus 8 --batch-size 8
 ```
 
 Families: `full` (120), `convnext` / `efficientnet` (60), `local` (24). Depth: [docs/landmark_coordinates.md](../docs/landmark_coordinates.md) · [docs/landmark_all_slice_pipeline.md](../docs/landmark_all_slice_pipeline.md).

@@ -16,6 +16,7 @@ from rsna2024_lumbar.coordinate_prediction.constants import (
     SPLIT_SEED_DEFAULT,
 )
 from rsna2024_lumbar.coordinate_prediction.densify import DEFAULT_OUTPUT, DEFAULT_RAW, densify_coordinates
+from rsna2024_lumbar.coordinate_prediction.resume import wants_resume
 
 HERE = Path(__file__).resolve().parents[1]
 DEFAULT_RUNS = HERE / "data" / "processed" / DENSE_COORDINATES_DIRNAME / "runs"
@@ -59,6 +60,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Dense coordinate table from `coordinate_prediction densify` (required with --all-slices).",
     )
+    train.add_argument("--resume", action="store_true", default=True, help="Continue from last.pt after a crash (default).")
+    train.add_argument("--no-resume", action="store_true", help="Ignore last.pt and start this run from epoch 1.")
 
     infer = sub.add_parser("infer", help="Predict (x, y) and project onto the rest of each series.")
     infer.add_argument("--data-root", type=Path, default=DEFAULT_RAW)
@@ -118,6 +121,7 @@ def main(argv: list[str] | None = None) -> int:
             max_studies=args.max_studies,
             all_slices=args.all_slices,
             dense_csv=args.dense_csv,
+            resume=wants_resume(args),
         )
         print(f"Wrote {meta['checkpoint']}  train={meta['n_train']} val={meta['n_val']}")
         return 0

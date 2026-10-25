@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from rsna2024_lumbar.coordinate_prediction.constants import BATCH_SIZE_DEFAULT, CONDITIONS, DENSE_COORDINATES_DIRNAME
+from rsna2024_lumbar.coordinate_prediction.resume import trial_is_complete, wants_resume
 from rsna2024_lumbar.coordinate_prediction.search import FAMILIES, FAMILY_FULL, expand_trials
 from rsna2024_lumbar.coordinate_prediction.train import _jsonable, train_condition
 
@@ -26,12 +27,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--epochs", type=int, default=None)
     p.add_argument("--batch-size", type=int, default=None, help=f"Fixed for every trial (default {BATCH_SIZE_DEFAULT}).")
     p.add_argument("--max-studies", type=int, default=None)
-    p.add_argument("--skip-completed", action="store_true")
+    p.add_argument("--resume", action="store_true", default=True)
+    p.add_argument("--no-resume", action="store_true", help="Ignore finished trials and last-epoch checkpoints.")
+    p.add_argument(
+        "--skip-completed",
+        action="store_true",
+        help="Deprecated alias; resume is on by default.",
+    )
     return p.parse_args(argv)
-
-
-def history_path(output_dir: Path, condition: str, backbone: str) -> Path:
-    return output_dir / f"{condition}_{backbone}_history.json"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -43,14 +46,14 @@ def main(argv: list[str] | None = None) -> int:
     if start < 1 or end < start or end > len(trials):
         raise SystemExit(f"Trial range {start}-{end} is outside 1-{len(trials)}.")
     slice_ = trials[start - 1 : end]
+    resume = wants_resume(args)
     print(f"worker {args.condition} trials {start}-{end} of {len(trials)}", flush=True)
     for trial in slice_:
         out = Path(args.output_base) / args.family / trial.condition / trial.slug
-        hist = history_path(out, trial.condition, trial.backbone)
-        if args.skip_completed and hist.is_file():
-            print(f"skip {trial.slug}", flush=True)
+        if resume and trial_is_complete(out, trial.condition, trial.backbone):
+            print(f"skip {trial.slug} (complete)", flush=True)
             continue
-        print(f"trial {trial.slug}", flush=True)
+        print(f"{'resume' if resume else 'trial'} {trial.slug}", flush=True)
         meta = train_condition(
             args.data_root,
             out,
@@ -64,7 +67,9 @@ def main(argv: list[str] | None = None) -> int:
             seed=trial.seed,
             pretrained=trial.pretrained,
             max_studies=args.max_studies,
+            resume=resume,
         )
+        out.mkdir(parents=True, exist_ok=True)
         metrics_path = out / f"{trial.condition}_{trial.backbone}_metrics.json"
         metrics = {}
         if metrics_path.is_file():

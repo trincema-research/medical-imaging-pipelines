@@ -42,7 +42,7 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
   --family full --all-conditions \
   --data-root rsna2024_lumbar/data/raw \
   --num-gpus 8 --batch-size 8 \
-  --spawn --wait --skip-completed
+  --spawn --wait
 ```
 
 Full download → NAS runbook: [../coordinate_prediction/README.md](../coordinate_prediction/README.md).

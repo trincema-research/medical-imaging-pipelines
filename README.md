@@ -1,4 +1,4 @@
-# medical-imaging-pipelines
+# 🩻🧠medical-imaging-ai-pipelines
 
 Shared training / preprocessing code for RSNA challenges. Each year is isolated; reusable pieces live in `common/`.
 

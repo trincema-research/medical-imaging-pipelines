@@ -9,11 +9,13 @@ from rsna2024_lumbar.visualizations.plot_dicom_reuse import (
     DEFAULT_DUPLICATION,
     DEFAULT_PAIRWISE,
     DEFAULT_SUMMARY,
+    MATH_COL_WIDTHS,
     MAX_SHOWN_MULT,
     _bin_multiplicity,
     generate_dicom_reuse_figures,
     load_duplication,
     load_overlap,
+    reconciliation_table_rows,
 )
 
 
@@ -37,6 +39,17 @@ def test_committed_duplication_loads():
     assert overlap["global_unique_dicoms"] == 24546
     assert overlap["pairwise_overlap"]["LSS&RSS"] == 5478
     assert overlap["check_sum_minus_extras_equals_global"] is True
+
+
+def test_reconciliation_meaning_wraps_and_value_column_is_narrow():
+    overlap = load_overlap(DEFAULT_SUMMARY, DEFAULT_PAIRWISE)
+    rows = reconciliation_table_rows(overlap)
+    assert "\n" in rows[0][2]
+    assert "double-counts shared files" in rows[0][2]
+    assert "shared fil" not in rows[0][2].split("\n")[0]
+    assert MATH_COL_WIDTHS[1] <= 0.15
+    assert MATH_COL_WIDTHS[1] < MATH_COL_WIDTHS[0]
+    assert MATH_COL_WIDTHS[1] < MATH_COL_WIDTHS[2]
 
 
 def test_load_duplication_rejects_missing_columns(tmp_path: Path):

@@ -10,6 +10,7 @@ from rsna2024_lumbar.nas.gpus import (
     ALLOWED_NAS_GPU_COUNTS,
     covered_trial_ids,
     resolve_num_gpus,
+    shard_inclusive_range,
     shard_trial_range,
 )
 from rsna2024_lumbar.nas.launch import build_plan, format_plan, main as launch_main
@@ -76,6 +77,14 @@ def test_convnext_144_on_8_gpus_is_18_each():
     assert all(shard.n_trials == 18 for shard in shards)
     assert shards[0].start_trial == 1
     assert shards[-1].end_trial == 144
+
+
+def test_inclusive_range_reshards_remaining_trials():
+    shards = shard_inclusive_range(47, 120, 8)
+    assert covered_trial_ids(shards) == list(range(47, 121))
+    assert shards[0].start_trial == 47
+    assert shards[-1].end_trial == 120
+    assert shards[0].gpu_id == 0
 
 
 def test_allowed_gpu_counts():

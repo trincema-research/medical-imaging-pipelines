@@ -99,6 +99,41 @@ def test_eight_gpus_split_120_trials():
     text = format_plan(plan)
     assert "GPUs:       8" in text
     assert "GPU 0: trials 1-15" in text
+    assert "Trials:     120" in text
+
+
+def test_start_trial_reshards_remaining_full_grid():
+    plan = build_plan("spinal_canal_stenosis", 8, visible=8, start_trial=47)
+    assert plan.n_trials == 120
+    assert plan.first_trial == 47
+    assert plan.last_trial == 120
+    assert covered_trial_ids(plan.shards) == list(range(47, 121))
+    assert plan.shards[0].start_trial == 47
+    assert plan.shards[-1].end_trial == 120
+    text = format_plan(plan)
+    assert "Trials:     47-120 of 120" in text
+    assert "GPU 0: trials 47-" in text
+
+
+def test_start_and_end_trial_window():
+    plan = build_plan(
+        "spinal_canal_stenosis", 1, visible=8, start_trial=10, end_trial=25
+    )
+    assert covered_trial_ids(plan.shards) == list(range(10, 26))
+    assert plan.shards[0].start_trial == 10
+    assert plan.shards[0].end_trial == 25
+
+
+def test_start_trial_rejects_past_grid():
+    with pytest.raises(SystemExit, match="past the grid"):
+        build_plan("spinal_canal_stenosis", 8, visible=8, start_trial=121)
+
+
+def test_launch_cli_start_trial(capsys):
+    launch_main(["--num-gpus", "8", "--visible-gpus", "8", "--start-trial", "106"])
+    out = capsys.readouterr().out
+    assert "Trials:     106-120 of 120" in out
+    assert "GPU 0: trials 106-" in out
 
 
 def test_launch_cli_lists_grid(capsys):
@@ -143,6 +178,8 @@ def test_launch_defaults_to_raw_dicom_dump():
     assert args.data_root.resolve() == DEFAULT_RAW.resolve()
     assert args.family == "full"
     assert args.batch_size is None
+    assert args.start_trial == 1
+    assert args.end_trial is None
     assert args.resume is True
     assert args.no_resume is False
 
@@ -153,6 +190,12 @@ def test_deploy_forwards_family_and_gpu_count():
     assert args.num_gpus == 1
     assert args.resume is True
     assert args.no_resume is False
+
+
+def test_deploy_forwards_start_trial():
+    args = parse_deploy_args(["--start-trial", "47", "--end-trial", "120"])
+    assert args.start_trial == 47
+    assert args.end_trial == 120
 
 
 def test_pack_zip_without_images(tmp_path):

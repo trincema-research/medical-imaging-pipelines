@@ -153,4 +153,4 @@ python -m rsna2024_lumbar.coordinate_prediction nas \
   --spawn --wait
 ```
 
-`--num-gpus` 1/2/4/8 and `--batch-size` are the only knobs. Re-run the same command after a crash; `nas --status` shows complete / incomplete / pending trial ids. Commands: [../coordinate_prediction/README.md](../coordinate_prediction/README.md).
+`--num-gpus` 1/2/4/8 and `--batch-size` are the only knobs. `--start-trial N` starts the full grid at that 1-based trial and reshards the rest. Re-run the same command after a crash; `nas --status` shows complete / incomplete / pending trial ids. Commands: [../coordinate_prediction/README.md](../coordinate_prediction/README.md).

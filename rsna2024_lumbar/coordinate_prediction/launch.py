@@ -16,7 +16,12 @@ from rsna2024_lumbar.coordinate_prediction.resume import (
     wants_resume,
 )
 from rsna2024_lumbar.coordinate_prediction.search import FAMILIES, FAMILY_FULL, expand_trials
-from rsna2024_lumbar.nas.gpus import ALLOWED_NAS_GPU_COUNTS, GpuShard, resolve_num_gpus, shard_trial_range
+from rsna2024_lumbar.nas.gpus import (
+    ALLOWED_NAS_GPU_COUNTS,
+    GpuShard,
+    resolve_num_gpus,
+    shard_inclusive_range,
+)
 
 HERE = Path(__file__).resolve().parents[1]
 DEFAULT_RAW = HERE / "data" / "raw"
@@ -28,6 +33,8 @@ class LandmarkLaunchPlan:
     family: str
     condition: str
     n_trials: int
+    first_trial: int
+    last_trial: int
     num_gpus: int
     shards: list[GpuShard]
 
@@ -54,6 +61,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help=f"Fixed batch size for every trial (default {BATCH_SIZE_DEFAULT}). Not a search axis.",
     )
     p.add_argument("--max-studies", type=int, default=None)
+    p.add_argument(
+        "--start-trial",
+        type=int,
+        default=1,
+        help="1-based first trial to run (inclusive). Remaining trials are resharded across GPUs.",
+    )
+    p.add_argument(
+        "--end-trial",
+        type=int,
+        default=None,
+        help="1-based last trial to run (inclusive). Default: last cell of the family grid.",
+    )
     p.add_argument("--resume", action="store_true", default=True, help="Skip finished trials (default).")
     p.add_argument("--no-resume", action="store_true", help="Retrain from epoch 1 even if outputs exist.")
     p.add_argument(
@@ -72,30 +91,55 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return p.parse_args(argv)
 
 
+def resolve_trial_window(n_trials: int, start_trial: int, end_trial: int | None) -> tuple[int, int]:
+    first = int(start_trial)
+    last = n_trials if end_trial is None else int(end_trial)
+    if first < 1:
+        raise SystemExit(f"--start-trial must be >= 1, got {first}.")
+    if last < 1:
+        raise SystemExit(f"--end-trial must be >= 1, got {last}.")
+    if first > n_trials:
+        raise SystemExit(f"--start-trial {first} is past the grid ({n_trials} trials).")
+    if last > n_trials:
+        raise SystemExit(f"--end-trial {last} is past the grid ({n_trials} trials).")
+    if last < first:
+        raise SystemExit(f"--start-trial {first} is after --end-trial {last}.")
+    return first, last
+
+
 def build_plan(
     condition: str,
     num_gpus: int,
     *,
     family: str = FAMILY_FULL,
     visible: int | None = None,
+    start_trial: int = 1,
+    end_trial: int | None = None,
 ) -> LandmarkLaunchPlan:
     trials = expand_trials(condition, family=family)
+    first, last = resolve_trial_window(len(trials), start_trial, end_trial)
     resolved = resolve_num_gpus(num_gpus, visible=visible)
-    shards = shard_trial_range(len(trials), resolved)
+    shards = shard_inclusive_range(first, last, resolved)
     return LandmarkLaunchPlan(
         family=family,
         condition=condition,
         n_trials=len(trials),
+        first_trial=first,
+        last_trial=last,
         num_gpus=resolved,
         shards=shards,
     )
 
 
 def format_plan(plan: LandmarkLaunchPlan) -> str:
+    if plan.first_trial == 1 and plan.last_trial == plan.n_trials:
+        trial_line = f"Trials:     {plan.n_trials}"
+    else:
+        trial_line = f"Trials:     {plan.first_trial}-{plan.last_trial} of {plan.n_trials}"
     lines = [
         f"Family:     {plan.family}",
         f"Condition:  {plan.condition}",
-        f"Trials:     {plan.n_trials}",
+        trial_line,
         f"GPUs:       {plan.num_gpus}  (allowed {ALLOWED_NAS_GPU_COUNTS})",
     ]
     for shard in plan.shards:
@@ -176,11 +220,24 @@ def main(argv: list[str] | None = None) -> int:
             trials = expand_trials(
                 condition, family=args.family, epochs=args.epochs, batch_size=args.batch_size
             )
-            rows.extend(collect_trial_statuses(trials, output_base=args.output_base, family=args.family))
+            first, last = resolve_trial_window(len(trials), args.start_trial, args.end_trial)
+            rows.extend(
+                row
+                for row in collect_trial_statuses(trials, output_base=args.output_base, family=args.family)
+                if first <= row.trial_id <= last
+            )
         print(format_status_report(rows, family=args.family, output_base=args.output_base))
         return 0
     plans = [
-        build_plan(c, args.num_gpus, family=args.family, visible=args.visible_gpus) for c in conditions
+        build_plan(
+            c,
+            args.num_gpus,
+            family=args.family,
+            visible=args.visible_gpus,
+            start_trial=args.start_trial,
+            end_trial=args.end_trial,
+        )
+        for c in conditions
     ]
     for plan in plans:
         print(format_plan(plan))
@@ -189,7 +246,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if args.all_conditions and args.wait:
         for plan in plans:
-            print(f"=== {plan.condition} ({plan.n_trials} trials, {plan.num_gpus} GPU(s)) ===")
+            print(
+                f"=== {plan.condition} (trials {plan.first_trial}-{plan.last_trial} "
+                f"of {plan.n_trials}, {plan.num_gpus} GPU(s)) ==="
+            )
             _wait([spawn_shard(plan, shard, args) for shard in plan.shards])
         print("All GPU shards finished.")
         return 0

@@ -29,6 +29,18 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help=f"Fixed batch size for every trial (default {BATCH_SIZE_DEFAULT}).",
     )
     p.add_argument("--max-studies", type=int, default=None)
+    p.add_argument(
+        "--start-trial",
+        type=int,
+        default=1,
+        help="1-based first trial to run (inclusive). Remaining trials are resharded across GPUs.",
+    )
+    p.add_argument(
+        "--end-trial",
+        type=int,
+        default=None,
+        help="1-based last trial to run (inclusive). Default: last cell of the family grid.",
+    )
     p.add_argument("--resume", action="store_true", default=True)
     p.add_argument("--no-resume", action="store_true")
     p.add_argument(
@@ -94,6 +106,10 @@ def main(argv: list[str] | None = None) -> int:
         cmd.extend(["--batch-size", str(args.batch_size)])
     if args.max_studies is not None:
         cmd.extend(["--max-studies", str(args.max_studies)])
+    if args.start_trial != 1:
+        cmd.extend(["--start-trial", str(args.start_trial)])
+    if args.end_trial is not None:
+        cmd.extend(["--end-trial", str(args.end_trial)])
     if wants_resume(args):
         cmd.append("--resume")
     else:

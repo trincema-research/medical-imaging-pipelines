@@ -66,6 +66,17 @@ python -m rsna2024_lumbar.coordinate_prediction nas --family full --all-conditio
 
 `--no-resume` starts those trials over. `--skip-completed` is kept as an alias. Dry-run the shard plan (no training): omit `--spawn`. `--list` prints the planned slugs without looking at outputs.
 
+To start the **full** grid at a given trial (1-based, inclusive), pass `--start-trial`. Remaining cells are resharded across `--num-gpus` (trial 47 of 120 on 8 GPUs → 47–120, not the original 1–15 shards). `--end-trial` is optional. With `--all-conditions` the same window applies to **each** condition independently; if only one condition was interrupted, drop `--all-conditions` and pass `--condition`:
+
+```bash
+python -m rsna2024_lumbar.coordinate_prediction nas \
+  --family full --condition spinal_canal_stenosis \
+  --start-trial 47 \
+  --data-root rsna2024_lumbar/data/raw \
+  --num-gpus 8 --batch-size 8 \
+  --spawn --wait
+```
+
 Outputs (gitignored): `rsna2024_lumbar/data/processed/dense_coordinates/nas/full/<condition>/<slug>/`
 
 - `<condition>_<backbone>_metrics.csv` / `.json` — train/val/test, overall **and each lumbar level**

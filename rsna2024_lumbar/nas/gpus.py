@@ -70,6 +70,23 @@ def shard_trial_range(n_trials: int, num_gpus: int) -> list[GpuShard]:
     return shards
 
 
+def shard_inclusive_range(first_trial: int, last_trial: int, num_gpus: int) -> list[GpuShard]:
+    """Even shards over the closed 1-based interval ``[first_trial, last_trial]``."""
+    if first_trial < 1:
+        raise ValueError(f"first_trial must be >= 1, got {first_trial}.")
+    if last_trial < first_trial:
+        raise ValueError(f"last_trial {last_trial} is before first_trial {first_trial}.")
+    shift = first_trial - 1
+    return [
+        GpuShard(
+            gpu_id=shard.gpu_id,
+            start_trial=shard.start_trial + shift,
+            end_trial=shard.end_trial + shift,
+        )
+        for shard in shard_trial_range(last_trial - first_trial + 1, num_gpus)
+    ]
+
+
 def covered_trial_ids(shards: list[GpuShard]) -> list[int]:
     ids: list[int] = []
     for shard in shards:

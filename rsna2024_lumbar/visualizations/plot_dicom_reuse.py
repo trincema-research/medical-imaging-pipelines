@@ -37,6 +37,8 @@ MULT_COLORS = {
     f"{MAX_SHOWN_MULT}+": "#8E44AD",
     str(MAX_SHOWN_MULT): "#8E44AD",
 }
+# Equal columns would be ~0.33 each; Value is ~60% narrower so Meaning can wrap.
+MATH_COL_WIDTHS = (0.42, 0.13, 0.45)
 
 
 def _bin_multiplicity(mult: dict[int, int]) -> tuple[list[str], list[int]]:
@@ -109,6 +111,56 @@ def load_overlap(summary_path: Path, pairwise_path: Path) -> dict[str, Any]:
     }
 
 
+def reconciliation_table_rows(overlap: dict[str, Any]) -> list[list[str]]:
+    pairwise = overlap["pairwise_overlap"]
+    return [
+        [
+            "Sum of per-condition unique DICOMs",
+            format_count(overlap["sum_per_condition_uniques"]),
+            "adds SCS+LFN+RFN+LSS+RSS uniques\n(double-counts shared files)",
+        ],
+        [
+            "− extras from multi-condition DICOMs",
+            format_count(overlap["double_counted_extras"]),
+            "each file in k conditions\ncontributes (k−1) extras",
+        ],
+        [
+            "= Global unique coord-referenced DICOMs",
+            format_count(overlap["global_unique_dicoms"]),
+            "matches check" if overlap["check_sum_minus_extras_equals_global"] else "MISMATCH",
+        ],
+        [
+            "Largest cross-condition overlap",
+            f"LSS&RSS =\n{format_count(pairwise.get('LSS&RSS', 0))}",
+            f"LFN&RFN = {format_count(pairwise.get('LFN&RFN', 0))}\nSCS shares 0 with others",
+        ],
+    ]
+
+
+def _style_reconciliation_table(table) -> None:
+    table.auto_set_font_size(False)
+    table.set_fontsize(8.5)
+    table.scale(1.0, 2.45)
+    for (row, col), cell in table.get_celld().items():
+        cell.set_edgecolor("#dddddd")
+        cell.get_text().set_color("#1a1a1a")
+        if 0 <= col < len(MATH_COL_WIDTHS):
+            cell.set_width(MATH_COL_WIDTHS[col])
+        if col == 1:
+            cell.get_text().set_ha("center")
+        else:
+            cell.get_text().set_ha("left")
+        cell.get_text().set_va("center")
+        if row == 0:
+            cell.set_facecolor("#f0f0f0")
+            cell.get_text().set_fontweight("bold")
+        elif row == 3:
+            cell.set_facecolor("#eafaf1")
+            cell.get_text().set_fontweight("bold")
+        else:
+            cell.set_facecolor("white")
+
+
 def plot_crops_from_duplication(
     results: dict[str, dict[str, Any]],
     overlap: dict[str, Any],
@@ -117,8 +169,8 @@ def plot_crops_from_duplication(
     _style()
     conditions = list(CONDITION_ORDER)
     mult_labels = [str(i) for i in range(1, MAX_SHOWN_MULT)] + [f"{MAX_SHOWN_MULT}+"]
-    fig = plt.figure(figsize=(13.5, 11.5))
-    gs = fig.add_gridspec(3, 2, height_ratios=[3.6, 1.45, 1.45], hspace=0.42, wspace=0.28)
+    fig = plt.figure(figsize=(13.5, 12.4))
+    gs = fig.add_gridspec(3, 2, height_ratios=[3.5, 1.4, 1.9], hspace=0.48, wspace=0.28)
     ax = fig.add_subplot(gs[0, :])
     ax_pair = fig.add_subplot(gs[1, 0])
     ax_hist = fig.add_subplot(gs[1, 1])
@@ -284,52 +336,18 @@ def plot_crops_from_duplication(
             cell.set_facecolor("white")
     ax_hist.set_title("How many conditions share each DICOM file", fontsize=10, pad=8)
 
-    sum_u = overlap["sum_per_condition_uniques"]
-    extras = overlap["double_counted_extras"]
-    glob = overlap["global_unique_dicoms"]
-    math_text = [
-        [
-            "Sum of per-condition unique DICOMs",
-            format_count(sum_u),
-            "adds SCS+LFN+RFN+LSS+RSS uniques (double-counts shared files)",
-        ],
-        [
-            "− extras from multi-condition DICOMs",
-            format_count(extras),
-            "each file in k conditions contributes (k−1) extras",
-        ],
-        [
-            "= Global unique coord-referenced DICOMs",
-            format_count(glob),
-            "matches check" if overlap["check_sum_minus_extras_equals_global"] else "MISMATCH",
-        ],
-        [
-            "Largest cross-condition overlap",
-            f"LSS&RSS = {format_count(pairwise.get('LSS&RSS', 0))}",
-            f"LFN&RFN = {format_count(pairwise.get('LFN&RFN', 0))}; SCS shares 0 with others",
-        ],
-    ]
     math_table = ax_math.table(
-        cellText=math_text,
+        cellText=reconciliation_table_rows(overlap),
         colLabels=["Reconciliation", "Value", "Meaning"],
         loc="center",
         cellLoc="left",
     )
-    math_table.auto_set_font_size(False)
-    math_table.set_fontsize(8.5)
-    math_table.scale(1.2, 1.75)
-    for (r, c), cell in math_table.get_celld().items():
-        cell.set_edgecolor("#dddddd")
-        cell.get_text().set_color("#1a1a1a")
-        if r == 0:
-            cell.set_facecolor("#f0f0f0")
-            cell.get_text().set_fontweight("bold")
-        elif r == 3:
-            cell.set_facecolor("#eafaf1")
-            cell.get_text().set_fontweight("bold")
-        else:
-            cell.set_facecolor("white")
-    ax_math.set_title("Why per-condition uniques do not add up to the global unique count", fontsize=10, pad=6)
+    _style_reconciliation_table(math_table)
+    ax_math.set_title(
+        "Why per-condition uniques do not add up to the global unique count",
+        fontsize=10,
+        pad=18,
+    )
     fig.suptitle(
         "DICOM reuse: within-condition multiplicity + across-condition sharing",
         fontsize=13,

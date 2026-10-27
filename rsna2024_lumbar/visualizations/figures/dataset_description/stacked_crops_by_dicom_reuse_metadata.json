@@ -1,8 +1,8 @@
 {
   "generated_from_real_results": true,
   "script_name": "plot_dicom_reuse.py",
-  "timestamp": "2026-10-25T17:39:19.329816+00:00",
-  "git_commit": "838fa5a71d6152badcbcfaa44de36fadb4fa551e",
+  "timestamp": "2026-10-27T06:30:12.393456+00:00",
+  "git_commit": "5eda7396a49b90b793dd862121c18682a05c3a17",
   "count_grouping": "thousands separators for 5+ digit integers only",
   "source_duplication": "F:\\workspace\\medical-imaging-pipelines-ordinal-figures\\rsna2024_lumbar\\data\\dataset_description\\dicom_duplication_by_condition.csv",
   "source_summary": "F:\\workspace\\medical-imaging-pipelines-ordinal-figures\\rsna2024_lumbar\\data\\dataset_description\\dicom_cross_condition_summary.csv",
